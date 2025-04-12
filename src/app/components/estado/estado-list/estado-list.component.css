@@ -1,0 +1,50 @@
+.toolbar-title {
+    flex: 1;
+    text-align: start;
+    color: white;
+    font-weight: 500;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+}
+
+.sort-field {
+    width: 120px;
+    padding-left: 30px;
+}
+
+.search-container {
+    padding-top: 21px;
+    margin-right: 30px;
+    flex-grow: 0;
+    max-width: 400px;
+}
+
+.custom-search-field .mat-icon {
+    color: #4360be;
+}
+
+.mat-column-id {
+    width: 5em;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-nome {
+    width: 70%;
+}
+
+.mat-column-sigla {
+    width: 5em;
+    text-align: center;
+}
+
+.mat-column-acao {
+    width: 10em;
+    text-align: center;
+}
