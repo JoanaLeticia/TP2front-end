@@ -1,0 +1,46 @@
+<app-header></app-header>
+<app-navside></app-navside>
+<main>
+    <h2 class="titulo">Cadastro de Estados</h2>
+    <div class="historic">
+
+        <a [routerLink]="['/']">Home</a>
+        /
+        <a [routerLink]="['/estado/list']">Lista de Estados</a>
+        /
+        <a>Estado</a>
+
+    </div>
+    <div class="content">
+        <span>Dados do Estados</span>
+    </div>
+    <form [formGroup]="formEstado">
+
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" formControlName="nome">
+            <mat-error *ngIf="formEstado.get('nome') 
+                                   && formEstado.get('nome')?.invalid
+                                   && formEstado.get('nome')?.touched">
+                O nome é obrigatorio.
+            </mat-error>
+        </div>
+        <div class="form-group">
+            <label for="sigla">Sigla:</label>
+            <input type="text" id="sigla" formControlName="sigla">
+            <mat-error *ngIf="formEstado.get('sigla') 
+                                   && formEstado.get('sigla')?.invalid
+                                   && formEstado.get('sigla')?.touched">
+                O sigla é obrigatorio.
+            </mat-error>
+        </div>
+
+    </form>
+    <div class="bnt-group">
+        <button type="submit" class="btn-cancelar" [routerLink]="['/estado/list']">Cancelar</button>
+        <button type="submit" class="btn-excluir" (click)="confirmDelete(formEstado?.value)"
+            *ngIf="formEstado?.get('id')?.value">Excluir</button>
+        <button type="submit" class="btn-salvar" (click)="salvar()">Salvar</button>
+    </div>
+
+</main>

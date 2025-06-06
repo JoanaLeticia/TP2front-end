@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+main {
+    display: flex;
+    flex-direction: column;
+    width: 78%;
+    margin-top: 70px;
+    margin-left: 280px;
+
+    font-family: "Lato", sans-serif;
+}
+
+h2 {
+    font-size: 25px;
+}
+a {
+    text-decoration: none; 
+    display: inline-block; 
+    border-bottom: none; 
+    margin: 0px 0px;
+    padding: 5px; 
+}
+.content {
+    background-color: #33BDFE;
+    color: #fff;
+
+    border: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px; 
+
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 700;
+}
+form {
+    margin-top: -5px;
+    border: 1px solid #33BDFE;
+    border-radius: 10px;
+    padding: 25px; 
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+}
+
+form .group-ini {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+form .group {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 45px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-group input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+mat-select{
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    width: 35px;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+}
+.mat-select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+mat-error{
+    color: #f36b7f;
+    font-family: "Lato", sans-serif;
+    font-size: 10px;
+}
+
+.form-group select{
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+#nome{
+    width: 320px;
+}
+#matricula{
+    width: 120px;
+}
+#cpf{
+    width: 150px;
+}
+#email{
+    width: 320px;
+}
+#nivel{
+    width: 150px;
+}
+
+.bnt-group{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+
+    margin-top: 15px;
+}
+
+button{
+    height: 50px;
+    width: 130px;
+    margin: 25px 0;
+    background: #0076CD;
+    font-size: 16px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+.btn-cancelar{
+    background: #808080;
+}
+.btn-excluir{
+    background: #f36b7f;
+}
+.btn-salvar{
+    background: #33BDFE;
+}

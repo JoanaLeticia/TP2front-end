@@ -1,0 +1,31 @@
+<div class="bg-white system-ui">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class="sr-only">Products</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+      <div *ngFor="let card of cards()" class="p-4 rounded-lg border-2 border-blue-100">
+        <a (click)="onDetalhesProduto(card.idProduto)" class="group">
+          <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+            <img mat-card-image [src]="card.urlImagem"
+              class="h-full w-full object-cover object-center group-hover:opacity-75">
+          </div>
+        </a>
+          <div class="flex justify-between items-center w-full mt-4">
+            <div>
+              <h3 class="font-sans text-sm text-gray-700">{{ card.titulo }}</h3>
+              <p class="font-sans text-lg font-medium text-gray-900">{{ card.preco | currency }}</p>
+            </div>
+
+            <div class="butão">
+              <button (click)="adicionarAoCarrinho(card)"
+              class="text-sm rounded-2xl py-1 px-1 w-28 border-2 border-indigo-300 text-indigo-400 bg-white rounded-full hover:bg-indigo-300 hover:text-white transition-colors duration-300"
+              >
+              Adicionar ao carrinho</button>
+            </div>
+          </div>
+
+        
+      </div>
+    </div>
+  </div>
+</div>

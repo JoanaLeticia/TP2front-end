@@ -1,0 +1,83 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #3839AF;
+    color: white;
+    height: 50px;
+    padding: 10px 20px;
+    border-bottom-right-radius: 40px;
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.logo {
+    margin-left: 25px;
+}
+
+.logo-bnt {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.logo img {
+    width: 110px;
+    height: 46px;
+}
+
+.welcome-message {
+    margin-right: 450px;
+}
+
+.actions {
+    position: relative;
+}
+
+.actions img {
+    border-radius: 100%;
+}
+
+#dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #3839AF;
+    min-width: 120px;
+    z-index: 1;
+    border-radius: 15px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+}
+
+.dropdown-content a:hover {
+    background-color: #0076CD;
+}
+
+.actions:hover .dropdown-content {
+    display: block;
+}
+
+@media screen and (max-width: 767px) {
+    .welcome-message {
+        display: none;
+    }
+}

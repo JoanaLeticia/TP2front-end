@@ -1,0 +1,67 @@
+<app-header></app-header>
+<ng-container *ngIf="produto$ | async as produto">
+<div class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+  <div class="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
+    <img *ngIf="imageUrl" [src]="imageUrl" [alt]="produto.nome" class="produto-image">
+    <span *ngIf="!imageUrl">Imagem não encontrada</span>
+  </div>
+  <div class="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
+      <div class="border-b border-gray-200 pb-6">
+          <p class="text-sm leading-none text-gray-600">Conheça mais sobre o produto</p>
+          <h1 class="lg:text-2xl text-xl font-bold mt-5 lg:leading-6 leading-7 text-gray-800  mt-2">{{ produto.nome }}</h1>
+      </div>
+      <div class="py-4 border-b border-gray-200 flex items-center justify-between">
+          <p class="text-base leading-4 text-gray-800">Plataforma</p>
+          <div class="flex items-center justify-center">
+              <p class="text-sm leading-none text-gray-600">{{ produto.plataforma.nome }}</p>
+          </div>
+      </div>
+      <div class="py-4 border-b border-gray-200 flex items-center justify-between">
+          <p class="text-base leading-4 text-gray-800">Preço</p>
+          <div class="flex items-center justify-center">
+              <p class="text-sm leading-none text-gray-600 mr-3">{{ produto.preco | currency }}</p>
+          </div>
+      </div>
+      <button (click)="adicionarAoCarrinho(produto)" class="mx-5 ml-80 mt-5 h-10 w-60 border rounded-md text-white text-base bg-indigo-700 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-opacity-50 ">
+          Adicionar no Carrinho
+      </button>
+      <div>
+          <p class="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">{{ produto.descricao }}</p>
+          <p class="text-base leading-4 mt-7 text-gray-600">Código: {{ produto.id}}</p>
+          <p class="text-base leading-4 mt-4 text-gray-600">Desenvolvedora {{ produto.desenvolvedora }}</p>
+          <p class="text-base leading-4 mt-4 text-gray-600">Plataforma: {{ produto.plataforma.nome }}</p>
+          <p class="text-base leading-4 mt-4 text-gray-600">Tipo Mídia: {{ produto.tipoMidia.nome }}</p>
+          <p class="text-base leading-4 mt-4 text-gray-600">Gênero: {{ produto.genero.nome }}</p>
+          <p class="text-base leading-4 mt-4 text-gray-600">Classificação Indicativa: {{ produto.classificacao.nome }}</p>
+        </div>
+      <div>
+          <div class="border-t border-b py-4 mt-7 border-gray-200">
+              <div class="flex justify-between items-center cursor-pointer">
+                  <p class="text-base leading-4 text-gray-800">Envios e devoluções</p>
+                  <button (click)="isToggle ? (isToggle = 0) : (isToggle = 1)" class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded" role="button" aria-label="show or hide">
+                      <svg [ngClass]="isToggle === 1 ? 'transform rotate-180' : ''" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 1L5 5L1 1" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                  </button>
+              </div>
+              <div *ngIf="isToggle === 1" class="pt-4 text-base leading-normal pr-12 mt-4 text-gray-600">Você será responsável por pagar seus próprios custos de envio para devolver seu item. Os custos de envio não são reembolsáveis</div>
+          </div>
+      </div>
+      <div>
+          <div class="border-b py-4 border-gray-200">
+              <div class="flex justify-between items-center cursor-pointer">
+                  <p class="text-base leading-4 text-gray-800">Entre em contato</p>
+                  <button (click)="isToggle ? (isToggle = 0) : (isToggle = 2)" class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded" role="button" aria-label="show or hide">
+                      <svg [ngClass]="isToggle === 2 ? 'transform rotate-180' : ''" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 1L5 5L1 1" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                  </button>
+              </div>
+              <div *ngIf="isToggle === 2" class="pt-4 text-base leading-normal pr-12 mt-4 text-gray-600">Se você tiver alguma dúvida sobre como nos devolver seu item, entre em contato conosco.</div>
+          </div>
+      </div>
+  </div>
+</div>
+</ng-container>
+<app-footer></app-footer>
+  

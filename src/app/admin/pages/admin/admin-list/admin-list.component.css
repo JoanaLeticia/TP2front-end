@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+main {
+    display: flex;
+    flex-direction: column;
+    width: 78%;
+    margin-top: 80px;
+    margin-left: 280px;
+
+    font-family: "Lato", sans-serif;
+}
+
+h2 {
+    font-size: 25px;
+}
+a {
+    text-decoration: none; /* Remove a decoração de texto padrão (como sublinhado) */
+    display: inline-block; 
+    border-bottom: none; /* Remove a linha de baixo */
+    margin: 0px 0px;
+    padding: 5px; /* Adiciona um preenchimento para melhorar a aparência do link */
+}
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bnt-cadastro {
+    height: 50px;
+    width: 110px;
+    margin: 25px 0;
+    background: #0076CD;
+    font-size: 16px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    height: 35px;
+    width: 350px;
+    margin-right: 120px;
+}
+
+.search label {
+    flex: 1;
+    font-size: 20px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    border-right: 200px;
+}
+
+.search input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    width: 500px;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.search input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Tabela */
+.mat-table{
+    border-style: dotted;
+    width: 500px;
+}
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.mat-column-nome {
+    width: 25%;
+
+}
+
+.mat-column-matricula {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-Nivel {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-acao {
+    min-width: 10em;
+    text-align: center;
+}
+
+table button {
+    background: #b6aeae;
+
+    width: 50px;
+    height: 40px;
+
+    border-radius: 20px;
+    border-style: none;
+
+    cursor: pointer;
+    color: #fff;
+    transform: scale(1.0)
+}
+
+
+/* Estilos padrão dos botões */
+.bnt-visualizar {
+    background-color: transparent; /* Cor de fundo transparente para o botão de visualização */
+}
+
+.bnt-editar {
+    background-color: transparent; /* Cor de fundo transparente para o botão de edição */
+}
+
+.bnt-apagar {
+    background-color: transparent; /* Cor de fundo transparente para o botão de exclusão */
+}
+
+/* Estilos dos botões quando o mouse passa por cima */
+.bnt-visualizar:hover {
+    background-color: #add8e6; /* Altera a cor de fundo para azul ao passar o mouse */
+}
+
+.bnt-editar:hover {
+    background-color: #ffff99; /* Altera a cor de fundo para amarelo ao passar o mouse */
+}
+
+.bnt-apagar:hover {
+    background-color: #ffb6c1; /* Altera a cor de fundo para vermelho ao passar o mouse */
+}

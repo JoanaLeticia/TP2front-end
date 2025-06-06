@@ -1,0 +1,141 @@
+<app-header></app-header>
+<app-navside></app-navside>
+<main>
+    <h2 class="titulo">Cadastro de Produtos</h2>
+    <div class="historic">
+
+        <a [routerLink]="['/']">Home</a>
+        /
+        <a [routerLink]="['/produtos/list']">Lista de Produtos</a>
+        /
+        <a>Produto</a>
+
+    </div>
+    <div class="content">
+        <span>Dados do Produto</span>
+    </div>
+    <form [formGroup]="formProduto">
+
+        <!-- nome -->
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" formControlName="nome">
+            <mat-error *ngIf="formProduto.get('nome') 
+                                   && formProduto.get('nome')?.invalid
+                                   && formProduto.get('nome')?.touched">
+                O nome é obrigatorio.
+            </mat-error>
+        </div>
+
+        <!-- descrição -->
+        <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" formControlName="descricao">
+            <mat-error *ngIf="formProduto.get('descricao') 
+                                   && formProduto.get('descricao')?.invalid
+                                   && formProduto.get('descricao')?.touched">
+                A descrição é obrigatorio.
+            </mat-error>
+        </div>
+
+        <!-- preço -->
+        <div class="form-group">
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" formControlName="preco">
+            <mat-error *ngIf="formProduto.get('preco') 
+                                   && formProduto.get('preco')?.invalid
+                                   && formProduto.get('preco')?.touched">
+                O preço é obrigatorio.
+            </mat-error>
+        </div>
+
+        <!-- estoque -->
+        <div class="form-group">
+            <label for="estoque">Estoque:</label>
+            <input type="text" id="estoque" formControlName="estoque">
+            <mat-error *ngIf="formProduto.get('estoque') 
+                                   && formProduto.get('estoque')?.invalid
+                                   && formProduto.get('estoque')?.touched">
+                O estoque é obrigatorio.
+            </mat-error>
+        </div>
+
+        <!-- desenvolvedora -->
+        <div class="form-group">
+            <label for="desenvolvedora">Desenvolvedora:</label>
+            <input type="text" id="desenvolvedora" formControlName="desenvolvedora">
+            <mat-error *ngIf="formProduto.get('desenvolvedora') 
+                                   && formProduto.get('desenvolvedora')?.invalid
+                                   && formProduto.get('desenvolvedora')?.touched">
+                A desenvolvedoraé obrigatorio.
+            </mat-error>
+        </div>
+
+        <!-- plataforma -->
+        <div class="form-group">
+            <label for="plataforma">Plataforma:</label>
+            <mat-select id="plataforma" formControlName="plataforma">
+                @for (plataforma of plataformas; track plataforma.id) {
+                <mat-option [value]="plataforma">
+                    {{plataforma.nome}}
+                </mat-option>
+                }
+            </mat-select>
+        </div>
+
+        <!-- tipoMidia -->
+        <div class="form-group">
+            <label for="tipoMidia">Tipo de Mídia:</label>
+            <mat-select id="tipoMidia" formControlName="tipoMidia">
+                @for (tipoMidia of tiposMidia; track tipoMidia.id) {
+                <mat-option [value]="tipoMidia">
+                    {{tipoMidia.nome}}
+                </mat-option>
+                }
+            </mat-select>
+        </div>
+
+        <!-- genero -->
+        <div class="form-group">
+            <label for="genero">Gênero:</label>
+            <mat-select id="genero" formControlName="genero">
+                @for (genero of generos; track genero.id) {
+                <mat-option [value]="genero">
+                    {{genero.nome}}
+                </mat-option>
+                }
+            </mat-select>
+        </div>
+
+        <!-- classificacao -->
+        <div class="form-group">
+            <label for="classificacao">Classificação Indicativa:</label>
+            <mat-select id="classificacao" formControlName="classificacao">
+                @for (classificacao of classificacoes; track classificacao.id) {
+                <mat-option [value]="classificacao">
+                    {{classificacao.nome}}
+                </mat-option>
+                }
+            </mat-select>
+        </div>
+
+        <!-- dataLancamento -->
+        <div class="form-group">
+            <label for="dataLancamento">Data de Lançamento:</label>
+            <input type="text" id="dataLancamento" formControlName="dataLancamento">
+            <mat-error *ngIf="formProduto.get('dataLancamento') 
+                                   && formProduto.get('dataLancamento')?.invalid
+                                   && formProduto.get('dataLancamento')?.touched">
+                A data de lançamento é obrigatorio.
+            </mat-error>
+        </div>
+
+    </form>
+    <div class="bnt-group">
+        <button type="submit" class="btn-cancelar" [routerLink]="['/produtos/list']">Cancelar</button>
+        <button type="submit" class="btn-excluir" (click)="confirmDelete(formProduto?.value)"
+            *ngIf="formProduto?.get('id')?.value">Excluir</button>
+        <button type="submit" class="btn-salvar" (click)="salvar()">Salvar</button>
+    </div>
+
+</main>
