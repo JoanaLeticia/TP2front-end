@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../../models/cliente.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,9 @@ export class ClienteService {
       }
     }
 
-    console.log(this.baseUrl);
-    console.log({ params });
-    return this.httpClient.get<Cliente[]>(this.baseUrl, { params });
+    return this.httpClient.get<{ dados: Cliente[] }>(this.baseUrl, { params }).pipe(
+      map(response => response.dados) // Extrai apenas o array de clientes
+    );
   }
 
   findByNome(nome: string): Observable<Cliente[]> {

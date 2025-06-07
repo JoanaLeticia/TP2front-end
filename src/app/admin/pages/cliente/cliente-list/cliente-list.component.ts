@@ -15,25 +15,21 @@ import { ConfirmationDialogComponent } from '../../../components/confirmation-di
 import { ClienteService } from '../../../../core/services/user/cliente.service';
 import { Cliente } from '../../../../core/models/cliente.model';
 
-import { PageEvent } from '@angular/material/paginator';
-import { MatPaginatorModule } from '@angular/material/paginator';
-
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [RouterModule, ViewClienteComponent, ConfirmationDialogComponent, ReactiveFormsModule, FormsModule,
     HeaderComponent, NavsideComponent, MatInputModule, MatFormFieldModule,
-    MatIconModule, MatTableModule, MatPaginatorModule],
+    MatIconModule, MatTableModule],
   templateUrl: './cliente-list.component.html',
   styleUrl: './cliente-list.component.css'
 })
-export class ClienteListComponent implements OnInit {
+export class ClienteListComponent {
   displayedColumns: string[] = ['id', 'nome', 'email', 'cpf', 'acao'];
   clientes: Cliente[] = [];
 
-  // variaveis de controle para a paginacao
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 2;
   page = 0;
 
   clientesSubscription: Subscription | undefined;
@@ -42,22 +38,25 @@ export class ClienteListComponent implements OnInit {
     private clienteService: ClienteService) { }
 
   ngOnInit(): void {
-    this.clientesSubscription = this.clienteService.findAll(this.page, this.pageSize).subscribe(data => {
-      this.clientes = data;
-      console.log(data);
-    });
-  }
-
-  paginar(event: PageEvent): void {
-    this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.ngOnInit();
+    this.carregarClientes();
   }
 
   ngOnDestroy(): void {
     if (this.clientesSubscription) {
       this.clientesSubscription.unsubscribe();
     }
+  }
+
+  carregarClientes(): void {
+    this.clienteService.findAll(this.page, this.pageSize).subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+        console.log('Clientes carregados:', clientes); // Verifique no console
+      },
+      error: (err) => {
+        console.error('Erro ao carregar clientes:', err);
+      }
+    });
   }
 
   searchText: string = '';
