@@ -1,12 +1,15 @@
 .navside {
-    height: 100vh;
+    height: 100%;
     width: 210px;
     position: fixed;
-    top: 70px; 
+    top: 70px;
     left: 0;
     background-color: #3839AF;
+    margin-top: -20px;
     padding: 0px 10px;
     color: #fff;
+    z-index: 10;
+    overflow-y: auto;
 }
 
 .links-bnt {

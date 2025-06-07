@@ -15,18 +15,26 @@ import { ConfirmationDialogComponent } from '../../../components/confirmation-di
 import { ClienteService } from '../../../../core/services/user/cliente.service';
 import { Cliente } from '../../../../core/models/cliente.model';
 
+import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [RouterModule, ViewClienteComponent, ConfirmationDialogComponent, ReactiveFormsModule, FormsModule,
     HeaderComponent, NavsideComponent, MatInputModule, MatFormFieldModule,
-    MatIconModule, MatTableModule],
+    MatIconModule, MatTableModule, MatPaginatorModule],
   templateUrl: './cliente-list.component.html',
   styleUrl: './cliente-list.component.css'
 })
-export class ClienteListComponent {
+export class ClienteListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'email', 'cpf', 'acao'];
   clientes: Cliente[] = [];
+
+  // variaveis de controle para a paginacao
+  totalRecords = 0;
+  pageSize = 10;
+  page = 0;
 
   clientesSubscription: Subscription | undefined;
 
@@ -34,10 +42,16 @@ export class ClienteListComponent {
     private clienteService: ClienteService) { }
 
   ngOnInit(): void {
-    this.clientesSubscription = this.clienteService.findAll().subscribe(data => {
+    this.clientesSubscription = this.clienteService.findAll(this.page, this.pageSize).subscribe(data => {
       this.clientes = data;
       console.log(data);
     });
+  }
+
+  paginar(event: PageEvent): void {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.ngOnInit();
   }
 
   ngOnDestroy(): void {

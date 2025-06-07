@@ -17,18 +17,30 @@
                     </button>
                 </div>
 
-
                 <!-- Área do usuário -->
                 <div class="user-area">
-                    <button mat-icon-button class="user-icon" (click)="onLoginClick()">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-                    <div class="user-info">
-                        <span class="welcome">Bem-vindo(a),</span>
-                        <div class="auth-links" style="color: white;">
-                            <a (click)="onLoginClick()">Entre</a> ou <a (click)="onCadastroClick()">Cadastre-se</a>
+                    <ng-container *ngIf="(usuarioLogado$ | async) as usuario; else notLoggedIn">
+                        <button mat-icon-button class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="user-info">
+                            <span class="welcome">Bem-vindo(a), {{ usuario.nome }}</span>
+                            <div class="auth-links" style="color: white;">
+                                <a (click)="logout()">Sair</a>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
+                    <ng-template #notLoggedIn>
+                        <button mat-icon-button class="user-icon" (click)="onLoginClick()">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="user-info">
+                            <span class="welcome">Bem-vindo(a),</span>
+                            <div class="auth-links" style="color: white;">
+                                <a (click)="onLoginClick()">Entre</a> ou <a (click)="onCadastroClick()">Cadastre-se</a>
+                            </div>
+                        </div>
+                    </ng-template>
                 </div>
 
                 <!-- Ícones de ação -->

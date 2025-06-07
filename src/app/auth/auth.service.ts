@@ -72,6 +72,29 @@ export class AuthService {
     )
   }
 
+  loginADM(email: string, senha: string): Observable<any> {
+    const params = {
+      login: email,
+      senha: senha,
+      perfil: 'ADMIN'
+    }
+
+    return this.http.post(`${this.baseURL}`, params, { observe: 'response' }).pipe(
+      tap((res: any) => {
+        const authToken = res.headers.get('Authorization') ?? '';
+        if (authToken) {
+          this.setToken(authToken);
+          const usuarioLogado = res.body;
+
+          if (usuarioLogado) {
+            this.setUsuarioLogado(usuarioLogado);
+            this.usuarioLogadoSubject.next(usuarioLogado);
+          }
+        }
+      })
+    )
+  }
+
   setUsuarioLogado(usuario: Usuario): void {
     this.localStorageService.setItem(this.usuarioLogadoKey, usuario);
   }

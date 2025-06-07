@@ -20,6 +20,8 @@ import { CadastroComponent } from './client/pages/cadastro/cadastro.component';
 import { DetalhesProdutoComponent } from './client/pages/detalhes-produto/detalhes-produto.component';
 import { CarrinhoComponent } from './client/pages/carrinho/carrinho.component';
 import { PlataformaComponent } from './client/pages/plataforma/plataforma.component';
+import { LoginAdmComponent } from './admin/pages/login-adm/login-adm.component';
+import { HomeAdmComponent } from './admin/pages/home-adm/home-adm.component';
 
 export const routes: Routes = [
 
@@ -27,6 +29,10 @@ export const routes: Routes = [
     { path: 'adm/list', component: AdminListComponent, title: 'Administradores' },
     { path: 'adm/form', component: AdminFormComponent, title: 'Cadastro de Administradores' },
     { path: 'adm/edit/:id', component: AdminFormComponent, resolve: { administrador: resolverAdm } },
+
+    { path: 'adm/login', component: LoginAdmComponent, title: 'Admin | Login' },
+
+    { path: 'adm/home', component: HomeAdmComponent, title: 'Admin | HOME'},
 
     // ESTADO
     { path: 'estado/list', component: EstadoListComponent, title: 'Estados' },
