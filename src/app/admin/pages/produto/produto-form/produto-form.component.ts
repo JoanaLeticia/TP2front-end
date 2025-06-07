@@ -181,14 +181,28 @@ export class ProdutoFormComponent implements OnInit {
   salvar() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const produto = this.formGroup.value;
+      const formValue = this.formGroup.value;
+      // Criar objeto no formato que o backend espera
+      const produtoParaEnviar = {
+        id: formValue.id,
+        nome: formValue.nome,
+        descricao: formValue.descricao,
+        preco: formValue.preco,
+        estoque: formValue.estoque,
+        desenvolvedora: formValue.desenvolvedora,
+        idPlataforma: formValue.plataforma?.id,
+        idTipoMidia: formValue.tipoMidia?.id,
+        idGenero: formValue.genero?.id,
+        idClassificacao: formValue.classificacao?.id,
+        dataLancamento: formValue.dataLancamento
+      };
 
-      console.log(produto);
+      console.log(produtoParaEnviar);
 
       // selecionando a operacao (insert ou update)
-      const operacao = produto.id == null
-        ? this.produtoService.insert(produto)
-        : this.produtoService.update(produto);
+      const operacao = produtoParaEnviar.id == null
+        ? this.produtoService.insert(produtoParaEnviar)
+        : this.produtoService.update(produtoParaEnviar);
 
       // executando a operacao
       operacao.subscribe({

@@ -8,6 +8,20 @@ import { Genero } from "../../models/genero.model";
 import { Classificacao } from "../../models/classificacao.model";
 import { map } from 'rxjs/operators';
 
+interface ProdutoSimplificado {
+  id?: number;
+  nome: string;
+  descricao: string;
+  preco: number;
+  estoque: number;
+  desenvolvedora: string;
+  idPlataforma?: number;
+  idTipoMidia?: number;
+  idGenero?: number;
+  idClassificacao?: number;
+  dataLancamento: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,11 +63,11 @@ export class ProdutoService {
     return this.httpClient.get<Produto>(`${this.baseUrl}/${id}`);
   }
 
-  insert(produto: Produto): Observable<Produto> {
+  insert(produto: Produto | ProdutoSimplificado): Observable<Produto> {
     return this.httpClient.post<Produto>(this.baseUrl, produto);
   }
 
-  update(produto: Produto): Observable<Produto> {
+  update(produto: Produto | ProdutoSimplificado): Observable<Produto> {
     return this.httpClient.put<Produto>(`${this.baseUrl}/${produto.id}`, produto);
   }
 

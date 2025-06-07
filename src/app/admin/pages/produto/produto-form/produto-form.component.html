@@ -81,6 +81,44 @@
                         {{ formGroup.get('plataforma')?.getError('apiError') }}
                     </mat-error>
                 </mat-form-field>  
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Tipo Mídia</mat-label>
+                    <mat-select formControlName="tipoMidia" #selectTipoMidia >
+                        <mat-option *ngFor="let tipoMidia of tiposMidia" [value]="tipoMidia">
+                            {{ tipoMidia.nome }}
+                        </mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="formGroup.get('tipoMidia')?.hasError('apiError')">
+                        {{ formGroup.get('tipoMidia')?.getError('apiError') }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Gênero</mat-label>
+                    <mat-select formControlName="genero" #selectGenero >
+                        <mat-option *ngFor="let genero of generos" [value]="genero">
+                            {{ genero.nome }}
+                        </mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="formGroup.get('genero')?.hasError('apiError')">
+                        {{ formGroup.get('genero')?.getError('apiError') }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Classificação Indicativa</mat-label>
+                    <mat-select formControlName="classificacao" #selectClassificacao >
+                        <mat-option *ngFor="let classificacao of classificacoes" [value]="classificacao">
+                            {{ classificacao.nome }}
+                        </mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="formGroup.get('classificacao')?.hasError('apiError')">
+                        {{ formGroup.get('classificacao')?.getError('apiError') }}
+                    </mat-error>
+                </mat-form-field>
                 
                 <mat-form-field appearance="outline" class="full-width-input">
                     <mat-label>Imagem da Produto</mat-label>
@@ -100,6 +138,12 @@
                         <mat-card-title class="centered-text"> {{inputNome.value}} </mat-card-title>
                         
                         <mat-card-content class="centered-text"> {{selectPlataforma.value.label}} </mat-card-content>
+                        <br/>
+                        <mat-card-content class="centered-text"> {{selectTipoMidia.value.label}} </mat-card-content>
+                        <br/>
+                        <mat-card-content class="centered-text"> {{selectGenero.value.label}} </mat-card-content>
+                        <br/>
+                        <mat-card-content class="centered-text"> {{selectClassificacao.value.label}} </mat-card-content>
                         <br/>
                         <mat-card-content class="centered-text"> {{inputPreco.value}} </mat-card-content>
                 
