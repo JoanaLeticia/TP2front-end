@@ -1,0 +1,24 @@
+/* plataforma.component.css */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.plataforma-title {
+  color: #0d358b;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+mat-paginator {
+  margin-top: 20px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}

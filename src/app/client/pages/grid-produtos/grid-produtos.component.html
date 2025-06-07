@@ -1,22 +1,7 @@
 <div class="grid-produtos">
-  <mat-card *ngFor="let card of cards()" class="card-produto">
-    <div>
-      <div>
-        <img mat-card-image [src]="card.urlImagem" alt="{{ card.titulo }}" />
-        <mat-card-title class="card-titulo">{{ card.titulo }}</mat-card-title>
-        <p class="card-info">{{ card.plataforma }} • {{ card.midia }}</p>
-      </div>
-    </div>
-    <div>
-      <mat-card-content>
-        <p class="preco">R$ {{ card.preco | number:'1.2-2' }}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="adicionarAoCarrinho(card)" class="botao-carrinho"
-          style="color: #fff;">
-          Adicionar ao carrinho
-        </button>
-      </mat-card-actions>
-    </div>
-  </mat-card>
+  <app-card-produto
+    *ngFor="let card of cards()"
+    [produto]="card"
+    (adicionar)="adicionarAoCarrinho($event)">
+  </app-card-produto>
 </div>

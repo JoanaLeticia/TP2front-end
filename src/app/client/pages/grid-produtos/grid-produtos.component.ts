@@ -1,6 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; 
+import { Router, RouterModule } from '@angular/router';
 import { CarrinhoService } from '../../../core/services/order/carrinho.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton } from '@angular/material/button';
@@ -17,18 +17,36 @@ import { CardProdutoComponent } from '../card-produto/card-produto.component';
   templateUrl: './grid-produtos.component.html',
   styleUrl: './grid-produtos.component.css'
 })
-export class GridProdutosComponent implements OnInit{
-  
-  cards = signal<Card[]> ([]);
+export class GridProdutosComponent implements OnInit {
+  @Input() produtosInput: Produto[] = [];
+  cards = signal<Card[]>([]);
   produtos: Produto[] = [];
 
-  constructor(private produtoService: ProdutoService, 
-              private carrinhoService: CarrinhoService,
-              private snackBar: MatSnackBar,
-              private router: Router ) {}
+  constructor(private produtoService: ProdutoService,
+    private carrinhoService: CarrinhoService,
+    private snackBar: MatSnackBar,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.carregarConsultas();
+  }
+
+  ngOnChanges() {
+    if (this.produtosInput) {
+      this.carregarCardsFromInput();
+    }
+  }
+
+  private carregarCardsFromInput() {
+    const cards: Card[] = this.produtosInput.map(produto => ({
+      idProduto: produto.id,
+      titulo: produto.nome,
+      preco: produto.preco,
+      urlImagem: this.produtoService.getUrlImagem(produto.imagem),
+      plataforma: produto.plataforma?.nome ?? 'N/A',
+      midia: produto.tipoMidia?.nome ?? 'N/A'
+    }));
+    this.cards.set(cards);
   }
 
   carregarConsultas() {
@@ -64,11 +82,11 @@ export class GridProdutosComponent implements OnInit{
     console.log("Adicionou o card ao carrinho")
   }
 
-  showSnackbarTopPosition(content:any, action:any) {
+  showSnackbarTopPosition(content: any, action: any) {
     this.snackBar.open(content, action, {
       duration: 2000,
-      verticalPosition: "top", 
-      horizontalPosition: "center" 
+      verticalPosition: "top",
+      horizontalPosition: "center"
     });
   }
 

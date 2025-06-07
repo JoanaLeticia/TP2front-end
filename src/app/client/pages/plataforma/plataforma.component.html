@@ -1,2 +1,6 @@
 <app-header></app-header>
+<main class="container">
+  <h1 class="plataforma-title">{{ plataforma | uppercase }}</h1>
+  <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+</main>
 <app-footer></app-footer>

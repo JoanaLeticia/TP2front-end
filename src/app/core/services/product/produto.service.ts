@@ -78,8 +78,29 @@ export class ProdutoService {
     return this.httpClient.get<Classificacao[]>(`${this.baseUrl}/classificacoes`);
   }
 
+  // produto.service.ts
+  getByPlataformaPaginado(nomePlataforma: string, page?: number, pageSize?: number): Observable<Produto[]> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined) {
+      params = {
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+    
+    console.log(this.baseUrl);
+    console.log({ params });
+    return this.httpClient.get<Produto[]>(
+      `${this.baseUrl}/plataforma/${nomePlataforma}`, { params });
+  }
+
   getByPlataforma(nomePlataforma: string): Observable<Produto[]> {
     return this.httpClient.get<Produto[]>(`${this.baseUrl}/plataforma/${nomePlataforma}`);
+  }
+
+  countByPlataforma(nomePlataforma: string): Observable<number> {
+    return this.httpClient.get<number>(`${this.baseUrl}/plataforma/${nomePlataforma}/count`);
   }
 
 }

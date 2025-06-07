@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.card-produto {
+    font-family: Libre Franklin, sans-serif;
+    width: 280px;
+    height: 470px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #eeeeee;
+    border-radius: 7px;
+    padding: 15px;
+}
+
+.card-titulo {
+    font-size: 16px;
+    max-width: 240px;
+    align-self: center;
+    font-weight: 700;
+    color: #1b1b1b;
+    text-transform: uppercase;
+}
+
+.card-info {
+    font-size: 14px;
+    color: #4b4b4b;
+}
+
+.card-produto img {
+    height: 260px;
+    object-fit: cover;
+}
+
+.preco {
+    font-weight: 700;
+    font-size: 22px;
+    color: #0d358b;
+    margin-top: -10px;
+}
+
+.botao-carrinho {
+    background-color: #0d358b;
+    height: 50px;
+    border-radius: 7px;
+    width: 100%;
+}
