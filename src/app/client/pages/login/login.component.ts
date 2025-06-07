@@ -40,11 +40,12 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const email = this.loginForm.get('email')!.value;
+      const password = this.loginForm.get('password')!.value;
       
       this.authService.login(email, password).subscribe({
-        next: () => {
-          this.router.navigate(['/gameverse/home']);
+        next: (resp) => {
+          this.router.navigateByUrl('/gameverse/home');
         },
         error: (err) => {
           console.error(err);

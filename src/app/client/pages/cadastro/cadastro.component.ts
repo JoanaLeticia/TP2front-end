@@ -46,15 +46,17 @@ export class CadastroComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+      cpf: ['', [Validators.minLength(11), Validators.maxLength(11)]],
+      dataNascimento: [''],
+      senha: ['', [Validators.required, Validators.minLength(6)]],
+      confirmarSenha: ['', [Validators.required]]
     }, { validator: this.passwordMatchValidator });
   }
 
   passwordMatchValidator(formGroup: FormGroup) {
-    return formGroup.get('senha')?.value === formGroup.get('confirmarSenha')?.value 
+    return formGroup.get('senha')?.value === formGroup.get('confirmarSenha')?.value
       ? null : { mismatch: true };
   }
 
@@ -72,7 +74,7 @@ export class CadastroComponent implements OnInit {
 
       this.authService.register(registerRequest).subscribe({
         next: (response) => {
-          this.router.navigate(['/login']); // Redireciona após cadastro
+          this.router.navigate(['/gameverse/login']); // Redireciona após cadastro
         },
         error: (err) => {
           this.showAlert('Erro no cadastro: ' + err.error?.message);

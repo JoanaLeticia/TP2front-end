@@ -30,18 +30,18 @@ export class AuthService {
   private usuarioLogadoKey = 'usuario_logado';
   private usuarioLogadoSubject = new BehaviorSubject<Usuario | null>(null);
 
-  constructor(private http: HttpClient, 
-              private localStorageService: LocalStorageService, 
-              private jwtHelper: JwtHelperService) {
+  constructor(private http: HttpClient,
+    private localStorageService: LocalStorageService,
+    private jwtHelper: JwtHelperService) {
 
     this.initUsuarioLogado();
 
   }
 
   private initUsuarioLogado() {
-    const usuario = localStorage.getItem(this.usuarioLogadoKey);
+    const usuario = this.localStorageService.getItem(this.usuarioLogadoKey);
     if (usuario) {
-      const usuarioLogado = JSON.parse(usuario);
+      const usuarioLogado = usuario;
 
       this.setUsuarioLogado(usuarioLogado);
       this.usuarioLogadoSubject.next(usuarioLogado);
@@ -53,24 +53,23 @@ export class AuthService {
     const params = {
       login: email,
       senha: senha,
-      perfil: 2 // paciente 
+      perfil: 'CLIENTE'
     }
 
-    //{ observe: 'response' } para garantir que a resposta completa seja retornada (incluindo o cabeçalho)
-    return this.http.post(`${this.baseURL}`, params, {observe: 'response'}).pipe(
+    return this.http.post(`${this.baseURL}`, params, { observe: 'response' }).pipe(
       tap((res: any) => {
         const authToken = res.headers.get('Authorization') ?? '';
         if (authToken) {
           this.setToken(authToken);
           const usuarioLogado = res.body;
-          console.log(usuarioLogado);
+
           if (usuarioLogado) {
             this.setUsuarioLogado(usuarioLogado);
             this.usuarioLogadoSubject.next(usuarioLogado);
           }
         }
       })
-    );
+    )
   }
 
   setUsuarioLogado(usuario: Usuario): void {
@@ -100,9 +99,18 @@ export class AuthService {
 
   isTokenExpired(): boolean {
     const token = this.getToken();
-    // Verifica se o token é nulo ou está expirado
-    return !token || this.jwtHelper.isTokenExpired(token);
-    // npm install @auth0/angular-jwt
+    if (!token) {
+      console.log(true);
+      return true;
+    }
+
+    try {
+      return this.jwtHelper.isTokenExpired(token);
+    } catch (error) {
+      console.error("Token inválido", error);
+      return true;
+    }
+
   }
 
   register(cliente: RegisterRequest): Observable<RegisterResponse> {
@@ -114,7 +122,7 @@ export class AuthService {
   //   if (!token) {
   //     return true;
   //   }
-    
+
   //   try {
   //     return this.jwtHelper.isTokenExpired(token);
   //   } catch (error) {
