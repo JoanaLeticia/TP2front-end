@@ -3,4 +3,10 @@
   <h1 class="plataforma-title">{{ plataforma | uppercase }}</h1>
   <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
 </main>
+<mat-paginator 
+    [pageSizeOptions]="[5, 10, 15, 20]"
+    [pageSize]="size"
+    [length]="totalRecords"
+    (page)="paginar($event)">
+</mat-paginator>
 <app-footer></app-footer>

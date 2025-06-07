@@ -63,7 +63,7 @@ export const routes: Routes = [
         path: 'gameverse/produto/plataforma/:nome', component: PlataformaComponent, title: 'Produtos por plataforma'
     },
 
-    { path: 'gamerverse/produto/:id', component: DetalhesProdutoComponent, title: 'Detalhes da Produto' },
+    { path: 'gameverse/produto/:id', component: DetalhesProdutoComponent, title: 'Detalhes da Produto' },
 
     { path: 'gameverse/carrinho', component: CarrinhoComponent, title: 'Carrinho' }
 

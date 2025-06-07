@@ -73,7 +73,7 @@ export class GridProdutosComponent implements OnInit {
   }
 
   adicionarAoCarrinho(card: Card) {
-    this.carrinhoService.adicionar({
+    this.carrinhoService.adicionarItem({
       id: card.idProduto,
       nome: card.titulo,
       valor: card.preco,
@@ -91,6 +91,6 @@ export class GridProdutosComponent implements OnInit {
   }
 
   onDetalhesProduto(id: number): void {
-    this.router.navigate(['/produto', id]);
+    this.router.navigate(['/gameverse/produto', id]);
   }
 }

@@ -19,10 +19,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 export class PlataformaComponent implements OnInit {
   produtos: Produto[] = [];
   plataforma = '';
-  
+
   // variaveis de controle para a paginacao
   totalRecords = 0;
-  pageSize = 10;
+  size = 5;
   page = 0;
 
   constructor(private route: ActivatedRoute, private produtoService: ProdutoService) { }
@@ -37,14 +37,20 @@ export class PlataformaComponent implements OnInit {
 
   paginar(event: PageEvent): void {
     this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this.size = event.pageSize;
     this.ngOnInit();
   }
 
   buscarProdutos() {
-    this.produtoService.getByPlataforma(this.plataforma).subscribe({
+    this.produtoService.getByPlataformaPaginado(this.plataforma, this.page, this.size).subscribe({
       next: (produtos) => {
         this.produtos = produtos;
+        console.log('Dados recebidos:', {
+          page: this.page,
+          size: this.size,
+          total: this.totalRecords,
+          produtos: this.produtos.length
+        });
       },
       error: (err) => {
         console.error('Erro ao carregar produtos:', err);

@@ -28,7 +28,7 @@ export class HeaderComponent {
   }
 
   quantCarrinho(): number {
-    return this.carrinhoService.tamanho();
+    return this.carrinhoService.getTotalItens();
   }
 
   onLoginClick(): void {

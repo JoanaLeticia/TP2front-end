@@ -2,6 +2,7 @@
   <app-card-produto
     *ngFor="let card of cards()"
     [produto]="card"
-    (adicionar)="adicionarAoCarrinho($event)">
+    (adicionar)="adicionarAoCarrinho($event)"
+    (click)="onDetalhesProduto(card.idProduto)" style="cursor: pointer;">
   </app-card-produto>
 </div>
