@@ -1,73 +1,71 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ItemPedido } from '../../../core/models/item-pedido.model';
-import { CarrinhoService } from '../../../core/services/order/carrinho.service';
-import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
-import { HeaderComponent } from '../../../shared/components/template/header/header.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CarrinhoService } from '../../../core/services/order/carrinho.service';
+import { ItemPedido } from '../../../core/models/item-pedido.model';
+import { HeaderComponent } from '../../../shared/components/template/header/header.component';
+import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-carrinho',
   standalone: true,
-  imports: [NgFor, NgIf, FooterComponent, HeaderComponent, CommonModule ],
+  imports: [
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
+  ],
   templateUrl: './carrinho.component.html',
-  styleUrl: './carrinho.component.css'
+  styleUrls: ['./carrinho.component.css']
 })
 export class CarrinhoComponent implements OnInit {
-  openTab: number = 1;
-  isToggle: any;
-  country: string = "United States";
   carrinhoItens: ItemPedido[] = [];
+  metodoPagamento: string = 'cartao';
 
-  constructor(private carrinhoService: CarrinhoService
-  ) { }
+  constructor(
+    private carrinhoService: CarrinhoService,
+    private snackBar: MatSnackBar
+  ) {}
 
-  
   ngOnInit(): void {
     this.carrinhoService.carrinho$.subscribe(itens => {
       this.carrinhoItens = itens;
-    })
+    });
+  }
+
+  aumentarQuantidade(item: ItemPedido): void {
+    this.carrinhoService.atualizarQuantidade(item.id, item.quantidade + 1);
+  }
+
+  diminuirQuantidade(item: ItemPedido): void {
+    if (item.quantidade > 1) {
+      this.carrinhoService.atualizarQuantidade(item.id, item.quantidade - 1);
+    }
   }
 
   removerItem(item: ItemPedido): void {
-    this.carrinhoService.remover(item);
-  }
-
-  formatarValor(valor: number): string {
-    return valor.toFixed(2); // Formata o valor para duas casas decimais
-  }
-
-
-  aumentarQuantidade(item: any) {
-    // Verifica se o item ainda está disponível no carrinho
-    const index = this.carrinhoItens.indexOf(item);
-    if (index !== -1) {
-      // Aumenta a quantidade do item
-      this.carrinhoItens[index].quantidade++;
-    }
-  }
-
-  diminuirQuantidade(item: any) {
-    // Verifica se o item ainda está disponível no carrinho
-    const index = this.carrinhoItens.indexOf(item);
-    if (index !== -1 && this.carrinhoItens[index].quantidade > 0) {
-      // Diminui a quantidade do item
-      this.carrinhoItens[index].quantidade--;
-    }
-  }
-  
-  finalizarCompra(): void {
-
+    this.carrinhoService.removerItem(item.id);
+    this.snackBar.open('Item removido do carrinho', 'Fechar', {
+      duration: 3000
+    });
   }
 
   calcularTotal(): number {
-    let total = 0;
-    for (const item of this.carrinhoItens) {
-      total += item.quantidade * item.valor;
-      console.log(total)
-    }
-    return parseFloat(total.toFixed(2));
+    return this.carrinhoService.getTotalValor();
   }
 
+  finalizarCompra(): void {
+    // Lógica para finalizar compra
+    this.snackBar.open('Compra finalizada com sucesso!', 'Fechar', {
+      duration: 5000
+    });
+    this.carrinhoService.limparCarrinho();
+  }
 }

@@ -1,202 +1,96 @@
 <app-header></app-header>
-<ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
-    <div class="lg:container lg:mx-auto grid grid-cols-9 lg:grid-cols-12">
-        <!--Informações do cliente-->
-        <div
-            class="w-50 col-span-5 lg:col-span-5 xl:col-span-7 bg-white h-auto lg:h-screen relative lg:px-10 p-6 lg:py-12">
 
-            <h3 class="font-semibold text-gray-800 text-4xl  mt-2">Carrinho</h3>
+<main class="container mx-auto px-4 py-8">
+  <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Itens do Carrinho -->
+      <div class="lg:col-span-2">
+        <h2 class="text-2xl font-bold mb-6">Seu Carrinho</h2>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="grid grid-cols-12 gap-4 p-4 border-b font-medium">
+            <div class="col-span-5">Produto</div>
+            <div class="col-span-2 text-center">Preço</div>
+            <div class="col-span-3 text-center">Quantidade</div>
+            <div class="col-span-2 text-right">Total</div>
+          </div>
 
-            <div class="mt-7 lg:mt-20">
-                <p class="font-normal text-sm text-gray-600 mb-3">Seus dados</p>
-                <h3 class="text-2xl text-gray-800 font-medium">Insira seus dados</h3>
-
-                <form class="mt-4" action="" autocomplete="off">
-                    <div class="p-4 bg-gray-100 flex flex-col">
-
-                        <label class="mt-4 text-base leading-4 text-gray-800">Endereço de Entrega</label>
-                        <div
-                            class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600 mt-8">
-                            <div class="mt-2 flex-col">
-                                <div>
-                                    <input
-                                        class="border rounded-tl rounded-tr border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="cep" id="cep" placeholder="CEP" />
-                                </div>
-                                <div class="flex-row flex">
-                                    <input
-                                        class="border border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="cidade" id="cidade" placeholder="Cidade" />
-                                    <input
-                                        class="border border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="estado" id="estado" placeholder="Estado" />
-                                </div>
-                                <div>
-                                    <input
-                                        class="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="endereco" id="endereco" placeholder="Endereço" />
-                                </div>
-                                <div class="flex-row flex">
-                                    <input
-                                        class="border border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="numero" id="numero" placeholder="Número" />
-                                    <input
-                                        class="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                        type="text" name="complemento" id="complemento" placeholder="Complemento" />
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <label class="mt-8 text-base text-gray-800">Opções de Pagamento:</label>
-                        <!-- Opções de pagamento -->
-                        <div class="bg-gray-100 font-sans mt-2 flex w-auto items-center justify-between">
-                            <div x-data="{ openTab: 1 }" class="p-2">
-                                <div class="max-w-md mx-auto">
-                                    <div class="mb-4 flex  p-2 bg-white rounded-lg shadow-md">
-                                        <button (mouseover)="openTab = 1"
-                                            [ngClass]="{ 'bg-indigo-500 text-white': openTab === 1 }"
-                                            class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Cartão
-                                            de Credito
-                                        </button>
-                                        <button (mouseover)="openTab = 2"
-                                            [ngClass]="{ 'bg-indigo-500 text-white': openTab === 2 }"
-                                            class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Boleto
-                                            Bancário
-                                        </button>
-                                    </div>
-
-                                    <div *ngIf="openTab === 1"
-                                        class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-indigo-600">
-                                        <label class="mt-8 text-base leading-4 text-gray-800">Cartão</label>
-                                        <div class="mt-2 flex-col">
-                                            <div>
-                                                <input
-                                                    class="border rounded-tl rounded-tr border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                                    type="text" name="" id="" placeholder="0000 1234 6549 15151" />
-                                            </div>
-                                            <div class="flex-row flex">
-                                                <input
-                                                    class="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                                    type="text" name="" id="" placeholder="MM/YY" />
-                                                <input
-                                                    class="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                                    type="text" name="" id="" placeholder="CVC" />
-                                            </div>
-                                        </div>
-
-                                        <label class="mt-8 text-base leading-4 text-gray-800">Nome do Cartão</label>
-                                        <div class="mt-2 flex-col">
-                                            <div>
-                                                <input
-                                                    class="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                                    type="text" name="" id="" placeholder="Name on card" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div *ngIf="openTab === 2"
-                                        class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
-                                        <h2 class="text-2xl font-semibold mb-2">Para pagamento com boleto:</h2>
-                                        <input
-                                            class="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
-                                            type="text" name="" id="" placeholder="Seu CPF" />
-                                        <ul class="text-gray-700 mt-2">
-                                            <li>* O boleto vence em três dias.</li>
-                                            <li>* O pagamento do boleto pode ser feito em agências bancárias, casas
-                                                lotéricas, correios ou internet banking.</li>
-                                            <li>* Imprima o boleto após a finalização do pedido. Para pagamento via
-                                                internet não há necessidade de impressão.</li>
-                                        </ul>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </form>
+          <div *ngFor="let item of carrinhoItens" class="grid grid-cols-12 gap-4 p-4 border-b items-center">
+            <div class="col-span-5 flex items-center">
+              <button mat-icon-button (click)="removerItem(item)" class="mr-2">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <span>{{ item.nome }}</span>
             </div>
-
-            <button
-                class="bg-indigo-500 rounded-xl hover:bg-indigo-900 text-white p-4 text-lg my-3 mt-10 w-full md:w-auto">Finalize sua Compra!</button>
+            
+            <div class="col-span-2 text-center">
+              {{ item.valor | currency:'BRL' }}
+            </div>
+            
+            <div class="col-span-3 flex items-center justify-center">
+              <button mat-icon-button (click)="diminuirQuantidade(item)">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="mx-2">{{ item.quantidade }}</span>
+              <button mat-icon-button (click)="aumentarQuantidade(item)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            
+            <div class="col-span-2 text-right">
+              {{ (item.valor * item.quantidade) | currency:'BRL' }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!--Lista de pedidos-->
-        <div
-            class="w-max h-auto relative col-span-9 mt-64 mb-24 lg:col-span-4 xl:col-span-5 bg-gray-100 lg:h-auto xl:h-screen px-8 py-14 xl:px-12 xl:py-20">
-            <div class="flex flex-col">
-                <h3 class="text-gray-800 font-semibold text-2xl -mt-7 mb-5">Items do seu carrinho:</h3>
-                <div class="flex flex-row justify-between space-x-6 mr-0 mt-5 -mb-6">
-                    <h4 id="nome" class="text-gray-500 font-semibold text-base ">Nome</h4>
-                    <h4 id="quant" class="text-gray-500 font-semibold text-base ">Quatidade</h4>
-                    <h4 id="unidade" class="text-gray-500 font-semibold text-base ">Unidade</h4>
-                    <h4 id="valor" class="text-gray-500 font-semibold text-base ">Valor</h4>
-                </div>
-
+      <!-- Resumo do Pedido -->
+      <div class="lg:col-span-1">
+        <mat-card class="sticky top-4">
+          <mat-card-header>
+            <mat-card-title>Resumo do Pedido</mat-card-title>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="flex justify-between py-2">
+              <span>Subtotal:</span>
+              <span>{{ calcularTotal() | currency:'BRL' }}</span>
             </div>
-
-            <!-- Container with scrollable content -->
-            <div class="mt-7 flex flex-col text-gray-800 text-lg font-normal overflow-y-auto h-80 w-auto ">
-                <div *ngFor="let item of carrinhoItens">
-                    <div class="p-3 flex flex-row justify-center space-x-7">
-                        <div class="flex items-center justify-center space-x-1">
-                            <h3 class="flex-auto text-right pr-4 md:pr-5 lg:pr-4">{{ item.quantidade }}</h3>
-                            <button
-                                class="px-1 h-8 w-8  bg-indigo-500 rounded-xl hover:bg-indigo-900 text-white  focus:outline-none focus:ring-2 "
-                                (click)="diminuirQuantidade(item)">
-                                -
-                            </button>
-                            <button
-                                class="px-1 h-8 w-8 bg-indigo-500 rounded-xl hover:bg-indigo-900 text-white focus:outline-none focus:ring-2 "
-                                (click)="aumentarQuantidade(item)">
-                                +
-                            </button>
-                        </div>
-                        <h3>{{ item.valor }}</h3>
-                        <h3>{{ formatarValor(item.quantidade * item.valor) }}</h3>
-                        <button
-                            class="flex items-center justify-center w-10 h-10 bg-indigo-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-                            (click)="removerItem(item)">
-                            <!-- SVG do ícone de "X" -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    <hr>
-                </div>
+            <div class="flex justify-between py-2">
+              <span>Frete:</span>
+              <span>Grátis</span>
             </div>
-
-            <div
-                class="-bottom-7 px-8 xl:px-12 pb-5 md:-bottom-96 bg-gray-100 md:pt-80 md:pb-10 lg:pb-10 lg:pt-0 lg:mt-0 lg:bottom-0 absolute left-0 w-full text-lg font-medium text-gray-800">
-                <span aria-label="Total" class="float-left text-2xl text-gray-800 font-normal">Total</span>
-                <span aria-label="Total Price" class="float-right font-semibold text-gray-800 text-2xl">${{
-                    calcularTotal() }}</span>
-                <div class="clear-both"></div>
+            <div class="flex justify-between py-2 font-bold text-lg">
+              <span>Total:</span>
+              <span>{{ calcularTotal() | currency:'BRL' }}</span>
             </div>
-        </div>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-raised-button 
+                    color="primary" 
+                    class="w-full py-2"
+                    (click)="finalizarCompra()">
+              Finalizar Compra
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
     </div>
+  </ng-container>
 
-</ng-container>
-
-<ng-template #carrinhoVazio>
-    <div class="flex items-center justify-center py-12">
-        <div class="bg-white border rounded-md flex items-center justify-center mx-4 md:w-2/3">
-            <div class="flex flex-col items-center py-16">
-                <img class="md:hidden" src="https://i.ibb.co/RgYQvV7/undraw-page-not-found-su7k-1.png" />
-                <h1 class="px-4 pt-8 pb-4 text-center text-5xl font-bold leading-10 text-gray-800">OOPS!</h1>
-                <p class="px-4 pb-10 text-base leading-none text-center text-gray-600">Seu carrinho está vazio. Que tal
-                    dar uma olhada em nossos produtos e adicionar algo especial?</p>
-                <button
-                    class="mx-4 h-10 w-44 border rounded-md text-white text-base bg-indigo-700 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:ring-indigo-800">Go
-                    Back</button>
-            </div>
-        </div>
+  <ng-template #carrinhoVazio>
+    <div class="text-center py-12">
+      <mat-icon class="text-6xl mb-4 text-gray-400">shopping_cart</mat-icon>
+      <h2 class="text-2xl font-bold mb-2">Seu carrinho está vazio</h2>
+      <p class="text-gray-600 mb-6">Adicione produtos para continuar</p>
+      <a mat-raised-button 
+         color="primary" 
+         routerLink="/produtos">
+        Ver Produtos
+      </a>
     </div>
-</ng-template>
+  </ng-template>
+</main>
 
 <app-footer></app-footer>

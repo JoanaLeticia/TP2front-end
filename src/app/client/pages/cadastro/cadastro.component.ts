@@ -1,45 +1,84 @@
-import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
-import { AlertComponent } from '../../../shared/components/template/alert/alert.component';
+import { HeaderComponent } from '../../../shared/components/template/header/header.component';
+import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
+import { AlertComponent } from "../../../shared/components/template/alert/alert.component";
+import { CommonModule } from '@angular/common';
+import { RegisterRequest } from '../../../auth/auth.service';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, MatFormFieldModule,
-    MatInputModule, MatButtonModule, MatCardModule, MatToolbarModule,
-    RouterModule, AlertComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    HeaderComponent,
+    FooterComponent,
+    AlertComponent,
+    NgxMaskDirective
+  ],
+  providers: [provideNgxMask()],
   templateUrl: './cadastro.component.html',
-  styleUrl: './cadastro.component.css'
+  styleUrls: ['./cadastro.component.css']
 })
 export class CadastroComponent implements OnInit {
-  loginForm!: FormGroup;
+  registerForm!: FormGroup;
   alertMessage: string = '';
-  showAlert$ = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
+  ) {
+    this.registerForm = this.formBuilder.group({
+      nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+      cpf: ['', [Validators.minLength(11), Validators.maxLength(11)]],
+      dataNascimento: [''],
+      senha: ['', [Validators.required, Validators.minLength(6)]],
+      confirmarSenha: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
   }
 
-  onRegister() {
-    // criar usuário
+  ngOnInit(): void {
+    this.registerForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(formGroup: FormGroup) {
+    return formGroup.get('senha')?.value === formGroup.get('confirmarSenha')?.value 
+      ? null : { mismatch: true };
+  }
+
+  // cadastro.component.ts
+  onSubmit() {
+    if (this.registerForm.valid) {
+      const formData = this.registerForm.value;
+      const registerRequest: RegisterRequest = {
+        nome: formData.nome,
+        email: formData.email,
+        senha: formData.senha,
+        cpf: formData.cpf,
+        dataNascimento: formData.dataNascimento
+      };
+
+      this.authService.register(registerRequest).subscribe({
+        next: (response) => {
+          this.router.navigate(['/login']); // Redireciona após cadastro
+        },
+        error: (err) => {
+          this.showAlert('Erro no cadastro: ' + err.error?.message);
+        }
+      });
+    }
   }
 
   onLogin() {
@@ -48,10 +87,6 @@ export class CadastroComponent implements OnInit {
 
   showAlert(message: string) {
     this.alertMessage = message;
-    this.showAlert$.next();
-
-    setTimeout(() => {
-      this.alertMessage = '';
-    }, 2000);
+    setTimeout(() => this.alertMessage = '', 3000);
   }
 }

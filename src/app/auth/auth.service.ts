@@ -5,6 +5,21 @@ import { LocalStorageService } from '../core/services/local-storage.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Usuario } from '../core/models/usuario.model';
 
+export interface RegisterRequest {
+  nome: string;
+  email: string;
+  senha: string;
+  cpf?: string;
+  dataNascimento?: string;
+}
+
+export interface RegisterResponse {
+  id: number;
+  nome: string;
+  email: string;
+  perfil: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,6 +103,10 @@ export class AuthService {
     // Verifica se o token é nulo ou está expirado
     return !token || this.jwtHelper.isTokenExpired(token);
     // npm install @auth0/angular-jwt
+  }
+
+  register(cliente: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.baseURL}/registrar`, cliente);
   }
 
   // isTokenExpired(): boolean {
