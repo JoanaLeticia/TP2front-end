@@ -43,22 +43,67 @@ export class ClienteFormComponent {
   ) { }
 
   ngOnInit() {
+    const cliente: Cliente = this.activatedRoute.snapshot.data['cliente'];
+
     this.formCliente = this.formBuilder.group({
-      nome: ['', Validators.required],
-      email: ['', Validators.required],
-      senha: ['', Validators.required],
-      cpf: ['', Validators.required],
-      dataNascimento: ['', Validators.required],
+      id: [(cliente && cliente.id)],
+      nome: [(cliente && cliente.nome) ? cliente.nome : '',
+      Validators.compose([Validators.required, Validators.maxLength(60)])
+      ],
+      email: [(cliente && cliente.email) ? cliente.email : '', Validators.required],
+      senha: [(cliente && cliente.senha) ? cliente.senha : '', Validators.required],
+      cpf: [(cliente && cliente.cpf) ? cliente.cpf : '', Validators.required],
+      dataNascimento: [(cliente && cliente.dataNascimento) ? cliente.dataNascimento : '', Validators.required],
       listaTelefones: this.formBuilder.array([
-        this.createTelefoneFormGroup() ]),
+        this.createTelefoneFormGroup()]),
       listaEnderecos: this.formBuilder.array([
-        this.createEnderecoFormGroup() ])
+        this.createEnderecoFormGroup()])
     });
 
-    const routeData = this.activatedRoute.snapshot.data;
-    if (routeData['cliente']) {
-      this.formCliente.patchValue(routeData['cliente']);
+    if (cliente) {
+      this.preencherFormulario(cliente);
     }
+  }
+
+  preencherFormulario(cliente: Cliente): void {
+    // Preenche campos básicos
+    this.formCliente.patchValue({
+      id: cliente.id,
+      nome: cliente.nome,
+      email: cliente.email,
+      senha: cliente.senha,
+      cpf: cliente.cpf,
+      dataNascimento: cliente.dataNascimento
+    });
+
+    // Preenche telefones
+    if (cliente.listaTelefones && cliente.listaTelefones.length > 0) {
+      const telefonesArray = this.formCliente.get('listaTelefones') as FormArray;
+      telefonesArray.clear(); // Limpa o array existente
+      cliente.listaTelefones.forEach(telefone => {
+        telefonesArray.push(this.formBuilder.group({
+          codigoArea: [telefone.codigoArea, Validators.required],
+          numero: [telefone.numero, Validators.required]
+        }));
+      });
+    }
+
+    // Preenche endereços
+    if (cliente.listaEnderecos && cliente.listaEnderecos.length > 0) {
+      const enderecosArray = this.formCliente.get('listaEnderecos') as FormArray;
+      enderecosArray.clear(); // Limpa o array existente
+      cliente.listaEnderecos.forEach(endereco => {
+        enderecosArray.push(this.formBuilder.group({
+          logradouro: [endereco.logradouro, Validators.required],
+          numero: [endereco.numbero, Validators.required],
+          complemento: [endereco.complemento, Validators.required],
+          bairro: [endereco.bairro, Validators.required],
+          cep: [endereco.cep, Validators.required]
+        }));
+      });
+    }
+
+    console.log('Dados do cliente recebidos:', cliente);
   }
 
   createTelefoneFormGroup(): FormGroup {

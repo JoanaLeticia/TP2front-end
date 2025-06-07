@@ -14,11 +14,11 @@ h2 {
     font-size: 25px;
 }
 a {
-    text-decoration: none; /* Remove a decoração de texto padrão (como sublinhado) */
+    text-decoration: none; 
     display: inline-block; 
-    border-bottom: none; /* Remove a linha de baixo */
+    border-bottom: none; 
     margin: 0px 0px;
-    padding: 5px; /* Adiciona um preenchimento para melhorar a aparência do link */
+    padding: 5px; 
 }
 .content {
     display: flex;

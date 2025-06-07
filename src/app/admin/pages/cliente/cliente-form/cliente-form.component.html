@@ -29,11 +29,11 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="text" id="email" formControlName="login"
+                    <input type="text" id="email" formControlName="email"
                         placeholder="Digite o email do cliente">
-                    <mat-error *ngIf="formCliente.get('login') 
-                                   && formCliente.get('login')?.invalid
-                                   && formCliente.get('login')?.touched">
+                    <mat-error *ngIf="formCliente.get('email') 
+                                   && formCliente.get('email')?.invalid
+                                   && formCliente.get('email')?.touched">
                         O email é obrigatorio.
                     </mat-error>
                 </div>

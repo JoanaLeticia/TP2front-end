@@ -25,7 +25,7 @@ export class ClienteService {
     return this.httpClient.get<{ dados: Cliente[] }>(this.baseUrl, { params }).pipe(
       map(response => response.dados) // Extrai apenas o array de clientes
     );
-  }
+  } 
 
   findByNome(nome: string): Observable<Cliente[]> {
     return this.httpClient.get<Cliente[]>(`${this.baseUrl}/search/nome/${nome}`);

@@ -6,56 +6,39 @@ import { MatTableModule } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
-import { AdminService } from '../../../../core/services/user/admin.service';
-import { Admin } from '../../../../core/models/admin.model';
-
+import { ViewAdmComponent } from '../view-dialog/view-dialog.component';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { NavsideComponent } from '../../../components/navside/navside.component';
-import { ViewAdmComponent } from '../view-dialog/view-dialog.component';
 import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
-import { PageEvent } from '@angular/material/paginator';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { AdminService } from '../../../../core/services/user/admin.service';
+import { Admin } from '../../../../core/models/admin.model';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [RouterModule, ViewAdmComponent, ConfirmationDialogComponent, ReactiveFormsModule, FormsModule,
     HeaderComponent, NavsideComponent, MatInputModule, MatFormFieldModule,
-    MatIconModule, MatTableModule, MatPaginatorModule],
+    MatIconModule, MatTableModule],
   templateUrl: './admin-list.component.html',
   styleUrl: './admin-list.component.css'
 })
-export class AdminListComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['id', 'nome', 'acao'];
+export class AdminListComponent {
+  displayedColumns: string[] = ['id', 'nome', 'email', 'acao'];
   admins: Admin[] = [];
-  adminsSubscription: Subscription | undefined;
 
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 2;
   page = 0;
-  searchText: string = '';
+
+  adminsSubscription: Subscription | undefined;
 
   constructor(private dialog: MatDialog,
     private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.adminService.findAll(this.page, this.pageSize).subscribe(data => {
-      this.admins = data;
-      console.log(this.admins);
-    });
-
-    this.adminService.count().subscribe(data => {
-      this.totalRecords = data;
-      console.log(this.admins);
-    });
-  }
-
-  paginar(event: PageEvent): void {
-    this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.ngOnInit();
+    this.carregarAdmins();
   }
 
   ngOnDestroy(): void {
@@ -64,6 +47,19 @@ export class AdminListComponent implements OnInit, OnDestroy {
     }
   }
 
+  carregarAdmins(): void {
+    this.adminService.findAll(this.page, this.pageSize).subscribe({
+      next: (admins) => {
+        this.admins = admins;
+        console.log('Admins carregados:', admins); // Verifique no console
+      },
+      error: (err) => {
+        console.error('Erro ao carregar admins:', err);
+      }
+    });
+  }
+
+  searchText: string = '';
   search() {
     if (!this.searchText.trim()) {
       this.adminService.findAll().subscribe(
@@ -71,7 +67,7 @@ export class AdminListComponent implements OnInit, OnDestroy {
           this.admins = data;
         },
         error => {
-          console.error('Erro ao buscar administradores:', error);
+          console.error('Erro ao buscar admins:', error);
         }
       );
       return;
@@ -104,7 +100,10 @@ export class AdminListComponent implements OnInit, OnDestroy {
 
   visualizarDados(admin: Admin): void {
     this.dialog.open(ViewAdmComponent, {
+      width: '600px',
+      height: '455px',
       data: admin
     });
+    console.log(admin)
   }
 }
