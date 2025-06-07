@@ -1,24 +1,26 @@
-import { Component } from '@angular/core';
-import { Estado } from '../../../../core/models/estado.model';
-import { MatDialog } from '@angular/material/dialog';
-import { EstadoService } from '../../../../core/services/utils/estado.service';
-import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
-import { ViewEstadoComponent } from '../view-dialog/view.component';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { NavsideComponent } from '../../../components/navside/navside.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+
+import { ViewEstadoComponent } from '../view-dialog/view.component';
 import { HeaderComponent } from '../../../components/header/header.component';
+import { NavsideComponent } from '../../../components/navside/navside.component';
+import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
+import { EstadoService } from '../../../../core/services/utils/estado.service';
+import { Estado } from '../../../../core/models/estado.model';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [RouterModule, ViewEstadoComponent, ConfirmationDialogComponent, ReactiveFormsModule, FormsModule,
-    HeaderComponent, NavsideComponent, MatInputModule, MatFormFieldModule,
+    HeaderComponent, NavsideComponent, MatInputModule, MatPaginatorModule, MatFormFieldModule,
     MatIconModule, MatTableModule],
   templateUrl: './estado-list.component.html',
   styleUrl: './estado-list.component.css'
@@ -27,22 +29,41 @@ export class EstadoListComponent {
   displayedColumns: string[] = ['id', 'nome', 'sigla', 'acao'];
   estados: Estado[] = [];
 
+  totalRecords = 0;
+  pageSize = 5;
+  page = 0;
+
   estadosSubscription: Subscription | undefined;
 
   constructor(private dialog: MatDialog,
     private estadoService: EstadoService) { }
 
   ngOnInit(): void {
-    this.estadosSubscription = this.estadoService.findAll().subscribe(data => {
-      this.estados = data;
-      console.log(data);
-    });
+    this.carregarEstados();
   }
 
   ngOnDestroy(): void {
     if (this.estadosSubscription) {
       this.estadosSubscription.unsubscribe();
     }
+  }
+
+  carregarEstados(): void {
+    this.estadoService.findAll(this.page, this.pageSize).subscribe({
+      next: (estados) => {
+        this.estados = estados;
+        console.log('Estados carregados:', estados); // Verifique no console
+      },
+      error: (err) => {
+        console.error('Erro ao carregar estados:', err);
+      }
+    });
+  }
+
+  paginar(event: PageEvent) : void {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.ngOnInit();
   }
 
   searchText: string = '';
@@ -86,7 +107,10 @@ export class EstadoListComponent {
 
   visualizarDados(estado: Estado): void {
     this.dialog.open(ViewEstadoComponent, {
+      width: '600px',
+      height: '455px',
       data: estado
     });
+    console.log(estado)
   }
 }

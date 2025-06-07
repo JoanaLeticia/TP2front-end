@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Estado } from '../../../../core/models/estado.model';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EstadoService } from '../../../../core/services/utils/estado.service';
+import { MatDialog } from '@angular/material/dialog';
 import { CommonModule, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
 import { ErrorComponent } from '../../../components/error/error.component';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { NavsideComponent } from '../../../components/navside/navside.component';
+import { Telefone } from '../../../../core/models/telefone.model';
 
 @Component({
   selector: 'app-form',
@@ -29,6 +30,8 @@ import { NavsideComponent } from '../../../components/navside/navside.component'
 })
 export class EstadoFormComponent {
   estados: Estado[] = [];
+  telefones: Telefone[] = [];
+
   formEstado!: FormGroup;
 
   constructor(
@@ -36,17 +39,52 @@ export class EstadoFormComponent {
     private estadoService: EstadoService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog,
-    private dialogError: MatDialog
-  ) {
+    private dialog: MatDialog
+  ) { }
+
+  ngOnInit() {
     const estado: Estado = this.activatedRoute.snapshot.data['estado'];
+
     this.formEstado = this.formBuilder.group({
-      nome: [estado?.nome || '', Validators.required],
-      sigla: [estado?.sigla || '', Validators.required]
+      id: [(estado && estado.id)],
+      nome: [(estado && estado.nome) ? estado.nome : '',
+      Validators.compose([Validators.required, Validators.maxLength(60)])
+      ],
+      sigla: [(estado && estado.sigla) ? estado.sigla : '', Validators.required]
+    });
+
+    if (estado) {
+      this.preencherFormulario(estado);
+    }
+  }
+
+  preencherFormulario(estado: Estado): void {
+    // Preenche campos básicos
+    this.formEstado.patchValue({
+      id: estado.id,
+      nome: estado.nome,
+      sigla: estado.sigla
+    });
+
+    console.log('Dados do estado recebidos:', estado);
+  }
+
+  createTelefoneFormGroup(): FormGroup {
+    return this.formBuilder.group({
+      codigoArea: ['', Validators.required],
+      numero: ['', Validators.required],
     });
   }
 
-
+  createEnderecoFormGroup(): FormGroup {
+    return this.formBuilder.group({
+      logradouro: ['', Validators.required],
+      numero: ['', Validators.required],
+      complemento: ['', Validators.required],
+      bairro: ['', Validators.required],
+      cep: ['', Validators.required],
+    });
+  }
 
   salvar() {
     console.log('Entrou no salvar');
@@ -56,9 +94,9 @@ export class EstadoFormComponent {
     if (this.formEstado.valid) {
       const estado = this.formEstado.value;
       if (estado.id == null) {
-        console.log(estado.nivelAcesso);
         this.estadoService.insert(estado).subscribe({
           next: (estadoService) => {
+            console.log('Formulário inserido ', this.formEstado.value);
             this.router.navigateByUrl('/estado/list');
           },
           error: (err) => {

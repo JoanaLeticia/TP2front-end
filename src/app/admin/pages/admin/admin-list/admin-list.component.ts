@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 import { ViewAdmComponent } from '../view-dialog/view-dialog.component';
 import { HeaderComponent } from '../../../components/header/header.component';
@@ -19,7 +20,7 @@ import { Admin } from '../../../../core/models/admin.model';
   selector: 'app-list',
   standalone: true,
   imports: [RouterModule, ViewAdmComponent, ConfirmationDialogComponent, ReactiveFormsModule, FormsModule,
-    HeaderComponent, NavsideComponent, MatInputModule, MatFormFieldModule,
+    HeaderComponent, NavsideComponent, MatInputModule, MatPaginatorModule, MatFormFieldModule,
     MatIconModule, MatTableModule],
   templateUrl: './admin-list.component.html',
   styleUrl: './admin-list.component.css'
@@ -29,7 +30,7 @@ export class AdminListComponent {
   admins: Admin[] = [];
 
   totalRecords = 0;
-  pageSize = 2;
+  pageSize = 5;
   page = 0;
 
   adminsSubscription: Subscription | undefined;
@@ -57,6 +58,12 @@ export class AdminListComponent {
         console.error('Erro ao carregar admins:', err);
       }
     });
+  }
+
+  paginar(event: PageEvent) : void {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.ngOnInit();
   }
 
   searchText: string = '';

@@ -14,11 +14,11 @@ h2 {
     font-size: 25px;
 }
 a {
-    text-decoration: none;
+    text-decoration: none; 
     display: inline-block; 
-    border-bottom: none;
+    border-bottom: none; 
     margin: 0px 0px;
-    padding: 5px;
+    padding: 5px; 
 }
 .content {
     display: flex;
@@ -75,6 +75,7 @@ a {
     border-color: #007bff;
 }
 
+/* Tabela */
 .mat-table{
     border-style: dotted;
     width: 500px;
@@ -118,26 +119,29 @@ table button {
     transform: scale(1.0)
 }
 
+
+/* Estilos padrão dos botões */
 .bnt-visualizar {
-    background-color: transparent;
+    background-color: transparent; /* Cor de fundo transparente para o botão de visualização */
 }
 
 .bnt-editar {
-    background-color: transparent;
+    background-color: transparent; /* Cor de fundo transparente para o botão de edição */
 }
 
 .bnt-apagar {
-    background-color: transparent;
+    background-color: transparent; /* Cor de fundo transparente para o botão de exclusão */
 }
 
+/* Estilos dos botões quando o mouse passa por cima */
 .bnt-visualizar:hover {
-    background-color: #add8e6;
+    background-color: #add8e6; /* Altera a cor de fundo para azul ao passar o mouse */
 }
 
 .bnt-editar:hover {
-    background-color: #ffff99;
+    background-color: #ffff99; /* Altera a cor de fundo para amarelo ao passar o mouse */
 }
 
 .bnt-apagar:hover {
-    background-color: #ffb6c1;
+    background-color: #ffb6c1; /* Altera a cor de fundo para vermelho ao passar o mouse */
 }

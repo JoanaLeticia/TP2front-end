@@ -6,6 +6,7 @@ import { Plataforma } from "../../models/plataforma.model";
 import { TipoMidia } from "../../models/tipo-midia.model";
 import { Genero } from "../../models/genero.model";
 import { Classificacao } from "../../models/classificacao.model";
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,19 @@ export class ProdutoService {
     return this.httpClient.get<Produto[]>(`${this.baseUrl}`, { params });
   }
 
-  findAll(): Observable<Produto[]> {
-    return this.httpClient.get<Produto[]>(this.baseUrl);
+  findAll(page?: number, pageSize?: number): Observable<Produto[]> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined) {
+      params = {
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+
+    return this.httpClient.get<{ dados: Produto[] }>(this.baseUrl, { params }).pipe(
+      map(response => response.dados)
+    );
   }
 
   findByNome(nome: string): Observable<Produto[]> {

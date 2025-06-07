@@ -15,11 +15,11 @@ h2 {
 }
 
 a {
-    text-decoration: none; 
-    display: inline-block; 
-    border-bottom: none; 
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: none;
     margin: 0px 0px;
-    padding: 5px; 
+    padding: 5px;
 }
 
 .content {
@@ -29,23 +29,37 @@ a {
     border: 2px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    padding: 15px; 
+    padding: 15px;
+    margin: -25px -25px 0px -25px;
 
-    margin-top: 20px;
     font-size: 18px;
     font-weight: 700;
 }
+
 form {
-    margin-top: -5px;
+    margin-top: 18px;
     border: 1px solid #33BDFE;
     border-radius: 10px;
-    padding: 25px; 
-    height: 120px;
-
+    padding: 25px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 60px;
+    flex-direction: column;
+    width: 78%;
+}
+
+form .group-ini {
+    display: flex;
+    margin-top: 25px;
+    gap: 5rem;
+}
+
+.group-ini .form-group:first-child {
+    justify-self: start;
+}
+
+form .group {
+    display: flex;
+    margin-top: 25px;
+    gap: 10rem;
 }
 
 .form-group {
@@ -77,7 +91,125 @@ form {
     border-color: #007bff;
 }
 
-mat-select{
+.group-tel {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-itens {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.form-itens label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-itens input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.form-itens input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+}
+
+.end-itens {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.end-itens label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.end-itens input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.end-itens input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.telefones {
+    margin-top: 25px;
+}
+
+.telefones button {
+    margin: 25px 0;
+    font-size: 13px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+
+.endereco-item{
+    display: flex;
+    flex-direction: row;
+}
+
+#remover{
+    background: #e68646;
+    height: 40px;
+    width: 65px;
+    margin-bottom: 0px;
+}
+
+#nome{
+    width: 260px;
+}
+
+#email{
+    width: 260px;
+}
+#adicionar{
+    background: #3d89e0;
+    height: 40px;
+    width: 100px;
+}
+mat-select {
     flex: 3;
     font-size: 15px;
     font-family: "Lato", sans-serif;
@@ -88,18 +220,19 @@ mat-select{
     border: 1px solid #808080;
     transition: border-color 0.3s ease;
 }
+
 .mat-select:focus {
     outline: none;
     border-color: #007bff;
 }
 
-mat-error{
+mat-error {
     color: #f36b7f;
     font-family: "Lato", sans-serif;
     font-size: 10px;
 }
 
-.form-group select{
+.form-group select {
     flex: 3;
     font-size: 15px;
     font-family: "Lato", sans-serif;
@@ -116,14 +249,8 @@ mat-error{
     border-color: #007bff;
 }
 
-#nome{
-    width: 320px;
-}
-#sigla{
-    width: 120px;
-}
 
-.bnt-group{
+.bnt-group {
     display: flex;
     justify-content: center;
     gap: 25px;
@@ -131,7 +258,7 @@ mat-error{
     margin-top: 15px;
 }
 
-button{
+button {
     height: 50px;
     width: 130px;
     margin: 25px 0;
@@ -144,12 +271,15 @@ button{
     border-style: none;
     cursor: pointer;
 }
-.btn-cancelar{
+
+.btn-cancelar {
     background: #808080;
 }
-.btn-excluir{
+
+.btn-excluir {
     background: #f36b7f;
 }
-.btn-salvar{
+
+.btn-salvar {
     background: #33BDFE;
 }

@@ -1,96 +1,118 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NavsideComponent } from "../../../components/navside/navside.component";
-import { HeaderComponent } from "../../../components/header/header.component";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ValidationErrors } from '@angular/forms';
+import { Produto } from '../../../../core/models/produto.model';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ProdutoService } from '../../../../core/services/product/produto.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonModule, NgIf, Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
-import { ErrorComponent } from '../../../components/error/error.component';
-import { CommonModule, NgIf } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Produto } from '../../../../core/models/produto.model';
-import { ProdutoService } from '../../../../core/services/product/produto.service';
+import { ConfirmationDialogComponent } from '../../../components/confirmation-dialog/confirmation-dialog.component';
+import { ErrorComponent } from '../../../components/error/error.component';
+import { HeaderComponent } from '../../../components/header/header.component';
+import { NavsideComponent } from '../../../components/navside/navside.component';
 import { Plataforma } from '../../../../core/models/plataforma.model';
 import { TipoMidia } from '../../../../core/models/tipo-midia.model';
 import { Genero } from '../../../../core/models/genero.model';
 import { Classificacao } from '../../../../core/models/classificacao.model';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-form',
   standalone: true,
+  imports: [ErrorComponent, CommonModule, MatSelectModule,
+    MatOptionModule, RouterModule, NgIf, HeaderComponent,
+    NavsideComponent, ReactiveFormsModule, FormsModule,
+    NavsideComponent, MatInputModule, MatFormFieldModule,
+    MatIconModule, ConfirmationDialogComponent, MatCardModule, MatToolbarModule],
   templateUrl: './produto-form.component.html',
-  styleUrl: './produto-form.component.css',
-  imports: [ErrorComponent, CommonModule, MatSelectModule, MatOptionModule, RouterModule, NgIf, HeaderComponent, NavsideComponent, ReactiveFormsModule, FormsModule,
-    NavsideComponent, MatInputModule, MatFormFieldModule, MatIconModule, ConfirmationDialogComponent]
+  styleUrl: './produto-form.component.css'
 })
-export class ProdutoFormComponent {
-  produtos: Produto[] = [];
+export class ProdutoFormComponent implements OnInit {
+  formGroup: FormGroup;
   plataformas: Plataforma[] = [];
   tiposMidia: TipoMidia[] = [];
   generos: Genero[] = [];
   classificacoes: Classificacao[] = [];
 
-  formProduto!: FormGroup;
+  fileName: string = '';
+  selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private produtoService: ProdutoService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog,
-    private dialogError: MatDialog
+    private location: Location
   ) {
-    const produto: Produto = this.activatedRoute.snapshot.data['produto'];
-    this.formProduto = this.formBuilder.group({
-      id: [produto?.id || null],
-      nome: [produto?.nome || '', Validators.required],
-      descricao: [produto?.descricao || '', Validators.required],
-      preco: [produto?.preco || '', Validators.required],
-      estoque: [produto?.estoque || '', Validators.required],
-      desenvolvedora: [produto?.desenvolvedora || '', Validators.required],
+    this.formGroup = this.formBuilder.group({
+      id: [null],
+      nome: ['', Validators.required],
+      descricao: ['', Validators.required],
+      preco: ['', Validators.required],
+      estoque: ['', Validators.required],
+      desenvolvedora: ['', Validators.required],
       plataforma: [null],
-      tipoMidia: [produto?.tipoMidia || '', Validators.required],
-      genero: [produto?.genero || '', Validators.required],
-      classificacao: [produto?.classificacao || '', Validators.required],
-    });
+      tipoMidia: [null],
+      genero: [null],
+      classificacao: [null],
+      dataLancamento: ['', Validators.required],
+    })
   }
 
   ngOnInit(): void {
-    this.produtoService.findPlataformas().subscribe(data => {
-      this.plataformas = data;
-      this.initializeForm();
-    });
-    this.produtoService.findTiposMidia().subscribe(data => {
-      this.tiposMidia = data;
-      this.initializeForm();
-    });
-    this.produtoService.findGeneros().subscribe(data => {
-      this.generos = data;
-      this.initializeForm();
-    });
-    this.produtoService.findClassificacoes().subscribe(data => {
-      this.classificacoes = data;
-      this.initializeForm();
-    });
+    this.produtoService.findPlataformas().subscribe(
+      data => {
+        this.plataformas = data;
+        this.initializeForm();
+      });
+
+    this.produtoService.findTiposMidia().subscribe(
+      data => {
+        this.tiposMidia = data;
+        this.initializeForm();
+      });
+
+    this.produtoService.findGeneros().subscribe(
+      data => {
+        this.generos = data;
+        this.initializeForm();
+      });
+
+    this.produtoService.findClassificacoes().subscribe(
+      data => {
+        this.classificacoes = data;
+        this.initializeForm();
+      });
+  }
+
+  voltarPagina() {
+    this.location.back();
   }
 
   initializeForm(): void {
     const produto: Produto = this.activatedRoute.snapshot.data['produto'];
 
-    const plataforma = this.plataformas.find(m => m.id === (produto?.plataforma?.id || null));
+    const plataforma = this.plataformas.find(p => p.id === (produto?.plataforma?.id || null));
 
-    const tipoMidia = this.tiposMidia.find(m => m.id === (produto?.tipoMidia?.id || null));
+    const tipoMidia = this.tiposMidia.find(t => t.id === (produto?.tipoMidia?.id || null));
 
-    const genero = this.generos.find(m => m.id === (produto?.genero?.id || null));
+    const genero = this.generos.find(g => g.id === (produto?.genero?.id || null));
 
-    const classificacao = this.classificacoes.find(m => m.id === (produto?.classificacao?.id || null));
+    const classificacao = this.classificacoes.find(c => c.id === (produto?.classificacao?.id || null));
 
-    this.formProduto = this.formBuilder.group({
+    if (produto && produto.imagem) {
+      this.imagePreview = this.produtoService.getUrlImagem(produto.imagem);
+      this.fileName = produto.imagem;
+    }
+
+    this.formGroup = this.formBuilder.group({
       id: [(produto && produto.id) ? produto.id : null],
       nome: [(produto && produto.nome) ? produto.nome : null],
       descricao: [(produto && produto.descricao) ? produto.descricao : null],
@@ -100,56 +122,127 @@ export class ProdutoFormComponent {
       plataforma: [plataforma],
       tipoMidia: [tipoMidia],
       genero: [genero],
-      classificacao: [classificacao]
+      classificacao: [classificacao],
+      dataLancamento: [(produto && produto.dataLancamento) ? produto.dataLancamento : null],
     })
+  }
+
+  tratarErros(errorResponse: HttpErrorResponse) {
+
+    if (errorResponse.status === 400) {
+      if (errorResponse.error?.errors) {
+        errorResponse.error.errors.forEach((validationError: any) => {
+          const formControl = this.formGroup.get(validationError.fieldName);
+
+          if (formControl) {
+            formControl.setErrors({ apiError: validationError.message })
+          }
+
+        });
+      }
+    } else if (errorResponse.status < 400) {
+      alert(errorResponse.error?.message || 'Erro genérico do envio do formulário.');
+    } else if (errorResponse.status >= 500) {
+      alert('Erro interno do servidor.');
+    }
 
   }
 
-  salvar() {
-    console.log('Entrou no salvar');
-    console.log('Formulário:', this.formProduto.value);
-    console.log('Formulário válido:', this.formProduto.valid);
+  carregarImagemSelecionada(event: any) {
+    this.selectedFile = event.target.files[0];
 
-    // Validar o formulário antes de prosseguir
-    this.enviarFormulario();
+    if (this.selectedFile) {
+      this.fileName = this.selectedFile.name;
+      // carregando image preview
+      const reader = new FileReader();
+      reader.onload = e => this.imagePreview = reader.result;
+      reader.readAsDataURL(this.selectedFile);
+    }
 
-    if (this.formProduto.valid) {
-      const produto = this.formProduto.value;
-      if (produto.id == null) {
-        this.produtoService.insert(produto).subscribe({
-          next: (produtoService) => {
-            this.router.navigateByUrl('/produtos/list');
+  }
+
+  private uploadImage(produtoId: number) {
+    if (this.selectedFile) {
+      this.produtoService.uploadImagem(produtoId, this.selectedFile.name, this.selectedFile)
+        .subscribe({
+          next: () => {
+            this.voltarPagina();
           },
-          error: (err) => {
-            console.log('Erro ao Incluir' + JSON.stringify(err));
-            if (err instanceof HttpErrorResponse && err.error && err.error.errors && err.error.errors.length > 0) {
-              const errorMessage = err.error.errors[0].message;
-              this.mostrarErro(errorMessage);
-            } else {
-              this.mostrarErro('Erro ao criar produto: ' + err.message);
-            }
+          error: err => {
+            console.log('Erro ao fazer o upload da imagem');
+            // tratar o erro
           }
-        });
-      } else {
-        this.produtoService.update(produto).subscribe({
-          next: (produtoService) => {
-            this.router.navigateByUrl('/produtos/list');
-          },
-          error: (err) => {
-            console.log('Erro ao Editar' + JSON.stringify(err));
-          }
-        });
-      }
+        })
     } else {
-      console.log('Formulário inválido');
-      this.mostrarErro('Por favor, preencha todos os campos obrigatórios.');
+      this.voltarPagina();
     }
   }
 
+  salvar() {
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
+      const produto = this.formGroup.value;
+
+      console.log(produto);
+
+      // selecionando a operacao (insert ou update)
+      const operacao = produto.id == null
+        ? this.produtoService.insert(produto)
+        : this.produtoService.update(produto);
+
+      // executando a operacao
+      operacao.subscribe({
+        next: (produtoCadastrado) => {
+          this.uploadImage(produtoCadastrado.id);
+        },
+        error: (error) => {
+          console.log('Erro ao Salvar' + JSON.stringify(error));
+          this.tratarErros(error);
+        }
+      });
+    }
+  }
+
+  getErrorMessage(controlName: string, errors: ValidationErrors | null | undefined): string {
+    if (!errors) {
+      return '';
+    }
+    for (const errorName in errors) {
+      if (errors.hasOwnProperty(errorName) && this.errorMessages[controlName][errorName]) {
+        return this.errorMessages[controlName][errorName];
+      }
+    }
+
+    return 'invalid field';
+  }
+
+  errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
+    nome: {
+      required: 'O nome deve ser informado.',
+      minlength: 'O nome deve conter ao menos 2 letras.',
+      maxlength: 'O nome deve conter no máximo 10 letras.',
+      apiError: ' '
+    },
+
+    descricao: {
+      required: 'A descricao deve ser informada.',
+      minlength: 'O nome deve conter 2 letras.',
+      maxlength: 'O nome deve conter 2 letras.',
+      apiError: ' '
+    },
+    preco: {
+      required: 'O preço deve ser informado.',
+      apiError: ' '
+    },
+    estoque: {
+      required: 'O estoque deve ser informado.',
+      apiError: ' '
+    }
+  }
 
   excluir() {
-    if (this.formProduto.valid) {
-      const produto = this.formProduto.value;
+    if (this.formGroup.valid) {
+      const produto = this.formGroup.value;
       if (produto.id != null) {
         this.produtoService.delete(produto).subscribe({
           next: () => {
@@ -161,36 +254,5 @@ export class ProdutoFormComponent {
         });
       }
     }
-  }
-
-  confirmDelete(produto: Produto): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
-
-    dialogRef.afterClosed().subscribe((result: boolean) => {
-      if (result === true && produto && produto.id !== undefined) {
-        this.produtoService.delete(produto).subscribe(
-          () => {
-            // Atualizar lista de administradores após exclusão
-            this.produtos = this.produtos.filter(adm => adm.id !== produto.id);
-
-            this.router.navigateByUrl('/produtos/list');
-          },
-          error => {
-            console.log('Erro ao excluir modelo:', error);
-          }
-        );
-      }
-    });
-  }
-
-  mostrarErro(mensagemErro: string): void {
-    this.dialog.open(ErrorComponent, {
-      data: mensagemErro
-    });
-  }
-
-  enviarFormulario(): void {
-
-
   }
 }
