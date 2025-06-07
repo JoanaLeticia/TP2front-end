@@ -7,18 +7,13 @@ import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardTitle, MatCardFooter } from '@angular/material/card';
 import { Produto } from '../../../core/models/produto.model';
 import { ProdutoService } from '../../../core/services/product/produto.service';
-
-type Card = {
-  idProduto: number;
-  titulo: string;
-  preco: number;
-  urlImagem: string;
-}
+import { Card } from '../../../core/models/card.model';
+import { CardProdutoComponent } from '../card-produto/card-produto.component';
 
 @Component({
   selector: 'app-grid-produtos',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatCard, MatCardActions, MatCardContent, MatCardTitle, MatCardFooter, NgFor, MatButton],
+  imports: [CommonModule, RouterModule, MatCard, MatCardActions, MatCardContent, MatCardTitle, MatCardFooter, NgFor, MatButton, CardProdutoComponent],
   templateUrl: './grid-produtos.component.html',
   styleUrl: './grid-produtos.component.css'
 })
@@ -50,7 +45,9 @@ export class GridProdutosComponent implements OnInit{
         idProduto: produto.id,
         titulo: produto.nome,
         preco: produto.preco,
-        urlImagem: this.produtoService.getUrlImagem(produto.imagem)
+        urlImagem: this.produtoService.getUrlImagem(produto.imagem),
+        plataforma: produto.plataforma?.nome ?? 'N/A',
+        midia: produto.tipoMidia?.nome ?? 'N/A'
       });
     });
     this.cards.set(cards);

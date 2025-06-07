@@ -77,4 +77,9 @@ export class ProdutoService {
   findClassificacoes(): Observable<Classificacao[]> {
     return this.httpClient.get<Classificacao[]>(`${this.baseUrl}/classificacoes`);
   }
+
+  getByPlataforma(nomePlataforma: string): Observable<Produto[]> {
+    return this.httpClient.get<Produto[]>(`${this.baseUrl}/plataforma/${nomePlataforma}`);
+  }
+
 }

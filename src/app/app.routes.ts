@@ -19,6 +19,7 @@ import { LoginComponent } from './client/pages/login/login.component';
 import { CadastroComponent } from './client/pages/cadastro/cadastro.component';
 import { DetalhesProdutoComponent } from './client/pages/detalhes-produto/detalhes-produto.component';
 import { CarrinhoComponent } from './client/pages/carrinho/carrinho.component';
+import { PlataformaComponent } from './client/pages/plataforma/plataforma.component';
 
 export const routes: Routes = [
 
@@ -56,7 +57,13 @@ export const routes: Routes = [
     // CADASTRO CLIENTE
     { path: 'gameverse/cadastro', component: CadastroComponent, title: 'Gameverse | Cadastro' },
 
-    { path: 'produto/:id', component: DetalhesProdutoComponent, title: 'Detalhes da Produto' },
+    // PRODUTO
+
+    {
+        path: 'gameverse/produto/plataforma/:nome', component: PlataformaComponent, title: 'Produtos por plataforma'
+    },
+
+    { path: 'gamerverse/produto/:id', component: DetalhesProdutoComponent, title: 'Detalhes da Produto' },
 
     { path: 'gameverse/carrinho', component: CarrinhoComponent, title: 'Carrinho' }
 
