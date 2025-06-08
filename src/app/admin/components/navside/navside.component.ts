@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgFor } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navside',
@@ -12,6 +13,11 @@ import { CommonModule, NgFor } from '@angular/common';
 })
 export class NavsideComponent {
   isSubmenuOpen: boolean[] = [false, false, false, false, false];
+
+  constructor(private router: Router) { }
+  logHome() {
+    this.router.navigate(['/adm/home']);
+  }
 
   toggleSubmenu(index: number) {
     this.isSubmenuOpen[index] = !this.isSubmenuOpen[index];

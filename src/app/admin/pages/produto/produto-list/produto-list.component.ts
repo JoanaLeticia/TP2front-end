@@ -107,8 +107,6 @@ export class ProdutoListComponent {
 
   visualizarDados(produto: Produto): void {
     this.dialog.open(ViewProdutoComponent, {
-      width: '600px',
-      height: '455px',
       data: produto
     });
     console.log(produto)

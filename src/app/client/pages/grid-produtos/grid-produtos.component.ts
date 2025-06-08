@@ -18,7 +18,7 @@ import { CardProdutoComponent } from '../card-produto/card-produto.component';
   styleUrl: './grid-produtos.component.css'
 })
 export class GridProdutosComponent implements OnInit {
-  @Input() produtosInput: Produto[] = [];
+  @Input() produtosInput: Produto[] | null = null; // Alterado para aceitar null
   cards = signal<Card[]>([]);
   produtos: Produto[] = [];
 
@@ -28,7 +28,10 @@ export class GridProdutosComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.carregarConsultas();
+    // Se não receber produtos via input, carrega do serviço
+    if (!this.produtosInput) {
+      this.carregarProdutos();
+    }
   }
 
   ngOnChanges() {
@@ -38,7 +41,7 @@ export class GridProdutosComponent implements OnInit {
   }
 
   private carregarCardsFromInput() {
-    const cards: Card[] = this.produtosInput.map(produto => ({
+    const cards: Card[] = (this.produtosInput || []).map(produto => ({
       idProduto: produto.id,
       titulo: produto.nome,
       preco: produto.preco,
@@ -49,27 +52,42 @@ export class GridProdutosComponent implements OnInit {
     this.cards.set(cards);
   }
 
-  carregarConsultas() {
-    this.produtoService.getAllPaginacao(0, 10).subscribe(data => {
-      this.produtos = data;
-      this.carregarCards();
+  private carregarProdutos() {
+    this.produtoService.getAllPaginacao(0, 10).subscribe({
+      next: (data) => {
+        console.log('Dados recebidos:', data); // Log para depuração
+        // Garante que data é um array
+        this.produtos = Array.isArray(data) ? data : [];
+        this.carregarCards();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar produtos:', err);
+        this.produtos = []; // Define como array vazio em caso de erro
+        this.carregarCards();
+      }
     });
   }
 
   carregarCards() {
     const cards: Card[] = [];
-    this.produtos.forEach(produto => {
-      cards.push({
-        idProduto: produto.id,
-        titulo: produto.nome,
-        preco: produto.preco,
-        urlImagem: this.produtoService.getUrlImagem(produto.imagem),
-        plataforma: produto.plataforma?.nome ?? 'N/A',
-        midia: produto.tipoMidia?.nome ?? 'N/A'
+    
+    // Verificação adicional de segurança
+    if (Array.isArray(this.produtos)) {
+      this.produtos.forEach(produto => {
+        // Verificação de cada propriedade
+        cards.push({
+          idProduto: produto.id,
+          titulo: produto.nome || 'Sem nome',
+          preco: produto.preco || 0,
+          urlImagem: produto.imagem ? this.produtoService.getUrlImagem(produto.imagem) : 'assets/imagem-padrao.jpg',
+          plataforma: produto.plataforma?.nome ?? 'N/A',
+          midia: produto.tipoMidia?.nome ?? 'N/A'
+        });
       });
-    });
+    }
+    
     this.cards.set(cards);
-    console.log("Carregou os cards")
+    console.log("Cards carregados:", cards);
   }
 
   adicionarAoCarrinho(card: Card) {
@@ -78,8 +96,8 @@ export class GridProdutosComponent implements OnInit {
       nome: card.titulo,
       valor: card.preco,
       quantidade: 1
-    })
-    console.log("Adicionou o card ao carrinho")
+    });
+    this.showSnackbarTopPosition(`${card.titulo} adicionado ao carrinho`, 'OK');
   }
 
   showSnackbarTopPosition(content: any, action: any) {

@@ -1,21 +1,23 @@
 <header>
     <div class="toolbar">
-        <div class="logo">
-            <button class="logo-bnt" (click)="logHome()">
-                <img src="../../../../assets/logo-noColor.png" alt="Logo do Sistema">
-            </button>
-        </div>
         <div class="welcome-message">
-            <p>Bem-vindo ao Painel Administrativo</p>
+            Admin
         </div>
-        <div class="actions">
-            <button id="dropdown-btn">
-                <img src="../../../../assets/User.jpg" alt="Usuário" width="32" height="32">
-            </button>
-            <div class="dropdown-content">
-                <a href="#">Dashboard</a>
-                <a href="#">Sair</a>
-            </div>
+        <div class="user-container">
+            <ng-container *ngIf="(usuarioLogado$ | async) as usuario">
+                <div class="user-display">
+                    <div class="actions">
+                        <button id="dropdown-btn">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a (click)="logHome()">Dashboard</a>
+                            <a (click)="logout()">Sair</a>
+                        </div>
+                    </div>
+                    <span class="user-name">{{ usuario.nome }} <br><a style="font-size: 12px; color: rgb(134, 134, 134);">Administrador</a></span>
+                </div>
+            </ng-container>
         </div>
     </div>
 </header>

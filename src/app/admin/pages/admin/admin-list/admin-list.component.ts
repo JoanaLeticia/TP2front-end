@@ -107,8 +107,6 @@ export class AdminListComponent {
 
   visualizarDados(admin: Admin): void {
     this.dialog.open(ViewAdmComponent, {
-      width: '600px',
-      height: '455px',
       data: admin
     });
     console.log(admin)

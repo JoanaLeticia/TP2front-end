@@ -100,8 +100,6 @@ export class ClienteListComponent {
 
   visualizarDados(cliente: Cliente): void {
     this.dialog.open(ViewClienteComponent, {
-      width: '600px',
-      height: '455px',
       data: cliente
     });
     console.log(cliente)

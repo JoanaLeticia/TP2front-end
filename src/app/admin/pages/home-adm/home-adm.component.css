@@ -1,7 +1,9 @@
 .container-admin-home {
-  padding: 90px 40px 40px; /* espaço para header fixo */
+  padding: 100px 40px 40px; /* espaço para header fixo */
   font-family: 'Inter', sans-serif;
-  margin-left: 230px;
+  margin-left: 250px;
+  background-color: #e1e4ee;
+  min-height: 100vh;
 }
 
 .container-admin-home h1 {

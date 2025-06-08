@@ -197,7 +197,7 @@ export class ProdutoFormComponent implements OnInit {
         dataLancamento: formValue.dataLancamento
       };
 
-      console.log(produtoParaEnviar);
+      console.log('Enviando para API:', produtoParaEnviar);
 
       // selecionando a operacao (insert ou update)
       const operacao = produtoParaEnviar.id == null
@@ -207,7 +207,11 @@ export class ProdutoFormComponent implements OnInit {
       // executando a operacao
       operacao.subscribe({
         next: (produtoCadastrado) => {
+          if (!produtoCadastrado?.id) {
+            throw new Error('Resposta inválida da API: ID não retornado');
+          }
           this.uploadImage(produtoCadastrado.id);
+          this.router.navigateByUrl('/produtos/list');
         },
         error: (error) => {
           console.log('Erro ao Salvar' + JSON.stringify(error));

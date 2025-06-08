@@ -107,8 +107,6 @@ export class EstadoListComponent {
 
   visualizarDados(estado: Estado): void {
     this.dialog.open(ViewEstadoComponent, {
-      width: '600px',
-      height: '455px',
       data: estado
     });
     console.log(estado)

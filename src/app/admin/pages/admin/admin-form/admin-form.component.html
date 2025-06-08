@@ -59,8 +59,8 @@
         
     </form>
     <div class="bnt-group">
-        <button type="submit" class="btn-cancelar" [routerLink]="['/adm/list']">Cancelar</button>
         <button type="submit" class="btn-excluir"  (click)="confirmDelete(formGroup?.value)" *ngIf="formGroup?.get('id')?.value" >Excluir</button>
+        <button type="submit" class="btn-cancelar" [routerLink]="['/adm/list']">Cancelar</button>
         <button type="submit" class="btn-salvar" (click)="salvar()">Salvar</button>
     </div>
 

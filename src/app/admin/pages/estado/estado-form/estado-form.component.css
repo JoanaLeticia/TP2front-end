@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 main {
-    display: flex;
-    flex-direction: column;
-    width: 78%;
-    margin-top: 70px;
-    margin-left: 280px;
+    padding: 100px 40px 40px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 250px;
+    background-color: #e1e4ee;
+    min-height: 100vh;
 
-    font-family: "Lato", sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 h2 {
@@ -23,7 +23,7 @@ a {
 }
 
 .content {
-    background-color: #33BDFE;
+    background-color: #0d358b;
     color: #fff;
 
     border: 2px;
@@ -37,38 +37,38 @@ a {
 }
 
 form {
-    margin-top: 18px;
-    border: 1px solid #33BDFE;
+    margin-top: -5px;
+    border: 1px solid #0d358b;
+    gap: 20px;
     border-radius: 10px;
-    padding: 25px;
+    padding: 25px; 
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
-    width: 78%;
+    margin-bottom: -15px;
 }
 
 form .group-ini {
-    display: flex;
+    display: contents;
+    flex-direction: row;
+    justify-content: space-around;
     margin-top: 25px;
-    gap: 5rem;
-}
-
-.group-ini .form-group:first-child {
-    justify-self: start;
 }
 
 form .group {
-    display: flex;
-    margin-top: 25px;
-    gap: 10rem;
+    display: contents;
+    justify-content: space-around;
 }
 
 .form-group {
     display: flex;
-    flex-direction: column;
+    margin-top: 20px;
 }
 
 .form-group label {
-    margin-bottom: 5px;
+    margin-right: 10px;
+    width: 70px;
+    margin-top: 7px;
     font-size: 15px;
     font-weight: 700;
 }
@@ -250,15 +250,15 @@ mat-error {
 }
 
 
-.bnt-group {
+.bnt-group{
     display: flex;
-    justify-content: center;
+    justify-content: end;
     gap: 25px;
 
     margin-top: 15px;
 }
 
-button {
+button{
     height: 50px;
     width: 130px;
     margin: 25px 0;
@@ -271,15 +271,12 @@ button {
     border-style: none;
     cursor: pointer;
 }
-
-.btn-cancelar {
+.btn-cancelar{
     background: #808080;
 }
-
-.btn-excluir {
-    background: #f36b7f;
+.btn-excluir{
+    background: #c90220;
 }
-
-.btn-salvar {
-    background: #33BDFE;
+.btn-salvar{
+    background: #007e39;
 }

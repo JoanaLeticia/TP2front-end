@@ -1,25 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
 
 main {
-    display: flex;
-    flex-direction: column;
-    width: 78%;
-    margin-top: 80px;
-    margin-left: 280px;
+    padding: 100px 40px 40px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 250px;
+    background-color: #e1e4ee;
+    min-height: 100vh;
 
-    font-family: "Lato", sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 h2 {
     font-size: 25px;
 }
+
 a {
-    text-decoration: none; 
-    display: inline-block; 
-    border-bottom: none; 
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: none;
     margin: 0px 0px;
-    padding: 5px; 
+    padding: 5px;
 }
+
 .content {
     display: flex;
     justify-content: space-between;
@@ -30,7 +32,7 @@ a {
     height: 50px;
     width: 110px;
     margin: 25px 0;
-    background: #0076CD;
+    background: #0d358b;
     font-size: 16px;
     color: #fff;
 
@@ -42,24 +44,22 @@ a {
 
 .search {
     display: flex;
-    align-items: center;
+    align-items: end;
     height: 35px;
     width: 350px;
-    margin-right: 120px;
 }
 
 .search label {
     flex: 1;
-    font-size: 20px;
-    font-family: "Lato", sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
     font-weight: 500;
-    border-right: 200px;
+    margin-right: -20px;
 }
 
 .search input {
     flex: 3;
     font-size: 15px;
-    font-family: "Lato", sans-serif;
     font-weight: 500;
     width: 500px;
 
@@ -72,14 +72,15 @@ a {
 
 .search input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #1d4db3;
 }
 
 /* Tabela */
-.mat-table{
+.mat-table {
     border-style: dotted;
     width: 500px;
 }
+
 .flex-container {
     display: flex;
     align-items: center;
@@ -102,46 +103,43 @@ a {
 
 .mat-column-acao {
     min-width: 10em;
-    text-align: center;
+    text-align: end;
 }
 
 table button {
-    background: #b6aeae;
-
     width: 50px;
     height: 40px;
 
+    font-size: 18px;
     border-radius: 20px;
     border-style: none;
 
     cursor: pointer;
-    color: #fff;
+    color: #494949;
     transform: scale(1.0)
 }
 
 
-/* Estilos padrão dos botões */
 .bnt-visualizar {
-    background-color: transparent; /* Cor de fundo transparente para o botão de visualização */
+    background-color: transparent;
 }
 
 .bnt-editar {
-    background-color: transparent; /* Cor de fundo transparente para o botão de edição */
+    background-color: transparent;
 }
 
 .bnt-apagar {
-    background-color: transparent; /* Cor de fundo transparente para o botão de exclusão */
+    background-color: transparent;
 }
 
-/* Estilos dos botões quando o mouse passa por cima */
 .bnt-visualizar:hover {
-    background-color: #add8e6; /* Altera a cor de fundo para azul ao passar o mouse */
+    color: #0076CD;
 }
 
 .bnt-editar:hover {
-    background-color: #ffff99; /* Altera a cor de fundo para amarelo ao passar o mouse */
+    color: #9b6d17;
 }
 
 .bnt-apagar:hover {
-    background-color: #ffb6c1; /* Altera a cor de fundo para vermelho ao passar o mouse */
+    color: red;
 }

@@ -41,13 +41,13 @@
             <th mat-header-cell *matHeaderCellDef> Ação </th>
             <td mat-cell *matCellDef="let element">
                 <button class="bnt-visualizar" (click)="visualizarDados(element)">
-                    <mat-icon>visibility</mat-icon>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
                 <button class="bnt-editar" [routerLink]="['/cliente/edit', element.id]">
-                    <mat-icon>edit</mat-icon>
+                    <i class="fa-solid fa-pen-to-square"></i>
                 </button>
                 <button class="bnt-apagar" (click)="confirmDelete(element)">
-                    <mat-icon>delete</mat-icon>
+                    <i class="fa-solid fa-trash"></i>
                 </button>
             </td>
         </ng-container>
