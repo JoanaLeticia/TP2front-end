@@ -45,7 +45,7 @@ export class GridProdutosComponent implements OnInit {
       idProduto: produto.id,
       titulo: produto.nome,
       preco: produto.preco,
-      urlImagem: this.produtoService.getUrlImagem(produto.imagem),
+      urlImagem: this.produtoService.getUrlImagem(produto.nomeImagem),
       plataforma: produto.plataforma?.nome ?? 'N/A',
       midia: produto.tipoMidia?.nome ?? 'N/A'
     }));
@@ -55,14 +55,13 @@ export class GridProdutosComponent implements OnInit {
   private carregarProdutos() {
     this.produtoService.getAllPaginacao(0, 10).subscribe({
       next: (data) => {
-        console.log('Dados recebidos:', data); // Log para depuração
-        // Garante que data é um array
+        console.log('Dados recebidos:', data);
         this.produtos = Array.isArray(data) ? data : [];
         this.carregarCards();
       },
       error: (err) => {
         console.error('Erro ao carregar produtos:', err);
-        this.produtos = []; // Define como array vazio em caso de erro
+        this.produtos = [];
         this.carregarCards();
       }
     });
@@ -79,7 +78,7 @@ export class GridProdutosComponent implements OnInit {
           idProduto: produto.id,
           titulo: produto.nome || 'Sem nome',
           preco: produto.preco || 0,
-          urlImagem: produto.imagem ? this.produtoService.getUrlImagem(produto.imagem) : 'assets/imagem-padrao.jpg',
+          urlImagem: produto.nomeImagem ? this.produtoService.getUrlImagem(produto.nomeImagem) : 'assets/imagem-padrao.jpg',
           plataforma: produto.plataforma?.nome ?? 'N/A',
           midia: produto.tipoMidia?.nome ?? 'N/A'
         });

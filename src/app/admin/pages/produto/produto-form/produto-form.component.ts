@@ -18,7 +18,7 @@ import { NavsideComponent } from '../../../components/navside/navside.component'
 import { Plataforma } from '../../../../core/models/plataforma.model';
 import { TipoMidia } from '../../../../core/models/tipo-midia.model';
 import { Genero } from '../../../../core/models/genero.model';
-import { Classificacao } from '../../../../core/models/classificacao.model';
+import { ClassificacaoIndicativa } from '../../../../core/models/classificacao-indicativa.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -38,7 +38,7 @@ export class ProdutoFormComponent implements OnInit {
   plataformas: Plataforma[] = [];
   tiposMidia: TipoMidia[] = [];
   generos: Genero[] = [];
-  classificacoes: Classificacao[] = [];
+  classificacoes: ClassificacaoIndicativa[] = [];
 
   fileName: string = '';
   selectedFile: File | null = null;
@@ -105,11 +105,11 @@ export class ProdutoFormComponent implements OnInit {
 
     const genero = this.generos.find(g => g.id === (produto?.genero?.id || null));
 
-    const classificacao = this.classificacoes.find(c => c.id === (produto?.classificacao?.id || null));
+    const classificacao = this.classificacoes.find(c => c.id === (produto?.classificacaoIndicativa?.id || null));
 
-    if (produto && produto.imagem) {
-      this.imagePreview = this.produtoService.getUrlImagem(produto.imagem);
-      this.fileName = produto.imagem;
+    if (produto && produto.nomeImagem) {
+      this.imagePreview = this.produtoService.getUrlImagem(produto.nomeImagem);
+      this.fileName = produto.nomeImagem;
     }
 
     this.formGroup = this.formBuilder.group({
@@ -122,7 +122,7 @@ export class ProdutoFormComponent implements OnInit {
       plataforma: [plataforma],
       tipoMidia: [tipoMidia],
       genero: [genero],
-      classificacao: [classificacao],
+      classificacaoIndicativa: [classificacao],
       dataLancamento: [(produto && produto.dataLancamento) ? produto.dataLancamento : null],
     })
   }
@@ -181,28 +181,14 @@ export class ProdutoFormComponent implements OnInit {
   salvar() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
-      // Criar objeto no formato que o backend espera
-      const produtoParaEnviar = {
-        id: formValue.id,
-        nome: formValue.nome,
-        descricao: formValue.descricao,
-        preco: formValue.preco,
-        estoque: formValue.estoque,
-        desenvolvedora: formValue.desenvolvedora,
-        idPlataforma: formValue.plataforma?.id,
-        idTipoMidia: formValue.tipoMidia?.id,
-        idGenero: formValue.genero?.id,
-        idClassificacao: formValue.classificacao?.id,
-        dataLancamento: formValue.dataLancamento
-      };
+      const produto = this.formGroup.value;
 
-      console.log('Enviando para API:', produtoParaEnviar);
+      console.log('Enviando para API:', produto);
 
       // selecionando a operacao (insert ou update)
-      const operacao = produtoParaEnviar.id == null
-        ? this.produtoService.insert(produtoParaEnviar)
-        : this.produtoService.update(produtoParaEnviar);
+      const operacao = produto.id == null
+        ? this.produtoService.insert(produto)
+        : this.produtoService.update(produto);
 
       // executando a operacao
       operacao.subscribe({

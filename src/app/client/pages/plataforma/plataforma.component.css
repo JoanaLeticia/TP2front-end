@@ -1,13 +1,17 @@
 /* plataforma.component.css */
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding-top: 40px;
 }
 
 .plataforma-title {
   color: #0d358b;
-  text-align: center;
-  margin: 20px 0;
+  text-align: start;
+  font: 600 24px Libre Franklin, sans-serif;
+  margin: 0;
+  margin-bottom: 10px;
 }
 
 .controls {

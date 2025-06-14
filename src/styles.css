@@ -182,17 +182,34 @@
 
 .secao-lancamentos {
   padding: 20px 20px;
-  background-color: #f9f9f9;
+  padding-bottom: 100px;
+  background-color: #f2f2f2;
   text-align: center;
+}
+
+.titulo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
 }
 
 .titulo-secao {
   font-size: 28px;
+  margin-top: 20px;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #0d358b;
+  color: #252525;
+  font-family: Libre Franklin, sans-serif;
 }
 
+.linha {
+    flex: 1;
+    max-width: 450px;
+    height: 1px;
+    background-color: #c9c9c9;
+}
 
 /* FOOTER */
 .footer {

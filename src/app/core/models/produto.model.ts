@@ -1,4 +1,4 @@
-import { Classificacao } from "./classificacao.model";
+import { ClassificacaoIndicativa } from "./classificacao-indicativa.model";
 import { Genero } from "./genero.model";
 import { Plataforma } from "./plataforma.model";
 import { TipoMidia } from "./tipo-midia.model";
@@ -13,7 +13,7 @@ export class Produto {
     plataforma!: Plataforma;
     tipoMidia!: TipoMidia;
     genero!: Genero;
-    classificacao!: Classificacao;
+    classificacaoIndicativa!: ClassificacaoIndicativa;
     dataLancamento!: string;
-    imagem!: string;
+    nomeImagem!: string;
 }

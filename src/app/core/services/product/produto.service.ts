@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Plataforma } from "../../models/plataforma.model";
 import { TipoMidia } from "../../models/tipo-midia.model";
 import { Genero } from "../../models/genero.model";
-import { Classificacao } from "../../models/classificacao.model";
+import { ClassificacaoIndicativa } from "../../models/classificacao-indicativa.model";
 import { map } from 'rxjs/operators';
 
 interface ProdutoSimplificado {
@@ -63,12 +63,39 @@ export class ProdutoService {
     return this.httpClient.get<Produto>(`${this.baseUrl}/${id}`);
   }
 
-  insert(produto: Produto | ProdutoSimplificado): Observable<Produto> {
-    return this.httpClient.post<Produto>(this.baseUrl, produto);
+  insert(produto: Produto): Observable<Produto> {
+    const obj = {
+      id: produto.id,
+      nome: produto.nome,
+      descricao: produto.descricao,
+      preco: produto.preco,
+      estoque: produto.estoque,
+      desenvolvedora: produto.desenvolvedora,
+      plataforma: produto.plataforma.id,
+      tipoMidia: produto.tipoMidia.id,
+      genero: produto.genero.id,
+      classificacaoIndicativa: produto.classificacaoIndicativa.id,
+      nomeImagem: produto.nomeImagem
+    }
+
+    return this.httpClient.post<Produto>(this.baseUrl, obj);
   }
 
-  update(produto: Produto | ProdutoSimplificado): Observable<Produto> {
-    return this.httpClient.put<Produto>(`${this.baseUrl}/${produto.id}`, produto);
+  update(produto: Produto): Observable<Produto> {
+    const obj = {
+      id: produto.id,
+      nome: produto.nome,
+      descricao: produto.descricao,
+      preco: produto.preco,
+      estoque: produto.estoque,
+      desenvolvedora: produto.desenvolvedora,
+      plataforma: produto.plataforma.id,
+      tipoMidia: produto.tipoMidia.id,
+      genero: produto.genero.id,
+      classificacaoIndicativa: produto.classificacaoIndicativa.id,
+      nomeImagem: produto.nomeImagem
+    }
+    return this.httpClient.put<Produto>(`${this.baseUrl}/${obj.id}`, obj);
   }
 
   delete(produto: Produto): Observable<any> {
@@ -76,7 +103,7 @@ export class ProdutoService {
   }
 
   getUrlImagem(nomeImagem: string): string {
-    return `http://localhost:8080/produtos/image/download/${nomeImagem}`;
+    return `${this.baseUrl}/image/download/${nomeImagem}`;
   }
 
   uploadImagem(id: number, nomeImagem: string, imagem: File): Observable<any> {
@@ -100,8 +127,8 @@ export class ProdutoService {
     return this.httpClient.get<Genero[]>(`${this.baseUrl}/generos`);
   }
 
-  findClassificacoes(): Observable<Classificacao[]> {
-    return this.httpClient.get<Classificacao[]>(`${this.baseUrl}/classificacoes`);
+  findClassificacoes(): Observable<ClassificacaoIndicativa[]> {
+    return this.httpClient.get<ClassificacaoIndicativa[]>(`${this.baseUrl}/classificacoes`);
   }
 
   getByPlataformaPaginado(nomePlataforma: string, page?: number, size?: number): Observable<Produto[]> {

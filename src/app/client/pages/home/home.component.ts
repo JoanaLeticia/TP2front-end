@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   buscarProdutos() {
     this.produtoService.findAll().subscribe({
       next: (produtos) => {
-        this.produtos = produtos;
+        this.produtos = produtos.slice(0, 8);
         console.log('Dados recebidos:', {
           produtos: this.produtos.length
         });

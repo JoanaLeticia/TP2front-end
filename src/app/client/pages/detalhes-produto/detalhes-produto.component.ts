@@ -55,8 +55,8 @@ export class DetalhesProdutoComponent implements OnInit {
 
     this.produto$.subscribe({
       next: (produto) => {
-        if (produto?.imagem) {
-          this.imageUrl = this.produtoService.getUrlImagem(produto.imagem);
+        if (produto?.nomeImagem) {
+          this.imageUrl = this.produtoService.getUrlImagem(produto.nomeImagem);
         }
         this.isLoading = false;
       },
