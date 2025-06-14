@@ -7,15 +7,15 @@
   <div class="dashboard-cards">
     <div class="card-resumo">
       <h3>Total de Produtos</h3>
-      <p>120</p>
+      <p>{{totalProdutos}}</p>
     </div>
     <div class="card-resumo">
       <h3>Total de Pedidos</h3>
-      <p>57</p>
+      <p>{{totalPedidos}}</p>
     </div>
     <div class="card-resumo">
       <h3>Usuários Registrados</h3>
-      <p>34</p>
+      <p>{{totalUsuarios}}</p>
     </div>
     <div class="card-resumo">
       <h3>Estoque Baixo</h3>
@@ -24,8 +24,8 @@
   </div>
 
   <div class="acesso-rapido">
-    <button>Gerenciar Produtos</button>
-    <button>Gerenciar Usuários</button>
-    <button>Ver Relatórios</button>
+    <button (click)="irProdutos()">Gerenciar Produtos</button>
+    <button (click)="irClientes()">Gerenciar Clientes</button>
+    <button (click)="irAdmins()">Gerenciar Admins</button>
   </div>
 </div>

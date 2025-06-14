@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { LocalStorageService } from '../core/services/local-storage.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Usuario } from '../core/models/usuario.model';
+import { Cliente } from '../core/models/cliente.model';
 
 export interface RegisterRequest {
   nome: string;
@@ -26,6 +27,7 @@ export interface RegisterResponse {
 export class AuthService {
 
   private baseURL: string = 'http://localhost:8080/auth';
+  private clienteURL: string = 'http://localhost:8080/clientes'
   private tokenKey = 'jwt_token';
   private usuarioLogadoKey = 'usuario_logado';
   private usuarioLogadoSubject = new BehaviorSubject<Usuario | null>(null);
@@ -105,6 +107,22 @@ export class AuthService {
 
   getUsuarioLogado() {
     return this.usuarioLogadoSubject.asObservable();
+  }
+
+  // auth.service.ts
+  getClienteCompleto(): Observable<Cliente | null> {
+    const usuario = this.localStorageService.getItem(this.usuarioLogadoKey);
+    console.log('Usuário no getClienteCompleto:', usuario); // Log temporário
+
+    if (usuario) {
+      return this.http.get<Cliente>(`${this.clienteURL}/${usuario.id}`).pipe(
+        catchError(error => {
+          console.error('Erro ao buscar cliente:', error);
+          return of(null);
+        })
+      );
+    }
+    return of(null);
   }
 
   getToken(): string | null {

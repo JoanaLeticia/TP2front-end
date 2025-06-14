@@ -18,3 +18,14 @@ hr{
 #valor{
   margin-right: 5.2rem;
 }
+
+.button-comprar {
+  background-color: #0d358b;
+  color: #fff;
+  border-radius: 7px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 150px;
+  padding: 15px 0;
+}

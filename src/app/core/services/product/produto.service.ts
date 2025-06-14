@@ -32,21 +32,21 @@ export class ProdutoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllPaginacao(pagina: number, tamanhoPagina: number): Observable<Produto[]> {
+  getAllPaginacao(page: number, size: number): Observable<Produto[]> {
     const params = {
-      page: pagina.toString(),
-      pageSize: tamanhoPagina.toString()
+      page: page.toString(),
+      size: size.toString()
     }
     return this.httpClient.get<Produto[]>(`${this.baseUrl}`, { params });
   }
 
-  findAll(page?: number, pageSize?: number): Observable<Produto[]> {
-    let params = {};
+  findAll(page?: number, size?: number): Observable<Produto[]> {
+    let params: any = {};
 
-    if (page !== undefined && pageSize !== undefined) {
+    if (page !== undefined && size !== undefined) {
       params = {
         page: page.toString(),
-        page_size: pageSize.toString()
+        size: size.toString()
       }
     }
 
@@ -54,6 +54,7 @@ export class ProdutoService {
       map(response => response.dados)
     );
   }
+
 
   findByNome(nome: string): Observable<Produto[]> {
     return this.httpClient.get<Produto[]>(`${this.baseUrl}/search/nome/${nome}`);
@@ -82,20 +83,10 @@ export class ProdutoService {
   }
 
   update(produto: Produto): Observable<Produto> {
-    const obj = {
-      id: produto.id,
-      nome: produto.nome,
-      descricao: produto.descricao,
-      preco: produto.preco,
-      estoque: produto.estoque,
-      desenvolvedora: produto.desenvolvedora,
-      plataforma: produto.plataforma.id,
-      tipoMidia: produto.tipoMidia.id,
-      genero: produto.genero.id,
-      classificacao: produto.classificacao.id,
-      nomeImagem: produto.nomeImagem
-    }
-    return this.httpClient.put<Produto>(`${this.baseUrl}/${obj.id}`, obj);
+
+    console.log('Enviando para atualizaçao:', produto);
+
+    return this.httpClient.put<Produto>(`${this.baseUrl}/${produto.id}`, produto);
   }
 
   delete(produto: Produto): Observable<any> {
@@ -158,6 +149,10 @@ export class ProdutoService {
 
   countByPlataforma(nomePlataforma: string): Observable<number> {
     return this.httpClient.get<number>(`${this.baseUrl}/plataforma/${nomePlataforma}/count`);
+  }
+
+  count(): Observable<number> {
+    return this.httpClient.get<number>(`${this.baseUrl}/count`);
   }
 
 }

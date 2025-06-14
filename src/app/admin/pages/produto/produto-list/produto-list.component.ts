@@ -29,8 +29,8 @@ export class ProdutoListComponent {
   displayedColumns: string[] = ['id', 'nome', 'preco', 'estoque', 'acao'];
   produtos: Produto[] = [];
 
-  totalRecords = 0;
-  pageSize = 5;
+  totalRecords = 53;
+  size = 5;
   page = 0;
 
   produtosSubscription: Subscription | undefined;
@@ -49,7 +49,7 @@ export class ProdutoListComponent {
   }
 
   carregarProdutos(): void {
-    this.produtoService.findAll(this.page, this.pageSize).subscribe({
+    this.produtoService.findAll(this.page, this.size).subscribe({
       next: (produtos) => {
         this.produtos = produtos;
         console.log('produtos carregados:', produtos); // Verifique no console
@@ -62,7 +62,7 @@ export class ProdutoListComponent {
 
   paginar(event: PageEvent) : void {
     this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this.size = event.pageSize;
     this.ngOnInit();
   }
 

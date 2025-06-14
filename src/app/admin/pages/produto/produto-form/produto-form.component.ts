@@ -181,22 +181,32 @@ export class ProdutoFormComponent implements OnInit {
   salvar() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const produto = this.formGroup.value;
+      const formValue = this.formGroup.value;
 
-      console.log('Enviando para API:', produto);
+      const produtoParaEnviar = {
+        ...formValue,
+        plataforma: formValue.plataforma.id,
+        tipoMidia: formValue.tipoMidia.id,
+        genero: formValue.genero.id,
+        classificacao: formValue.classificacao.id
+      };
+
+      console.log('Enviando para API:', produtoParaEnviar);
 
       // selecionando a operacao (insert ou update)
-      const operacao = produto.id == null
-        ? this.produtoService.insert(produto)
-        : this.produtoService.update(produto);
+      const operacao = produtoParaEnviar.id == null
+        ? this.produtoService.insert(produtoParaEnviar)
+        : this.produtoService.update(produtoParaEnviar);
 
       // executando a operacao
       operacao.subscribe({
         next: (produtoCadastrado) => {
-          if (!produtoCadastrado?.id) {
+          const produtoId = produtoParaEnviar.id || produtoCadastrado?.id;
+
+          if (!produtoId) {
             throw new Error('Resposta inválida da API: ID não retornado');
           }
-          this.uploadImage(produtoCadastrado.id);
+          this.uploadImage(produtoId);
           this.router.navigateByUrl('/produtos/list');
         },
         error: (error) => {
