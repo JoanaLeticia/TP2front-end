@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<body>
+<body style="background-color: #f2f2f2;">
     <!-- Carrossel de Destaques -->
     <div class="carrossel-destaques">
         <div class="carrossel-container">
@@ -11,14 +11,16 @@
             </ngx-slick-carousel>
         </div>
     </div>
-    <!-- Seção de Lançamentos -->
-    <div class="secao-lancamentos">
-        <div class="titulo-container">
-            <div class="linha"></div>
-            <h2 class="titulo-secao">LANÇAMENTOS</h2>
-            <div class="linha"></div>
+    <main class="container">
+        <!-- Seção de Lançamentos -->
+        <div class="secao-lancamentos">
+            <div class="titulo-container">
+                <div class="linha"></div>
+                <h2 class="titulo-secao">LANÇAMENTOS</h2>
+                <div class="linha"></div>
+            </div>
+            <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
         </div>
-        <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
-    </div>
+    </main>
 </body>
 <app-footer></app-footer>

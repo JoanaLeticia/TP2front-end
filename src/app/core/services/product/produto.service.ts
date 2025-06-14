@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Plataforma } from "../../models/plataforma.model";
 import { TipoMidia } from "../../models/tipo-midia.model";
 import { Genero } from "../../models/genero.model";
-import { ClassificacaoIndicativa } from "../../models/classificacao-indicativa.model";
+import { Classificacao } from "../../models/classificacao.model";
 import { map } from 'rxjs/operators';
 
 interface ProdutoSimplificado {
@@ -74,7 +74,7 @@ export class ProdutoService {
       plataforma: produto.plataforma.id,
       tipoMidia: produto.tipoMidia.id,
       genero: produto.genero.id,
-      classificacaoIndicativa: produto.classificacaoIndicativa.id,
+      classificacao: produto.classificacao.id,
       nomeImagem: produto.nomeImagem
     }
 
@@ -92,7 +92,7 @@ export class ProdutoService {
       plataforma: produto.plataforma.id,
       tipoMidia: produto.tipoMidia.id,
       genero: produto.genero.id,
-      classificacaoIndicativa: produto.classificacaoIndicativa.id,
+      classificacao: produto.classificacao.id,
       nomeImagem: produto.nomeImagem
     }
     return this.httpClient.put<Produto>(`${this.baseUrl}/${obj.id}`, obj);
@@ -127,22 +127,27 @@ export class ProdutoService {
     return this.httpClient.get<Genero[]>(`${this.baseUrl}/generos`);
   }
 
-  findClassificacoes(): Observable<ClassificacaoIndicativa[]> {
-    return this.httpClient.get<ClassificacaoIndicativa[]>(`${this.baseUrl}/classificacoes`);
+  findClassificacoes(): Observable<Classificacao[]> {
+    return this.httpClient.get<Classificacao[]>(`${this.baseUrl}/classificacoes`);
   }
 
-  getByPlataformaPaginado(nomePlataforma: string, page?: number, size?: number): Observable<Produto[]> {
-    let params = {};
+  getByPlataformaPaginado(nomePlataforma: string, page?: number, size?: number, sort?: string): Observable<Produto[]> {
+    let params: any = {};
 
     if (page !== undefined && size !== undefined) {
       params = {
         page: page.toString(),
-        page_size: size.toString()
+        size: size.toString()
       }
+    }
+
+    if (sort) {
+      params.sort = sort;
     }
 
     console.log(this.baseUrl);
     console.log({ params });
+    
     return this.httpClient.get<Produto[]>(
       `${this.baseUrl}/plataforma/${nomePlataforma}`, { params });
   }

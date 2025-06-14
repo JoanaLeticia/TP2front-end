@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
 import { HeaderComponent } from '../../../shared/components/template/header/header.component';
@@ -42,7 +42,8 @@ export class DetalhesProdutoComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private produtoService: ProdutoService,
-    private carrinhoService: CarrinhoService
+    private carrinhoService: CarrinhoService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +56,8 @@ export class DetalhesProdutoComponent implements OnInit {
 
     this.produto$.subscribe({
       next: (produto) => {
+        console.log('Produto completo:', produto);
+        console.log('Classificação:', produto.classificacao);
         if (produto?.nomeImagem) {
           this.imageUrl = this.produtoService.getUrlImagem(produto.nomeImagem);
         }
@@ -78,6 +81,8 @@ export class DetalhesProdutoComponent implements OnInit {
       valor: produto.preco,
       quantidade: 1
     });
+
+    this.router.navigate(['/gameverse/carrinho']);
   }
 
 }

@@ -18,7 +18,7 @@ import { NavsideComponent } from '../../../components/navside/navside.component'
 import { Plataforma } from '../../../../core/models/plataforma.model';
 import { TipoMidia } from '../../../../core/models/tipo-midia.model';
 import { Genero } from '../../../../core/models/genero.model';
-import { ClassificacaoIndicativa } from '../../../../core/models/classificacao-indicativa.model';
+import { Classificacao } from '../../../../core/models/classificacao.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -38,7 +38,7 @@ export class ProdutoFormComponent implements OnInit {
   plataformas: Plataforma[] = [];
   tiposMidia: TipoMidia[] = [];
   generos: Genero[] = [];
-  classificacoes: ClassificacaoIndicativa[] = [];
+  classificacoes: Classificacao[] = [];
 
   fileName: string = '';
   selectedFile: File | null = null;
@@ -105,7 +105,7 @@ export class ProdutoFormComponent implements OnInit {
 
     const genero = this.generos.find(g => g.id === (produto?.genero?.id || null));
 
-    const classificacao = this.classificacoes.find(c => c.id === (produto?.classificacaoIndicativa?.id || null));
+    const classificacao = this.classificacoes.find(c => c.id === (produto?.classificacao?.id || null));
 
     if (produto && produto.nomeImagem) {
       this.imagePreview = this.produtoService.getUrlImagem(produto.nomeImagem);
@@ -122,7 +122,7 @@ export class ProdutoFormComponent implements OnInit {
       plataforma: [plataforma],
       tipoMidia: [tipoMidia],
       genero: [genero],
-      classificacaoIndicativa: [classificacao],
+      classificacao: [classificacao],
       dataLancamento: [(produto && produto.dataLancamento) ? produto.dataLancamento : null],
     })
   }

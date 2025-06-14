@@ -4,11 +4,14 @@ import { CarrinhoService } from '../../../core/services/order/carrinho.service';
 import { ItemPedido } from '../../../core/models/item-pedido.model';
 import { HeaderComponent } from '../../../shared/components/template/header/header.component';
 import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { style } from '@angular/animations';
+import { PedidoService } from '../../../core/services/order/pedido.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-carrinho',
@@ -31,8 +34,11 @@ export class CarrinhoComponent implements OnInit {
 
   constructor(
     private carrinhoService: CarrinhoService,
-    private snackBar: MatSnackBar
-  ) {}
+    private pedidoService: PedidoService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.carrinhoService.carrinho$.subscribe(itens => {
@@ -53,7 +59,7 @@ export class CarrinhoComponent implements OnInit {
   removerItem(item: ItemPedido): void {
     this.carrinhoService.removerItem(item.id);
     this.snackBar.open('Item removido do carrinho', 'Fechar', {
-      duration: 3000
+      duration: 3000, panelClass: ['custom-snackbar'], horizontalPosition: 'center', verticalPosition: 'top'
     });
   }
 
@@ -62,9 +68,11 @@ export class CarrinhoComponent implements OnInit {
   }
 
   finalizarCompra(): void {
-    // Lógica para finalizar compra
     this.snackBar.open('Compra finalizada com sucesso!', 'Fechar', {
-      duration: 5000
+      duration: 5000,
+      panelClass: ['custom-snackbar', 'success-snackbar'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
     this.carrinhoService.limparCarrinho();
   }

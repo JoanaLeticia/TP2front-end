@@ -2,7 +2,7 @@
 
 .card-produto {
     font-family: Libre Franklin, sans-serif;
-    width: 280px;
+    width: 285px;
     height: 470px;
     display: flex;
     flex-direction: column;
@@ -45,4 +45,8 @@
     height: 50px;
     border-radius: 7px;
     width: 100%;
+}
+
+.botao-carrinho:hover {
+    background-color: #164ab9;
 }

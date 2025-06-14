@@ -16,6 +16,12 @@
     object-fit: cover;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
 ::ng-deep .slick-prev-custom,
 ::ng-deep .slick-next-custom {
     position: absolute;

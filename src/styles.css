@@ -181,9 +181,7 @@
 }
 
 .secao-lancamentos {
-  padding: 20px 20px;
   padding-bottom: 100px;
-  background-color: #f2f2f2;
   text-align: center;
 }
 
@@ -307,4 +305,18 @@
             color: rgba(255, 255, 255, 0.8);
         }
     }
+}
+
+/* Snackbar global */
+.mat-mdc-snack-bar-container {
+  &.custom-snackbar {
+    --mdc-snackbar-container-color: #ffffff;
+    --mat-mdc-snack-bar-button-color: #333;
+    --mdc-snackbar-supporting-text-color: #333;
+  }
+
+  &.success-snackbar {
+    --mdc-snackbar-container-color: #ffffff;
+    border-left: 4px solid #4CAF50;
+  }
 }

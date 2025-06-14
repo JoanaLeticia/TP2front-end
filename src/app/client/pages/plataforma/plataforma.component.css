@@ -6,6 +6,13 @@
   padding-top: 40px;
 }
 
+.titulo {
+  display: flex;
+  justify-content: space-between; /* Isso vai separar os itens */
+  align-items: center; /* Alinha verticalmente */
+  width: 100%; /* Ocupa toda a largura */
+}
+
 .plataforma-title {
   color: #0d358b;
   text-align: start;
@@ -14,15 +21,78 @@
   margin-bottom: 10px;
 }
 
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-
 mat-paginator {
   margin-top: 20px;
-  background: #f5f5f5;
   border-radius: 4px;
+}
+
+
+.custom-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.filter-label {
+  font-size: 14px;
+  color: #4b4b4b;
+  font-weight: 500;
+}
+
+.custom-select {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.selected-option {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.option {
+  padding: 12px 16px;
+  transition: all 0.2s;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
+}
+
+.option.selected {
+  background-color: #e8f0fe;
+  color: #0d358b;
+  font-weight: 500;
+}
+
+.custom-select.active {
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
 }

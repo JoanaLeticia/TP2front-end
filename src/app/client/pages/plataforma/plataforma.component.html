@@ -1,10 +1,32 @@
 <app-header></app-header>
+
 <body style="background-color: #f2f2f2;">
   <main class="container">
-    <h1 class="plataforma-title">{{ plataforma | uppercase }}</h1>
+    <div class="titulo">
+      <h1 class="plataforma-title">{{ plataforma | uppercase }}</h1>
+
+      <div class="custom-filter-container">
+        <div class="filter-label">Ordenar por:</div>
+
+        <div class="custom-select" (click)="toggleDropdown()" [class.active]="dropdownOpen">
+          <div class="selected-option">
+            {{ getSelectedOptionText() }}
+            <span class="arrow-icon">{{ dropdownOpen ? '▲' : '▼' }}</span>
+          </div>
+
+          <div class="dropdown-options" *ngIf="dropdownOpen">
+            <div class="option" *ngFor="let option of filterOptions" (click)="selectOption(option.value)"
+              [class.selected]="ordenacao === option.value">
+              {{ option.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+    <mat-paginator [length]="totalRecords" [pageSize]="size" [pageSizeOptions]="[4, 8, 12]" (page)="paginar($event)">
+    </mat-paginator>
   </main>
-  <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" [pageSize]="size" [length]="totalRecords" (page)="paginar($event)">
-  </mat-paginator>
 </body>
 <app-footer></app-footer>
