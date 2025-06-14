@@ -29,7 +29,7 @@ export class ClienteListComponent {
   clientes: Cliente[] = [];
 
   totalRecords = 0;
-  pageSize = 2;
+  pageSize = 10;
   page = 0;
 
   clientesSubscription: Subscription | undefined;

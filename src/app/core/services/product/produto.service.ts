@@ -64,28 +64,11 @@ export class ProdutoService {
     return this.httpClient.get<Produto>(`${this.baseUrl}/${id}`);
   }
 
-  insert(produto: Produto): Observable<Produto> {
-    const obj = {
-      id: produto.id,
-      nome: produto.nome,
-      descricao: produto.descricao,
-      preco: produto.preco,
-      estoque: produto.estoque,
-      desenvolvedora: produto.desenvolvedora,
-      plataforma: produto.plataforma.id,
-      tipoMidia: produto.tipoMidia.id,
-      genero: produto.genero.id,
-      classificacao: produto.classificacao.id,
-      nomeImagem: produto.nomeImagem
-    }
-
-    return this.httpClient.post<Produto>(this.baseUrl, obj);
+  insert(produto: Produto | ProdutoSimplificado): Observable<Produto> {
+    return this.httpClient.post<Produto>(this.baseUrl, produto);
   }
 
-  update(produto: Produto): Observable<Produto> {
-
-    console.log('Enviando para atualizaçao:', produto);
-
+  update(produto: Produto | ProdutoSimplificado): Observable<Produto> {
     return this.httpClient.put<Produto>(`${this.baseUrl}/${produto.id}`, produto);
   }
 
@@ -138,7 +121,7 @@ export class ProdutoService {
 
     console.log(this.baseUrl);
     console.log({ params });
-    
+
     return this.httpClient.get<Produto[]>(
       `${this.baseUrl}/plataforma/${nomePlataforma}`, { params });
   }

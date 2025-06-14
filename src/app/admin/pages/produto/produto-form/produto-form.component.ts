@@ -182,18 +182,23 @@ export class ProdutoFormComponent implements OnInit {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       const formValue = this.formGroup.value;
-
+      // Criar objeto no formato que o backend espera
       const produtoParaEnviar = {
-        ...formValue,
-        plataforma: formValue.plataforma.id,
-        tipoMidia: formValue.tipoMidia.id,
-        genero: formValue.genero.id,
-        classificacao: formValue.classificacao.id
+        id: formValue.id,
+        nome: formValue.nome,
+        descricao: formValue.descricao,
+        preco: formValue.preco,
+        estoque: formValue.estoque,
+        desenvolvedora: formValue.desenvolvedora,
+        idPlataforma: formValue.plataforma?.id,
+        idTipoMidia: formValue.tipoMidia?.id,
+        idGenero: formValue.genero?.id,
+        idClassificacao: formValue.classificacao?.id,
+        dataLancamento: formValue.dataLancamento
       };
 
-      console.log('Enviando para API:', produtoParaEnviar);
+      console.log(produtoParaEnviar);
 
-      // selecionando a operacao (insert ou update)
       const operacao = produtoParaEnviar.id == null
         ? this.produtoService.insert(produtoParaEnviar)
         : this.produtoService.update(produtoParaEnviar);
@@ -203,8 +208,8 @@ export class ProdutoFormComponent implements OnInit {
         next: (produtoCadastrado) => {
           const produtoId = produtoParaEnviar.id || produtoCadastrado?.id;
 
-          if (!produtoId) {
-            throw new Error('Resposta inválida da API: ID não retornado');
+          if(!produtoId) {
+            throw new Error('Resposta inválida da API: ID não retornado.');
           }
           this.uploadImage(produtoId);
           this.router.navigateByUrl('/produtos/list');

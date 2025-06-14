@@ -30,7 +30,7 @@ export class MunicipioListComponent {
   municipios: Municipio[] = [];
 
   totalRecords = 0;
-  pageSize = 5;
+  pageSize = 10;
   page = 0;
 
   municipiosSubscription: Subscription | undefined;
