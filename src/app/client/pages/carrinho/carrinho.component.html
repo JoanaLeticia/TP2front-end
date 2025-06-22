@@ -1,0 +1,107 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+  <main class="container mx-auto py-8" style="font-family: Libre Franklin; padding-bottom: 100px;">
+    <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+      <div class="max-w-[1200px] mx-auto">
+        <div style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; ">
+          Carrinho
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 5px; color: #636363; margin-bottom: 20px;">
+          Clique em finalizar compra para efetuar o seu pedido.
+        </div>
+        <!-- Card geral do carrinho -->
+        <div class="bg-white rounded-lg p-7 mb-6" style="border: 1px solid #e4e4e4;">
+          <!-- Header do carrinho - Atualizado -->
+          <div class="grid grid-cols-12 gap-4 pb-3 font-bold" style="font-size: 15px;">
+            <div class="col-span-5">PRODUTO</div>
+            <div class="col-span-3 text-center">QTD</div>
+            <div class="col-span-2 text-center">PREÇO</div>
+            <div class="col-span-2 text-center">EXCLUIR</div>
+          </div>
+
+          <!-- Itens do carrinho - Atualizado -->
+          <div *ngFor="let item of carrinhoItens" class="grid grid-cols-12 gap-4 py-7 items-center" style="border-bottom: 1px solid rgb(0, 0, 0, 0.15);">
+            <div class="col-span-5">
+              <div class="flex items-center">
+                <img [src]="item.imagemUrl" alt="{{item.nome}}" class="w-17 h-20 object-cover rounded mr-4">
+                <div>
+                  <div class="text-sm text-gray-500" style="font-size: 12px;">{{item.desenvolvedora || 'Desenvolvedora não informada'}}</div>
+                  <div class="font-bold" style="font-size: 15px;">{{item.nome}} | {{item.plataforma}} | Mídia {{item.tipoMidia}}</div>
+                  <div class="text-xs text-gray-500" style="font-size: 12px; ">Código: {{item.id}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-span-3">
+              <div class="flex items-center justify-center" >
+                <button mat-icon-button (click)="diminuirQuantidade(item)" class="text-gray-500">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="mx-3">{{ item.quantidade }}</span>
+                <button mat-icon-button (click)="aumentarQuantidade(item)" class="text-gray-500">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-span-2 text-center flex items-center justify-center">
+              {{ (item.valor * item.quantidade) | currency:'BRL' }}
+            </div>
+
+            <div class="col-span-2 flex items-center justify-center">
+              <button mat-icon-button (click)="removerItem(item)" class="text-gray-500">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Seção de frete -->
+          <div class="py-4" style="border-bottom: 1px solid rgb(0, 0, 0, 0.15);">
+            <h3 class="font-bold mb-2">Calcular Frete:</h3>
+            <div class="flex">
+              <input type="text" placeholder="CEP" class="border rounded-l px-3 py-2 w-40">
+              <button class="text-white px-4 py-2 rounded-r" style="background-color: #0d358b; cursor: pointer;">Calcular</button>
+            </div>
+          </div>
+
+          <!-- Seção de total -->
+          <div class="pt-7 flex justify-end">
+            <div class="text-right">
+              <div class="font-bold text-xl">
+                Total: {{ calcularTotal() | currency:'BRL' }}
+              </div>
+              <div class="text-sm text-gray-500">
+                ou em até 12x de {{ (calcularTotal() / 12) | currency:'BRL' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões de ação -->
+        <div class="flex justify-end" style="gap: 20px">
+          <a mat-stroked-button routerLink="/gameverse/home" style="border: 1px solid #c5c5c5; padding: 25px 30px; border-radius: 7px; font-size: 16px; font-weight: 500; color: #494949">
+            Continuar comprando
+          </a>
+          <button mat-raised-button color="primary" (click)="finalizarCompra()"
+            style="background-color: #0d358b; padding: 25px 50px; border-radius: 7px; color: #fff; font-weight: 500;">
+            Finalizar Compra
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #carrinhoVazio>
+      <div class="text-center py-12" style="margin-bottom: 90px;">
+        <mat-icon class="text-6xl mb-4 text-gray-400">shopping_cart</mat-icon>
+        <h2 class="text-2xl font-bold mb-2">Seu carrinho está vazio</h2>
+        <p class="text-gray-600 mb-6">Adicione produtos para continuar</p>
+        <a mat-raised-button color="primary" routerLink="/gameverse/home">
+          Ver Produtos
+        </a>
+      </div>
+    </ng-template>
+  </main>
+</body>
+
+<app-footer></app-footer>

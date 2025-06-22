@@ -1,0 +1,382 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+.mat-card {
+  margin-bottom: 1.5rem;
+}
+
+.mat-radio-button {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.success-snackbar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.custom-snackbar {
+  background-color: #f44336;
+  color: white;
+}
+
+.resumo-pedido {
+  background-color: #fff;
+  position: sticky;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+}
+
+.button-finalizar {
+  background-color: #0d358b;
+  color: #fff;
+  width: 100%;
+  margin-top: 20px;
+  padding: 17px 0;
+  border-radius: 7px;
+  font-size: 18px;
+  transition: background-color 300ms ease;
+
+  &:hover {
+    background-color: #2155c4;
+  }
+}
+
+.endereco-card {
+  background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+/* Adicione estas regras no final do arquivo */
+.endereco-option {
+  transition: all 300ms ease;
+  overflow: hidden;
+}
+
+.endereco-option-collapsed {
+  height: 50px;
+}
+
+.endereco-option-expanded {
+  height: auto;
+}
+
+.endereco-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0px 5px 0px;
+  padding-right: 15px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border-radius: 7px;
+  transition: background-color 300ms ease;
+  border: 1px solid #d8d8d8;
+  font-size: 16px;
+}
+
+.endereco-header:hover {
+  background-color: #e4e4e4;
+}
+
+.endereco-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  padding-left: 30px;
+  padding-top: 21px;
+  padding-right: 30px;
+  margin-top: -5px;
+  border: 1px solid #d8d8d8;
+  border-top: none;
+  border-radius: 0 0 7px 7px;
+}
+
+.editar-endereco {
+  display: flex;
+  font-size: 15px;
+  color: #666;
+  transition: all 300ms ease;
+}
+
+.editar-endereco:hover {
+  color: #0d358b;
+}
+
+.button-add-endereco {
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 20px;
+  border-radius: 7px;
+  transition: all 300ms ease;
+  color: #666;
+}
+
+.button-add-endereco:hover {
+  padding-left: 5px;
+  color: #0d358b;
+}
+
+.entrega-card {
+  margin-top: 20px;
+  background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.entrega-card span {
+  font-size: 14px;
+}
+
+/* Adicione estas regras no final do arquivo */
+.input-endereco {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #b4b4b4;
+  /* Borda mais grossa e azul */
+  border-radius: 5px;
+  padding: 5px 10px;
+  transition: border-color 300ms ease;
+}
+
+.input-endereco:hover {
+  border-color: #2155c4;
+}
+
+.input-endereco input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  padding: 5px;
+  width: 100%;
+}
+
+/* Estilo para o placeholder do CEP */
+input::placeholder {
+  color: #999;
+}
+
+/* Estilo para o botão de cancelar */
+.cancel-button {
+  cursor: pointer;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 13px 40px;
+  border-radius: 7px;
+  transition: background-color 200ms ease;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+}
+
+.button-add-novo-endereco {
+  background-color: #0d358b;
+  cursor: pointer;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 13px 40px;
+  border-radius: 7px;
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: #2155c4;
+  }
+}
+
+.input-endereco select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 5px;
+  outline: none;
+  appearance: none;
+  /* Remove a seta padrão */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-endereco.select-estado {
+  position: relative;
+}
+
+.input-endereco.select-estado::after {
+  content: "▼";
+  font-size: 12px;
+  color: #666;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ESTILOS DO DROPDOWN PERSONALIZADO */
+.estado-select-container {
+  position: relative;
+}
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.selected-option {
+  margin-top: 5px;
+  padding: 9px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #b4b4b4;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.selected-option:hover {
+  border-color: #2155c4;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-box {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #2155c4;
+}
+
+.option {
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.option:hover {
+  background-color: #f5f8ff;
+}
+
+.option.selected {
+  background-color: #e6efff;
+}
+
+.option .sigla {
+  font-weight: 600;
+  color: #0d358b;
+  min-width: 30px;
+}
+
+:host {
+  display: block;
+}
+
+
+.pagamento-card {
+  margin-top: 20px;
+  background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.pagamento-card span {
+  font-size: 14px;
+}
+
+.header-pagamento {
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #ccc;
+  margin-right: -7px;
+  margin-left: -7px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  margin-bottom: -1px;
+  border-radius: 6px;
+  padding-left: 5px;
+}
+
+.header-pagamento:hover {
+  background-color: #e4e4e4;
+}
+
+.header-pagamento-selected {
+  background-color: #f0f5ff;
+  border-color: #0d358b;
+}
+
+.cartao-form-group {
+  margin-bottom: 15px;
+}
+
+.cartao-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+.cartao-form-group .input-endereco {
+  margin-top: 0;
+}
+
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.mat-select {
+  width: 100%;
+}
+
+.input-invalido {
+  border-color: #f44336 !important;
+}
+
+.mensagem-erro {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}

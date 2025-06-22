@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Estilo para os botões */
+.mat-stroked-button {
+  border-width: 2px;
+  padding: 0 24px;
+  height: 48px;
+}
+
+.mat-raised-button {
+  padding: 0 24px;
+  height: 48px;
+  font-weight: 500;
+}
+
+/* Estilo para o input de CEP */
+input[type="text"] {
+  border-color: #e2e8f0;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #0d358b;
+}
+
+/* Estilo para o botão calcular frete */
+button.bg-blue-600 {
+  transition: background-color 0.3s;
+}
+
+button.bg-blue-600:hover {
+  background-color: #0d358b;
+}
+
+/* Espaçamento entre os botões */
+.flex.justify-between > * {
+  margin: 0 8px;
+}
+
+.flex.justify-between > *:first-child {
+  margin-left: 0;
+}
+
+.flex.justify-between > *:last-child {
+  margin-right: 0;
+}

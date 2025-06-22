@@ -1,0 +1,16 @@
+<div class="popup-content">
+
+    <h2>Informações do Admin</h2>
+
+    <div class="userInfo">
+        <h3>Nome: <span class="data-info">{{data.nome}}</span></h3>
+        <h3>CPF: <span class="data-info">{{data.cpf}}</span></h3>
+        <h3>Email: <span class="data-info">{{data.email}}</span></h3>
+        <h3>Perfil de Usuário: <span class="data-info">Administrador</span></h3>
+    </div>
+
+    <div class="popup-bnt">
+        <button class="bnt-cancelar" (click)="cancelar()">Cancelar</button>
+        <button class="bnt-editar" (click)="editar(data.id)">Editar</button>
+    </div>
+</div>

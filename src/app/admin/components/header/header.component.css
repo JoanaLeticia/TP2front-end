@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+    position: sticky;
+    z-index: 999;
+}
+
+.toolbar {
+    margin-left: 210px;
+    display: flex;
+    font-family: Inter, sans-serif;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    color: #000;
+    height: 70px;
+    padding: 10px 20px;
+    padding-right: 30px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message {
+    font-weight: 500;
+    margin-left: 60px;
+    height: 45px;
+    width: 75px;
+    line-height: 45px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #d8ddeb;
+    color: #005796;
+}
+
+.actions {
+    position: relative;
+}
+
+.actions img {
+    border-radius: 100%;
+}
+
+#dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    i {
+        font-size: 35px;
+        color:#7c7c7c;
+    }
+}
+
+.dropdown-content {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid hsla(0, 0%, 0%, 0.2);
+    min-width: 120px;
+    z-index: 1;
+    border-radius: 7px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: #303030;
+    text-decoration: none;
+    border-radius: 7px;
+}
+
+.dropdown-content a:hover {
+    background-color: #e2e2e2;
+}
+
+.actions:hover .dropdown-content {
+    display: block;
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+}
+
+.user-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-name {
+    font-weight: 400;
+    font-family: Inter, sans-serif;
+    line-height: 16px;
+    color: #303030;
+    font-size: 14px;
+}
+
+
+@media screen and (max-width: 767px) {
+    .welcome-message {
+        display: none;
+    }
+}

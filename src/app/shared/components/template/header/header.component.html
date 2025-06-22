@@ -1,0 +1,99 @@
+<header class="header">
+    <div class="top-header">
+        <div class="container">
+            <div class="top-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a routerLink="/gameverse/home">
+                        <img src="assets/logo-gameverse-branca.png" alt="Logo da Loja">
+                    </a>
+                </div>
+
+                <!-- Barra de pesquisa -->
+                <div class="custom-search-bar">
+                    <input type="text" placeholder="Pesquisar produtos..." [formControl]="searchControl"
+                        (keyup.enter)="pesquisarProdutos()" />
+                    <button (click)="pesquisarProdutos()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div style="display: flex;">
+                    <!-- Área do usuário -->
+                    <div class="user-area">
+                        <ng-container *ngIf="(usuarioLogado$ | async) as usuario; else notLoggedIn">
+                            <div class="user-dropdown" (mouseenter)="showDropdown = true"
+                                (mouseleave)="showDropdown = false">
+                                <button mat-icon-button class="user-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </button>
+                                <div class="user-info">
+                                    <span class="welcome">Bem-vindo(a), <br><strong
+                                            style="font-size: 14px; font-weight: 500;">{{ usuario.nome
+                                            }}</strong></span>
+                                </div>
+
+                                <!-- Menu Dropdown -->
+                                <div class="dropdown-menu" *ngIf="showDropdown">
+                                    <ul>
+                                        <li>
+                                            <a routerLink="/gameverse/conta/minha-conta" (click)="showDropdown = false">
+                                                <mat-icon>account_circle</mat-icon> Minha Conta
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a routerLink="/gameverse/conta/meus-pedidos"
+                                                (click)="showDropdown = false">
+                                                <mat-icon>shopping_basket</mat-icon> Meus Pedidos
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a (click)="logout(); showDropdown = false">
+                                                <mat-icon>exit_to_app</mat-icon> Sair
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #notLoggedIn>
+                            <button mat-icon-button class="user-icon" (click)="onLoginClick()">
+                                <i class="fas fa-user-circle"></i>
+                            </button>
+                            <div class="user-info" style="margin-left: -10px;">
+                                <span class="welcome">Bem-vindo(a),</span>
+                                <div class="auth-links" style="color: white;">
+                                    <a (click)="onLoginClick()">Entre</a> ou <a
+                                        (click)="onCadastroClick()">Cadastre-se</a>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Ícones de ação -->
+                    <div class="action-icons">
+                        <button mat-icon-button>
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button mat-icon-button class="cart-icon" (click)="onCarrinhoClick()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">{{ quantCarrinho() }}</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <nav class="category-nav">
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a routerLink="/gameverse/produto/plataforma/ps4">PS4</a></li>
+                <li><a routerLink="/gameverse/produto/plataforma/ps5">PS5</a></li>
+                <li><a routerLink="/gameverse/produto/plataforma/xboxone">Xbox One</a></li>
+                <li><a routerLink="/gameverse/produto/plataforma/xboxseries">Xbox Series</a></li>
+                <li><a routerLink="/gameverse/produto/plataforma/nintendo">Nintendo</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>

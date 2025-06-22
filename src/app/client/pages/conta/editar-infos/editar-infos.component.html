@@ -1,0 +1,207 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <main class="container mx-auto px-0 py-8">
+        <div
+            style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 30px;">
+            Atualizar Cadastro
+        </div>
+
+        <div *ngIf="loading" style="text-align: center; padding: 50px;">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Carregando dados...</p>
+        </div>
+
+        <div *ngIf="error" style="text-align: center; padding: 20px; color: red;">
+            {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !error" class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+            <div class="lg:col-span-1">
+                <div class="nav-side-user">
+                    <div class="info-user">
+                        <div
+                            style="background-color: #ebebeb; width: 50px; height: 50px; align-content: center; text-align: center; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #c5c5c5;">
+                            {{ getIniciais() }}
+                        </div>
+                        <div style="line-height: 20px;">
+                            <p style="font-weight: 500;">{{ cliente?.nome }}</p>
+                            <p style="font-size: 13px; cursor: pointer;" (click)="logout()">Sair</p>
+                        </div>
+                    </div>
+                    <div class="nav-side-option">
+                        <ul>
+                            <li (click)="navegarPara('/gameverse/conta/minha-conta')"><mat-icon>account_circle</mat-icon>Minha Conta</li>
+                            <li (click)="navegarPara('/gameverse/conta/meus-pedidos')"><mat-icon>shopping_basket</mat-icon>Meus Pedidos</li>
+                            <li><mat-icon>favorite_border</mat-icon>Lista de Desejos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <!-- INFOS PESSOAIS -->
+                <mat-card class="card">
+                    <mat-card-header>
+                        <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">Informações
+                            pessoais</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="form-usuario" [formGroup]="infoForm">
+                        <div style="display: flex; gap: 15px; width: 100%;">
+                            <div style="width: 70%;">
+                                <span>Nome Completo</span>
+                                <div class="input-endereco">
+                                    <input type="text" formControlName="nome" required />
+                                </div>
+                                <small *ngIf="infoForm.get('nome')?.invalid && infoForm.get('nome')?.touched"
+                                    style="color: red;">
+                                    Nome é obrigatório
+                                </small>
+                            </div>
+
+                            <div style="width: 30%;">
+                                <span>Data de Nascimento</span>
+                                <div class="input-endereco">
+                                    <input type="date" formControlName="dataNascimento" required />
+                                </div>
+                                <small
+                                    *ngIf="infoForm.get('dataNascimento')?.invalid && infoForm.get('dataNascimento')?.touched"
+                                    style="color: red;">
+                                    Data é obrigatória
+                                </small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; margin-top: 10px;">
+                            <div style="width: 50%;">
+                                <span>CPF</span>
+                                <div class="input-endereco">
+                                    <input type="text" formControlName="cpf" placeholder="000.000.000-00" required />
+                                </div>
+                                <small *ngIf="infoForm.get('cpf')?.invalid && infoForm.get('cpf')?.touched"
+                                    style="color: red;">
+                                    CPF é obrigatório
+                                </small>
+                            </div>
+
+                            <div style="width: 50%;">
+                                <span>Telefone</span>
+                                <div class="input-endereco" style="height: 43px;">
+                                    <input type="text" formControlName="telefone" placeholder="(00) 00000-0000" />
+                                    <!-- Mostra o botão correto baseado no estado -->
+                                    <button *ngIf="editandoTelefone === null" mat-icon-button
+                                        (click)="adicionarTelefone()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <button *ngIf="editandoTelefone !== null" mat-icon-button
+                                        (click)="atualizarTelefone()">
+                                        <mat-icon>check</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="telefones.length > 0" style="margin-top: 10px;">
+                                <span>Telefones cadastrados:</span>
+                                <div *ngFor="let telefone of telefones; let i = index"
+                                    style="display: flex; align-items: center; gap: 10px; margin-top: 5px;"
+                                    [style.background-color]="editandoTelefone === i ? '#f5f5f5' : 'transparent'"
+                                    [style.padding]="editandoTelefone === i ? '5px' : '0'">
+                                    <span>({{ telefone.codArea }}) {{ telefone.numero }}</span>
+                                    <button mat-icon-button (click)="editarTelefone(i)"
+                                        [disabled]="editandoTelefone !== null && editandoTelefone !== i">
+                                        <mat-icon style="font-size: 16px;">edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="removerTelefone(i)"
+                                        [disabled]="editandoTelefone !== null">
+                                        <mat-icon style="font-size: 16px; color: red;">delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; margin-top: 10px;">
+                            <div style="width: 100%;">
+                                <span>E-mail</span>
+                                <div class="input-endereco">
+                                    <input type="text" formControlName="email" />
+                                    <mat-icon style="color: #666;">lock</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px;">
+                            <button class="cancel-button" mat-button style="color: #666; border: 1px solid #ccc;"
+                                (click)="cancelarEdicao()">
+                                Cancelar
+                            </button>
+                            <button class="button-add-novo-endereco" mat-button (click)="salvarInformacoes()"
+                                [disabled]="infoForm.invalid" style="color: #fff;">
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- SENHA -->
+                <mat-card class="card">
+                    <mat-card-header>
+                        <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">Alterar
+                            Senha</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="form-usuario" [formGroup]="senhaForm">
+                        <div style="display: flex; gap: 15px; width: 100%;">
+                            <div style="width: 33.33%;">
+                                <span>Senha atual</span>
+                                <div class="input-endereco">
+                                    <input type="password" formControlName="senhaAtual" required />
+                                    <mat-icon style="color: #666;">remove_red_eye</mat-icon>
+                                </div>
+                                <small
+                                    *ngIf="senhaForm.get('senhaAtual')?.invalid && senhaForm.get('senhaAtual')?.touched"
+                                    style="color: red;">
+                                    Senha atual é obrigatória
+                                </small>
+                            </div>
+
+                            <div style="width: 33.33%;">
+                                <span>Nova senha</span>
+                                <div class="input-endereco">
+                                    <input type="password" formControlName="novaSenha" required />
+                                    <mat-icon style="color: #666;">remove_red_eye</mat-icon>
+                                </div>
+                                <small
+                                    *ngIf="senhaForm.get('novaSenha')?.invalid && senhaForm.get('novaSenha')?.touched"
+                                    style="color: red;">
+                                    Mínimo de 6 caracteres
+                                </small>
+                            </div>
+
+                            <div style="width: 33.33%;">
+                                <span>Confirmar senha</span>
+                                <div class="input-endereco">
+                                    <input type="password" formControlName="confirmarSenha" required />
+                                    <mat-icon style="color: #666;">remove_red_eye</mat-icon>
+                                </div>
+                                <small
+                                    *ngIf="senhaForm.hasError('senhasNaoCoincidem') && senhaForm.get('confirmarSenha')?.touched"
+                                    style="color: red;">
+                                    Senhas não coincidem
+                                </small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px;">
+                            <button class="cancel-button" mat-button style="color: #666; border: 1px solid #ccc;"
+                                (click)="senhaForm.reset()">
+                                Cancelar
+                            </button>
+                            <button class="button-add-novo-endereco" mat-button (click)="alterarSenha()"
+                                [disabled]="senhaForm.invalid">
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </main>
+</body>
+<app-footer></app-footer>

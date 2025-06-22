@@ -1,0 +1,159 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+  <main class="container mx-auto px-0 py-8">
+    <div style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 30px;">
+      Editar Endereço
+    </div>
+
+    <div *ngIf="loading" style="text-align: center; padding: 50px;">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Carregando dados...</p>
+    </div>
+
+    <div *ngIf="error" style="text-align: center; padding: 20px; color: red;">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error" class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+      <!-- Menu Lateral -->
+      <div class="lg:col-span-1">
+        <div class="nav-side-user">
+          <div class="info-user">
+            <div style="background-color: #ebebeb; width: 50px; height: 50px; align-content: center; text-align: center; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #c5c5c5;">
+              {{ getIniciais() }}
+            </div>
+            <div style="line-height: 20px;">
+              <p style="font-weight: 500;">{{ cliente?.nome }}</p>
+              <p style="font-size: 13px; cursor: pointer;" (click)="logout()">Sair</p>
+            </div>
+          </div>
+          <div class="nav-side-option">
+            <ul>
+              <li (click)="navegarPara('/gameverse/conta/minha-conta')">
+                <mat-icon>account_circle</mat-icon>Minha Conta
+              </li>
+              <li (click)="navegarPara('/gameverse/conta/meus-pedidos')">
+                <mat-icon>shopping_basket</mat-icon>Meus Pedidos
+              </li>
+              <li (click)="navegarPara('/gameverse/conta/lista-desejos')">
+                <mat-icon>favorite_border</mat-icon>Lista de Desejos
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulário de Endereço -->
+      <div class="lg:col-span-3">
+        <mat-card class="card">
+          <mat-card-header>
+            <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">
+              Editar Endereço
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div style="display: flex; gap: 15px;">
+              <div style="width: 80%;">
+                <span>Endereço</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.logradouro" required />
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.logradouro" style="color: red;">
+                  Endereço é obrigatório
+                </small>
+              </div>
+
+              <div style="width: 20%;">
+                <span>Número</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.numero" required />
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.numero" style="color: red;">
+                  Número é obrigatório
+                </small>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 60%;">
+                <span>Complemento</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.complemento" />
+                </div>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Bairro</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.bairro" required />
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.bairro" style="color: red;">
+                  Bairro é obrigatório
+                </small>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 30%;">
+                <span>CEP</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.cep" (input)="formatarCEP($event)" maxlength="9" placeholder="00000-000" required />
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.cep" style="color: red;">
+                  CEP é obrigatório
+                </small>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Estado</span>
+                <div class="estado-select-container">
+                  <div class="custom-select" (click)="toggleEstadoDropdown()" [class.active]="estadoDropdownOpen">
+                    <div class="selected-option">
+                      {{ enderecoForm.estado ? (enderecoForm.estado.sigla + ' - ' + enderecoForm.estado.nome) : 'Selecione um estado' }}
+                      <span class="arrow-icon">{{ estadoDropdownOpen ? '▲' : '▼' }}</span>
+                    </div>
+
+                    <div class="dropdown-options" *ngIf="estadoDropdownOpen">
+                      <div class="search-box">
+                        <input type="text" placeholder="Buscar estado..." [(ngModel)]="estadoSearchTerm" (click)="$event.stopPropagation()">
+                      </div>
+                      <div class="option" *ngFor="let estado of filteredEstados" (click)="selectEstado(estado)" [class.selected]="enderecoForm.estado?.id === estado.id">
+                        <span class="sigla">{{ estado.sigla }}</span>
+                        <span class="nome">{{ estado.nome }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.estado" style="color: red;">
+                  Estado é obrigatório
+                </small>
+              </div>
+
+              <div style="width: 30%;">
+                <span>Cidade</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="enderecoForm.nomeMunicipio" required (blur)="verificarMunicipioExistente()" />
+                </div>
+                <small *ngIf="formSubmetido && !enderecoForm.nomeMunicipio" style="color: red;">
+                  Cidade é obrigatória
+                </small>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+              <button class="cancel-button" mat-button (click)="cancelarEdicao()" style="color: #666; border: 1px solid #ccc;">
+                Cancelar
+              </button>
+              <button class="button-add-novo-endereco" mat-button (click)="salvarEndereco()" style="color: #fff;">
+                Salvar Alterações
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </main>
+</body>
+
+<app-footer></app-footer>

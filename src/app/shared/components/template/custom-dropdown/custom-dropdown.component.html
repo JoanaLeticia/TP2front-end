@@ -1,0 +1,17 @@
+<div class="custom-sort-dropdown" [class.open]="isOpen">
+  <div class="dropdown-header" (click)="toggleDropdown()">
+    <span class="selected-label">{{ selectedLabel }}</span>
+    <span class="arrow-icon">{{ isOpen ? '▲' : '▼' }}</span>
+  </div>
+  
+  <div class="dropdown-menu" *ngIf="isOpen">
+    <div 
+      *ngFor="let option of options" 
+      class="dropdown-item"
+      [class.selected]="selectedValue === option.value"
+      (click)="selectOption(option.value)"
+    >
+      {{ option.label }}
+    </div>
+  </div>
+</div>

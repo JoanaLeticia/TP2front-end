@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.product-detail-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 2rem auto;
+  margin-bottom: -30px;
+  padding: 0 1rem;
+  gap: 2rem;
+}
+
+.product-images {
+  flex: 1;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-image {
+  width: 100%;
+  padding-top: 20px;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background: #e6e6e6;
+  border-radius: 8px;
+  color: #666;
+}
+
+.image-placeholder mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+}
+
+.product-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 0px;
+  color: #333;
+}
+
+.add-to-cart-btn {
+  margin-top: 10px;
+  height: 60px;
+  border-radius: 7px;
+  padding: 35px 0px;
+  background-color: #0d358b;
+  font: 600 22px Libre Franklin, sans-serif;
+  width: 100%;
+}
+
+.product-accordion {
+  margin-top: 2rem;
+  margin-bottom: 100px;
+}
+
+.product-detail-description {
+  margin-top: 100px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.descricao {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid hsl(0, 0%, 0%, 0.15);
+
+  h2 {
+    margin-bottom: 15px;
+    font: 600 20px Libre Franklin, sans-serif;
+  }
+
+  p {
+    color: #666;
+  }
+}
+
+.especificacoes-produto {
+  margin-bottom: 100px;
+
+  h2 {
+    margin-bottom: 15px;
+    font: 600 20px Libre Franklin, sans-serif;
+  }
+}
+
+
+.meta-item {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.meta-label {
+  font-weight: 600;
+  min-width: 150px;
+  color: #444;
+}
+
+.meta-value {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .product-detail-container {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,53 @@
+<app-header></app-header>
+<app-navside></app-navside>
+<main>
+    <h2 class="titulo">Cadastro de Municípios</h2>
+    <div class="historic">
+
+        <a [routerLink]="['/']">Home</a>
+        /
+        <a [routerLink]="['/municipio/list']">Lista de Municípios</a>
+        /
+        <a>Município</a>
+
+    </div>
+    <div class="content">
+        <span>Dados da Município</span>
+    </div>
+    <form [formGroup]="formMunicipio">
+
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" formControlName="nome">
+            <mat-error *ngIf="formMunicipio.get('nome') 
+                                   && formMunicipio.get('nome')?.invalid
+                                   && formMunicipio.get('nome')?.touched">
+                O nome é obrigatorio.
+            </mat-error>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <mat-select id="estado" formControlName="estado">
+                    <mat-option *ngFor="let estado of estados" [value]="estado.id" style="background-color: #e1e4ee;">
+                        {{ estado.nome }}
+                    </mat-option>
+                </mat-select>
+            </div>
+            <mat-error *ngIf="formMunicipio.get('sigla') 
+                                   && formMunicipio.get('sigla')?.invalid
+                                   && formMunicipio.get('sigla')?.touched">
+                O Estado é obrigatorio.
+            </mat-error>
+        </div>
+
+    </form>
+    <div class="bnt-group">
+        <button type="submit" class="btn-cancelar" [routerLink]="['/municipio/list']">Cancelar</button>
+        <button type="submit" class="btn-excluir" (click)="confirmDelete(formMunicipio?.value)"
+            *ngIf="formMunicipio?.get('id')?.value">Excluir</button>
+        <button type="submit" class="btn-salvar" (click)="salvar()">Salvar</button>
+    </div>
+
+</main>

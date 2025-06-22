@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.card-produto {
+    font-family: Libre Franklin, sans-serif;
+    width: 221px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: start;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 7px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card-titulo {
+    font-size: 14px;
+    max-width: 240px;
+    margin-top: 10px;
+    align-self: flex-start;
+    font-weight: 600;
+    color: #1b1b1b;
+    text-transform: uppercase;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    height: calc(1.4em * 2);
+}
+
+.card-info {
+    font-size: 14px;
+    color: #4b4b4b;
+}
+
+.card-produto img {
+    height: 200px;
+    padding: 10px;
+    object-fit: cover;
+}
+
+.preco {
+    font-weight: 700;
+    font-size: 22px;
+    color: #0d358b;
+    margin-left: -15px;
+    align-self: flex-start;
+}
+
+/* Estilos para o botão de detalhes */
+.details-button {
+    position: absolute;
+    display: inline-flex;
+    justify-content: center;
+    top: -40px; /* Começa escondido acima do card */
+    left: 0;
+    width: 100%;
+    background-color: #0d358b;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    font-family: Libre Franklin, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: top 0.3s ease;
+    z-index: 10;
+}
+
+.card-produto:hover .details-button {
+    top: 0; /* Aparece no topo do card quando hover */
+}
+
+.card-produto:hover {
+    box-shadow: 0 0px 15px rgba(0,0,0,0.10);
+}

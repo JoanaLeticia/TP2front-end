@@ -1,0 +1,26 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <!-- Carrossel de Destaques -->
+    <div class="carrossel-destaques">
+        <div class="carrossel-container">
+            <ngx-slick-carousel [config]="myConfig">
+                <div ngxSlickItem *ngFor="let i of myImages">
+                    <img [src]="i.src" alt="" class="myImg" />
+                </div>
+            </ngx-slick-carousel>
+        </div>
+    </div>
+    <main class="container">
+        <!-- Seção de Lançamentos -->
+        <div class="secao-lancamentos">
+            <div class="titulo-container">
+                <div class="linha"></div>
+                <h2 class="titulo-secao">LANÇAMENTOS</h2>
+                <div class="linha"></div>
+            </div>
+            <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+        </div>
+    </main>
+</body>
+<app-footer></app-footer>

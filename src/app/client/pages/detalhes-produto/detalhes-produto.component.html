@@ -1,0 +1,99 @@
+<app-header></app-header>
+
+<body
+  style="background-color: #f2f2f2; margin-top: -32px; margin-bottom: -32px; padding-top: 50px; padding-bottom: 50px;">
+  <main class="container">
+    <ng-container *ngIf="(produto$ | async) as produto; else loading">
+      <div class="product-detail-container">
+        <div class="product-images">
+          <div class="main-image">
+            <img *ngIf="imageUrl" [src]="imageUrl" [alt]="produto.nome" class="product-image">
+            <div *ngIf="!imageUrl" class="image-placeholder">
+              <mat-icon>image_not_supported</mat-icon>
+              <span>Imagem não disponível</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <div class="product-header">
+            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Início > {{produto.plataforma.nome}} >
+              {{produto.genero.nome}} > {{produto.nome}}</p>
+            <h1 class="product-title">{{ produto.nome }}</h1>
+            <div
+              style="display: inline-flex; gap: 30px; margin-bottom: 15px; font-size: 14px; width: 100%; padding-bottom: 20px; border-bottom: 1px solid hsl(0, 0%, 0%, 0.15);">
+              <div style="color: #666;"><strong style="font-weight: 500; color: #444;">Desenvolvedora: </strong> {{
+                produto.desenvolvedora }}</div>
+              <div style="color: #666;"><strong style="font-weight: 500; color: #444; margin-top: -10px;">Código:
+                </strong> {{ produto.id
+                }}</div>
+            </div>
+          </div>
+          <div style="font-size: 36px; font-weight: 700; color: #0d358b;">
+            {{produto.preco | currency:'R$ '}}
+          </div>
+          <div style="line-height: 25px; margin-top: 5px; margin-bottom: 30px; font-size: 15px;">
+            Até 12x de <strong style="color: #0d358b;">{{produto.preco / 12 | currency:'R$ '}}</strong> sem juros
+            <br>ou <strong style="color: #0d358b;">{{produto.preco | currency:'R$ '}}</strong> à vista
+          </div>
+
+          <div style="justify-content: space-between; display: inline-flex; gap: 10px;">
+            <mat-icon>favorite_border</mat-icon><span>Lista de Desejos</span>
+          </div>
+
+          <button mat-button color="primary" class="add-to-cart-btn" (click)="adicionarAoCarrinho(produto)"
+            style="color: #fff;">Comprar</button>
+
+          <div class="py-4" style="margin-top: 10px;">
+            <h3 class="mb-2" style="font-weight: 600;">Calcular o frete:</h3>
+            <div class="flex" style="width: 100%; gap: 10px;">
+              <input type="text" placeholder="Digite seu CEP" class="border px-3 py-3"
+                style="width: 60%; border-color: #929292; border-radius: 7px;">
+              <button class="text-white px-4 py-3 rounded"
+                style="background-color:#666; cursor: pointer; width: 40%; font-weight: 500; border-radius: 7px;">Calcular</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="product-detail-description">
+        <div class="descricao">
+          <h2>Detalhes do Produto</h2>
+          <p>{{ produto.descricao }}</p>
+        </div>
+        <div class="especificacoes-produto">
+          <h2>Especificações Técnicas</h2>
+          <div class="meta-item">
+            <span class="meta-label">Plataforma:</span>
+            <span class="meta-value">{{ produto.plataforma?.nome || 'N/A' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Desenvolvedora</span>
+            <span class="meta-value">{{ produto.desenvolvedora || 'N/A' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Tipo de Mídia:</span>
+            <span class="meta-value">{{ produto.tipoMidia?.nome || 'N/A' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Gênero:</span>
+            <span class="meta-value">{{ produto.genero?.nome || 'N/A' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Classificação:</span>
+            <span class="meta-value">{{ produto.classificacao?.nome }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</body>
+
+<app-footer></app-footer>
