@@ -1,0 +1,48 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <div class="container pesquisa-container">
+        <div class="titulo">
+            <h1 class="pesquisa-title">Resultados para: "{{ termoPesquisa }}"</h1>
+
+            <div class="custom-filter-container">
+                <div class="filter-label">Ordenar por:</div>
+
+                <div class="custom-select" (click)="toggleDropdown()" [class.active]="dropdownOpen">
+                    <div class="selected-option">
+                        {{ getSelectedOptionText() }}
+                        <span class="arrow-icon">{{ dropdownOpen ? '▲' : '▼' }}</span>
+                    </div>
+
+                    <div class="dropdown-options" *ngIf="dropdownOpen">
+                        <div class="option" *ngFor="let option of filterOptions" (click)="selectOption(option.value)"
+                            [class.selected]="ordenacao === option.value">
+                            {{ option.label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isLoading" class="loading-spinner">
+            <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoading">
+            <div *ngIf="produtos.length > 0; else noResults">
+                <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+
+                <mat-paginator [length]="totalRecords" [pageSize]="size" [pageIndex]="page"
+                    [pageSizeOptions]="[4, 8, 12]" (page)="paginar($event)">
+                </mat-paginator>
+            </div>
+
+            <ng-template #noResults>
+                <div class="no-results">
+                    <p>Nenhum produto encontrado para "{{ termoPesquisa }}"</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</body>
+<app-footer></app-footer>

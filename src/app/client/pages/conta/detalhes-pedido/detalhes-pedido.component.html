@@ -1,0 +1,98 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <main class="container mx-auto px-0 py-8">
+        <div *ngIf="loading" style="text-align: center; padding: 50px;">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Carregando detalhes do pedido...</p>
+        </div>
+
+        <div *ngIf="error" style="text-align: center; padding: 20px; color: red;">
+            {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !error" class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+            <!-- Menu Lateral -->
+            <div class="lg:col-span-1">
+                <div class="nav-side-user">
+                    <div class="info-user">
+                        <div
+                            style="background-color: #ebebeb; width: 50px; height: 50px; align-content: center; text-align: center; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #c5c5c5;">
+                            {{ getIniciais() }}
+                        </div>
+                        <div style="line-height: 20px;">
+                            <p style="font-weight: 500;">{{ cliente?.nome }}</p>
+                            <p style="font-size: 13px; cursor: pointer;" (click)="logout()">Sair</p>
+                        </div>
+                    </div>
+                    <div class="nav-side-option">
+                        <ul>
+                            <li (click)="navegarPara('/gameverse/conta/minha-conta')">
+                                <mat-icon>account_circle</mat-icon>Minha Conta
+                            </li>
+                            <li (click)="navegarPara('/gameverse/conta/meus-pedidos')">
+                                <mat-icon>shopping_basket</mat-icon>Meus Pedidos
+                            </li>
+                            <li><mat-icon>favorite_border</mat-icon>Lista de Desejos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalhes do Pedido -->
+            <div class="lg:col-span-3">
+                <div class="card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="font-size: 20px; font-weight: 600;">Detalhes do Pedido #{{ pedido?.idPedido }}</h2>
+                        <button mat-button (click)="voltarParaPedidos()" style="color: #0d358b; display: flex;"
+                            class="button-voltar">
+                            <mat-icon>arrow_back</mat-icon> Voltar para pedidos
+                        </button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <div>
+                            <p><span class="font-bold">Data do Pedido:</span> {{ formatarData(pedido?.horario) }}</p>
+                            <p><span class="font-bold">Status:</span> {{ pedido?.statusPedido?.nome }}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p><span class="font-bold">Total:</span> R$ {{ pedido?.valorTotal?.toFixed(2) }}</p>
+                            <p><span class="font-bold">Método de Pagamento:</span> {{ pedido?.pagamento?.metodo?.nome }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">Endereço de Entrega</h3>
+                        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 7px;">
+                            <p>{{ pedido?.enderecoEntrega?.logradouro }}, {{ pedido?.enderecoEntrega?.numero }}</p>
+                            <p>{{ pedido?.enderecoEntrega?.bairro }}</p>
+                            <p>{{ pedido?.enderecoEntrega?.municipio?.nome }}/{{
+                                pedido?.enderecoEntrega?.municipio?.estado?.sigla }}</p>
+                            <p>CEP: {{ pedido?.enderecoEntrega?.cep }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 15px;">Itens do Pedido</h3>
+                        <div *ngFor="let item of pedido?.itens"
+                            style="display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                            <img [src]="'http://localhost:8080/produtos/image/download/' + item.nomeImagem" alt="{{item.nome}}" class="w-17 h-20 object-cover rounded mr-4">
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500;">{{ item.nome }}</p>
+                                <p>Quantidade: {{ item.quantidade }}</p>
+                                <p>Preço unitário: R$ {{ item.valor?.toFixed(2) }}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-weight: 500;">R$ {{ (item.valor * item.quantidade).toFixed(2) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<app-footer></app-footer>

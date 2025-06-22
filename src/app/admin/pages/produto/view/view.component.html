@@ -1,0 +1,20 @@
+<div class="popup-content">
+
+    <h2>Informações do Produto</h2>
+
+    <div class="userInfo">
+        <h3>Nome: <span class="data-info">{{data.nome}}</span></h3>
+        <h3>Descricao: <span class="data-info">{{data.descricao}}</span></h3>
+        <h3>Preço: <span class="data-info">{{data.preco}}</span></h3>
+        <h3>Desenvolvedora <span class="data-info">{{data.desenvolvedora}}</span></h3>
+        <h3>Plataforma: <span class="data-info">{{data.plataforma.nome}}</span></h3>
+        <h3>Tipo Mídia: <span class="data-info">{{data.tipoMidia.nome}}</span></h3>
+        <h3>Gênero: <span class="data-info">{{data.genero.nome}}</span></h3>
+        <h3>Classificação Indicativa: <span class="data-info">{{data.classificacao.nome}}</span></h3>
+    </div>
+
+    <div class="popup-bnt">
+        <button class="bnt-cancelar" (click)="cancelar()">Cancelar</button>
+        <button class="bnt-editar" (click)="editar(data.id)">Editar</button>
+    </div>
+</div>

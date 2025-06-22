@@ -1,0 +1,125 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <main class="container mx-auto px-0 py-8">
+        <div
+            style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 30px;">
+            Minha Conta
+        </div>
+
+        <div *ngIf="loading" style="text-align: center; padding: 50px;">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Carregando dados...</p>
+        </div>
+
+        <div *ngIf="error" style="text-align: center; padding: 20px; color: red;">
+            {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !error" class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+            <div class="lg:col-span-1">
+                <div class="nav-side-user">
+                    <div class="info-user">
+                        <div
+                            style="background-color: #ebebeb; width: 50px; height: 50px; align-content: center; text-align: center; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #c5c5c5;">
+                            {{ getIniciais() }}
+                        </div>
+                        <div style="line-height: 20px;">
+                            <p style="font-weight: 500;">{{ cliente?.nome }}</p>
+                            <p style="font-size: 13px; cursor: pointer;" (click)="logout()">Sair</p>
+                        </div>
+                    </div>
+                    <div class="nav-side-option">
+                        <ul>
+                            <li (click)="navegarPara('/gameverse/conta/minha-conta')">
+                                <mat-icon>account_circle</mat-icon>Minha Conta
+                            </li>
+                            <li (click)="navegarPara('/gameverse/conta/meus-pedidos')"><mat-icon>shopping_basket</mat-icon>Meus Pedidos</li>
+                            <li><mat-icon>favorite_border</mat-icon>Lista de Desejos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="card">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Coluna Dados Pessoais -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">Dados Pessoais</h3>
+                            <div
+                                style="background-color: #f5f5f5; padding: 15px 20px; border-radius: 7px; border: 1px solid hsl(0, 0%, 0%, 0.10);">
+                                <ul class="space-y-1">
+                                    <li><span class="font-bold">Nome:</span> {{ cliente?.nome }}</li>
+                                    <li><span class="font-bold">Data de nascimento:</span> {{
+                                        formatarData(cliente?.dataNascimento) }}</li>
+                                    <li><span class="font-bold">CPF:</span> {{ formatarCPF(cliente?.cpf) }}</li>
+                                    <li>
+                                        <span class="font-bold">Telefone(s):</span>
+                                        {{ formatarTelefones() }}
+                                    </li>
+                                    <li><span class="font-bold">E-mail:</span> {{ cliente?.login }}</li>
+                                </ul>
+                            </div>
+                            <button class="button-add-novo-endereco" mat-button style="margin-top: 10px;"
+                                (click)="navegarPara('/gameverse/conta/editar-info')">
+                                Editar Informações
+                            </button>
+                        </div>
+
+                        <!-- Coluna Primeiro Endereço -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Endereço</h3>
+                            <div *ngIf="primeiroEndereco; else semEndereco"
+                                style="background-color: #f5f5f5; padding: 15px 20px; border-radius: 7px; border: 1px solid hsl(0, 0%, 0%, 0.10);">
+                                <div class="space-y-1">
+                                    <p><span class="font-bold">Endereço:</span> {{ primeiroEndereco.logradouro }}</p>
+                                    <p><span class="font-bold">Número:</span> {{ primeiroEndereco.numero }}</p>
+                                    <p><span class="font-bold">Bairro:</span> {{ primeiroEndereco.bairro }}</p>
+                                    <p><span class="font-bold">Cidade/UF:</span> {{ primeiroEndereco.municipio?.nome
+                                        }}/{{ primeiroEndereco.municipio?.estado?.sigla }}</p>
+                                    <p><span class="font-bold">CEP:</span> {{ primeiroEndereco.cep }}</p>
+                                </div>
+                            </div>
+                            <ng-template #semEndereco>
+                                <div
+                                    style="background-color: #f5f5f5; padding: 15px 20px; border-radius: 7px; border: 1px solid hsl(0, 0%, 0%, 0.10);">
+                                    <p>Nenhum endereço cadastrado</p>
+                                </div>
+                            </ng-template>
+                            <button class="button-add-novo-endereco" mat-button style="margin-top: 10px;"
+                                (click)="navegarParaEditarEndereco(primeiroEndereco?.id)">
+                                {{ primeiroEndereco ? 'Editar Endereço' : 'Adicionar Endereço' }}
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="enderecos.length > 0" style="margin-top: 20px;">
+                        <h3 class="text-lg font-semibold mb-2">Lista de Endereços</h3>
+                        <div *ngFor="let endereco of enderecos" style="margin-bottom: 10px;">
+                            <div
+                                style="background-color: #f5f5f5; border: 1px solid hsl(0, 0%, 0%, 0.10); padding: 10px 20px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; display: flex; justify-content: space-between; align-items: center;">
+                                <span>{{ endereco.municipio?.nome }}/{{ endereco.municipio?.estado?.sigla }}</span>
+                                <span
+                                    style="display: flex; gap: 5px;font-weight: 400; font-size: 14px; align-items: center; cursor: pointer;"
+                                    (click)="navegarParaEditarEndereco(endereco.id)">
+                                    <mat-icon style="font-size: 16px; width: 16px; height: 16px;">edit</mat-icon>Editar
+                                </span>
+                            </div>
+                            <div
+                                style="background-color: #f5f5f5; padding: 15px 20px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; border: 1px solid hsl(0, 0%, 0%, 0.10); border-top: 0;">
+                                <div class="space-y-0">
+                                    <p><span class="font-bold">Endereço:</span> {{ endereco.logradouro }}</p>
+                                    <p><span class="font-bold">Número:</span> {{ endereco.numero }}</p>
+                                    <p><span class="font-bold">Bairro:</span> {{ endereco.bairro }}</p>
+                                    <p><span class="font-bold">Cidade/UF:</span> {{ endereco.municipio?.nome }}/{{
+                                        endereco.municipio?.estado?.sigla }}</p>
+                                    <p><span class="font-bold">CEP:</span> {{ endereco.cep }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<app-footer></app-footer>

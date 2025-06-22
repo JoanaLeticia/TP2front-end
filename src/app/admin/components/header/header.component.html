@@ -1,0 +1,23 @@
+<header>
+    <div class="toolbar">
+        <div class="welcome-message">
+            Admin
+        </div>
+        <div class="user-container">
+            <ng-container *ngIf="(usuarioLogado$ | async) as usuario">
+                <div class="user-display">
+                    <div class="actions">
+                        <button id="dropdown-btn">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a (click)="logHome()">Dashboard</a>
+                            <a (click)="logout()">Sair</a>
+                        </div>
+                    </div>
+                    <span class="user-name">{{ usuario.nome }} <br><a style="font-size: 12px; color: rgb(134, 134, 134);">Administrador</a></span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</header>

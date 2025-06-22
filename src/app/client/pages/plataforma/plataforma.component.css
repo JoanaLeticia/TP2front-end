@@ -1,0 +1,271 @@
+/* plataforma.component.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 0px;
+}
+
+.titulo {
+  display: flex;
+  justify-content: space-between; /* Isso vai separar os itens */
+  align-items: center; /* Alinha verticalmente */
+  width: 100%; /* Ocupa toda a largura */
+}
+
+.plataforma-title {
+  color: #0d358b;
+  text-align: start;
+  font: 600 24px Libre Franklin, sans-serif;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+mat-paginator {
+  margin-top: 20px;
+  border-radius: 4px;
+}
+
+.custom-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.filter-label {
+  font-size: 14px;
+  color: #4b4b4b;
+  font-weight: 500;
+}
+
+.custom-select {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+}
+
+.selected-option {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.option {
+  padding: 12px 16px;
+  transition: all 0.2s;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
+}
+
+.option.selected {
+  background-color: #e8f0fe;
+  color: #0d358b;
+  font-weight: 500;
+}
+
+.custom-select.active {
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+.produtos-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+app-grid-produtos {
+  flex: 1; /* Ocupa o espaço disponível */
+  min-height: 300px; /* Altura mínima para evitar colapso */
+}
+
+.filtros-container {
+  width: 250px;
+  border-radius: 8px;
+  align-self: flex-start; /* Mantém alinhado ao topo */
+  top: 20px; /* Distância do topo quando faz scroll */
+  margin-bottom: 50px;
+  padding-right: 20px;
+}
+
+.filtro-group {
+  margin-bottom: 20px;
+}
+
+.filtro-group h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.produtos-container {
+  margin-left: 20px;
+}
+
+.nenhum-produto-mensagem {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nenhum-produto-mensagem mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  color: #666;
+}
+
+.nenhum-produto-mensagem p {
+  font-size: 1.2rem;
+  color: #444;
+  margin: 1rem 0;
+}
+
+.nenhum-produto-mensagem button {
+  margin-top: 1rem;
+}
+
+.limpar-filtros-button:hover {
+  color:#0d358b;
+}
+
+/* Estilos para os gêneros */
+.genero-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.genero-option {
+  padding: 8px 0px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4b4b4b;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.genero-option:hover {
+  color: #0d358b;
+  padding-left: 5px;
+}
+
+.genero-option.selected {
+  background-color: #e4e4e4;
+  padding: 8px 15px;
+  border-left: 3px solid #0d358b;
+  color: #000;
+  font-weight: 600;
+}
+
+/* Estilos para as opções de preço (pode ser combinado com os de gênero) */
+.preco-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.preco-option {
+  padding: 6px 0px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4b4b4b;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.preco-option:hover {
+  padding-left: 5px;
+}
+
+.preco-option.selected {
+  background-color: #f0f0f0;
+  color: #0d358b;
+  font-weight: 600;
+}
+
+/* Estilos para o filtro de desenvolvedora */
+.dev-options-container {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dev-options-scroll {
+  max-height: 178px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.dev-option {
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4b4b4b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev-option:hover {
+  padding-left: 17px;
+}
+
+.dev-option.selected {
+  color: #0d358b;
+  font-weight: 600;
+}
+
+.all-option {
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #e7e7e7;
+  font-weight: 500;
+}
+
+/* Estilizando a scrollbar para navegadores WebKit */
+.dev-options-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dev-options-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dev-options-scroll::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}

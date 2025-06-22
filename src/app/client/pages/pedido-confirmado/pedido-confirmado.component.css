@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Estilos básicos para o componente */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Estilo para o botão */
+button[mat-raised-button] {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+button[mat-raised-button]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para o card de informações */
+.bg-white {
+  background-color: #fff;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.meuspedidos-button {
+    margin-bottom: 70px;
+    background-color: #0d358b;
+    color: #fff;
+    cursor: pointer;
+    padding: 15px 70px;
+    border-radius: 7px;
+    transition: all 0.3s ease;
+}
+
+.meuspedidos-button:hover {
+    background-color: #2155c4;
+}

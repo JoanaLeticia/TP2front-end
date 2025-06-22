@@ -1,0 +1,93 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2; display: flex; flex-direction: column; min-height: 100vh;">
+  <main class="container" style="flex: 1;">
+    <div class="titulo">
+      <h1 class="plataforma-title">{{ plataformaNomes[plataforma] || plataforma | uppercase }}</h1>
+
+      <div class="custom-filter-container">
+        <div class="filter-label">Ordenar por:</div>
+
+        <div class="custom-select" (click)="toggleDropdown()" [class.active]="dropdownOpen">
+          <div class="selected-option">
+            {{ getSelectedOptionText() }}
+            <span class="arrow-icon">{{ dropdownOpen ? '▲' : '▼' }}</span>
+          </div>
+
+          <div class="dropdown-options" *ngIf="dropdownOpen">
+            <div class="option" *ngFor="let option of filterOptions" (click)="selectOption(option.value)"
+              [class.selected]="ordenacao === option.value">
+              {{ option.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="filtros-container">
+        <h3 style="font: 600 18px Libre Franklin, sans-serif; margin-bottom: 25px">Filtrar por:</h3>
+
+        <!-- Filtro por Gênero -->
+        <div class="filtro-group" style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); padding-bottom: 20px;">
+          <h4 style="font: 600 16px Libre Franklin, sans-serif;">Gênero</h4>
+          <div class="genero-options">
+            <div *ngFor="let genero of filtros.generos" class="genero-option"
+              [class.selected]="filtrosSelecionados.genero === genero" (click)="selecionarGenero(genero)">
+              {{ genero }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro por Preço -->
+        <div class="filtro-group"
+          style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); padding-bottom: 20px; margin-top: 25px;">
+          <h4 style="font: 600 16px Libre Franklin, sans-serif;">Faixa de Preço</h4>
+          <div class="preco-options">
+            <div *ngFor="let faixa of filtros.faixasPreco" class="preco-option"
+              [class.selected]="filtrosSelecionados.precoMax === faixa" (click)="selecionarPreco(faixa)">
+              Até {{ faixa | currency:'R$' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro por Desenvolvedora -->
+        <div class="filtro-group"
+          style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); padding-bottom: 20px; margin-top: 25px;">
+          <h4 style="font: 600 16px Libre Franklin, sans-serif;">Desenvolvedora</h4>
+          <div class="dev-options-container">
+            <div class="dev-option all-option" [class.selected]="!filtrosSelecionados.desenvolvedora"
+              (click)="selecionarDesenvolvedora(null)">
+              Todas
+            </div>
+            <div class="dev-options-scroll">
+              <div *ngFor="let dev of filtros.desenvolvedoras" class="dev-option"
+                [class.selected]="filtrosSelecionados.desenvolvedora === dev" (click)="selecionarDesenvolvedora(dev)">
+                {{ dev }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="limparFiltros()" style="display: flex; gap: 10px; cursor: pointer;"
+          class="limpar-filtros-button"><mat-icon>cached</mat-icon> Limpar Filtros</button>
+      </div>
+
+      <div class="produtos-container">
+        <div *ngIf="nenhumProdutoEncontrado && produtos.length === 0" class="nenhum-produto-mensagem">
+          <mat-icon>info</mat-icon>
+          <p>Nenhum produto encontrado com os filtros selecionados.</p>
+          <button mat-button color="primary" (click)="limparFiltros()" style="cursor:pointer;"
+            class="limpar-filtros-button">Limpar filtros</button>
+        </div>
+
+        <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+      </div>
+    </div>
+
+    <mat-paginator *ngIf="totalRecords > 0" [length]="totalRecords" [pageSize]="size" [pageIndex]="page"
+      [pageSizeOptions]="[4, 8, 12]" (page)="paginar($event)">
+    </mat-paginator>
+  </main>
+  <app-footer></app-footer>
+</body>

@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+main {
+    padding: 100px 40px 40px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 250px;
+    background-color: #e1e4ee;
+    min-height: 100vh;
+
+    font-family: Inter, sans-serif;
+}
+
+h2 {
+    font-size: 25px;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: none;
+    margin: 0px 0px;
+    padding: 5px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bnt-cadastro {
+    height: 50px;
+    width: 110px;
+    margin: 25px 0;
+    background: #0d358b;
+    font-size: 16px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+
+.search {
+    display: flex;
+    align-items: end;
+    height: 35px;
+    width: 350px;
+}
+
+.search label {
+    flex: 1;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    margin-right: -20px;
+}
+
+.search input {
+    flex: 3;
+    font-size: 15px;
+    font-weight: 500;
+    width: 500px;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.search input:focus {
+    outline: none;
+    border-color: #1d4db3;
+}
+
+/* Tabela */
+.mat-table {
+    border-style: dotted;
+    width: 500px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.mat-column-nome {
+    width: 25%;
+
+}
+
+.mat-column-matricula {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-Nivel {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-acao {
+    min-width: 10em;
+    text-align: end;
+}
+
+table button {
+    width: 50px;
+    height: 40px;
+
+    font-size: 18px;
+    border-radius: 20px;
+    border-style: none;
+
+    cursor: pointer;
+    color: #494949;
+    transform: scale(1.0)
+}
+
+
+.bnt-visualizar {
+    background-color: transparent;
+}
+
+.bnt-editar {
+    background-color: transparent;
+}
+
+.bnt-apagar {
+    background-color: transparent;
+}
+
+.bnt-visualizar:hover {
+    color: #0076CD;
+}
+
+.bnt-editar:hover {
+    color: #9b6d17;
+}
+
+.bnt-apagar:hover {
+    color: red;
+}

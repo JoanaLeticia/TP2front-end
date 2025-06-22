@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+.nav-side-user {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #e4e4e4;
+    border-radius: 7px;
+}
+
+.content-card {
+    grid-column: span 3;
+}
+
+.card {
+    background-color: #fff;
+    padding: 25px;
+    width: 100%;
+    border: 1px solid #e4e4e4;
+    border-radius: 7px;
+    margin-bottom: 20px;
+}
+
+.font-bold {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+
+
+body {
+    font-family: Libre Franklin, sans-serif;
+}
+
+.info-user {
+    color: #000;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-side-option ul {
+    margin-top: 20px;
+}
+
+.nav-side-option li {
+    display: flex;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+    gap: 15px;
+    border-radius: 7px;
+    align-items: center;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.nav-side-option li:hover {
+    background-color: #eeeeee;
+    padding-left: 15px;
+    color: #0d358b;
+}
+
+/* Adicione estas regras no final do arquivo */
+.input-endereco {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #b4b4b4;
+  /* Borda mais grossa e azul */
+  border-radius: 5px;
+  padding: 5px 10px;
+  transition: border-color 300ms ease;
+}
+
+.input-endereco:hover {
+  border-color: #2155c4;
+}
+
+.input-endereco input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  padding: 5px;
+  width: 100%;
+}
+
+/* Estilo para o placeholder do CEP */
+input::placeholder {
+  color: #999;
+}
+
+/* Estilo para o botão de cancelar */
+.cancel-button {
+  cursor: pointer;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 13px 40px;
+  border-radius: 7px;
+  transition: background-color 200ms ease;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+}
+
+.button-add-novo-endereco {
+  background-color: #0d358b;
+  cursor: pointer;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 13px 40px;
+  border-radius: 7px;
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: #2155c4;
+  }
+}
+
+.input-endereco select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 5px;
+  outline: none;
+  appearance: none;
+  /* Remove a seta padrão */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-endereco.select-estado {
+  position: relative;
+}
+
+.input-endereco.select-estado::after {
+  content: "▼";
+  font-size: 12px;
+  color: #666;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ESTILOS DO DROPDOWN PERSONALIZADO */
+.estado-select-container {
+  position: relative;
+}
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.selected-option {
+  margin-top: 5px;
+  padding: 9px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #b4b4b4;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.selected-option:hover {
+  border-color: #2155c4;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-box {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #2155c4;
+}
+
+.option {
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.option:hover {
+  background-color: #f5f8ff;
+}
+
+.option.selected {
+  background-color: #e6efff;
+}
+
+.option .sigla {
+  font-weight: 600;
+  color: #0d358b;
+  min-width: 30px;
+}
+
+:host {
+  display: block;
+}
+
+.form-usuario span {
+    font-size: 15px;
+}
+
+.space-y-1 li {
+    font-size: 14px;
+}
+
+.space-y-1 p {
+    font-size: 14px;
+}
+
+.card {
+  background-color: #fff;
+  padding: 25px;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.nav-side-user {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+}
+
+.info-user {
+  color: #000;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-side-option ul {
+  margin-top: 20px;
+}
+
+.nav-side-option li {
+  display: flex;
+  padding: 10px;
+  margin-bottom: 5px;
+  gap: 15px;
+  border-radius: 7px;
+  align-items: center;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-side-option li:hover {
+  background-color: #eeeeee;
+  padding-left: 15px;
+  color: #0d358b;
+}
+
+.button-voltar {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.button-voltar:hover {
+    padding-right: 5px;
+}

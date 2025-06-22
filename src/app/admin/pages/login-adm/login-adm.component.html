@@ -1,0 +1,29 @@
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <div class="admin-login-header">
+      <img src="assets/logo-gameverse-azul.png" alt="Admin Logo" style="display: flex; margin-left: 27%;">
+      <h2>Acesso Administrativo</h2>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="admin-login-form">
+      <div class="form-group">
+        <label for="admin-email">E-mail administrativo</label>
+        <input id="admin-email" type="email" formControlName="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-password">Senha</label>
+        <input id="admin-password" type="password" formControlName="password" required>
+      </div>
+
+      <button type="submit" class="admin-login-btn">
+        <span *ngIf="!loading">Acessar Painel</span>
+        <span *ngIf="loading">Carregando...</span>
+      </button>
+    </form>
+
+    <div class="admin-login-footer">
+      <p>Problemas com acesso? <a href="#">Contate o superadmin</a></p>
+    </div>
+  </div>
+</div>

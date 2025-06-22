@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+main {
+    padding: 100px 40px 40px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 250px;
+    background-color: #e1e4ee;
+    min-height: 100vh;
+
+    font-family: Inter, sans-serif;
+}
+
+h2 {
+    font-size: 25px;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: none;
+    margin: 0px 0px;
+    padding: 5px;
+}
+
+.content {
+    background-color: #0d358b;
+    color: #fff;
+
+    border: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px;
+    margin: -25px -25px 0px -25px;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+form {
+    margin-top: -5px;
+    border: 1px solid #0d358b;
+    gap: 20px;
+    border-radius: 10px;
+    padding: 25px; 
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: -15px;
+}
+
+form .group-ini {
+    display: contents;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+form .group {
+    display: contents;
+    justify-content: space-around;
+}
+
+.form-group {
+    display: flex;
+    margin-top: 20px;
+}
+
+.form-group label {
+    margin-right: 10px;
+    width: 70px;
+    margin-top: 7px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-group input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.group-tel {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-itens {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.form-itens label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-itens input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.form-itens input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+}
+
+.end-itens {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.end-itens label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.end-itens input {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+
+}
+
+.end-itens input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.telefones {
+    margin-top: 25px;
+}
+
+.telefones button {
+    margin: 25px 0;
+    font-size: 13px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+
+.endereco-item{
+    display: flex;
+    flex-direction: row;
+}
+
+#remover{
+    background: #e68646;
+    height: 40px;
+    width: 65px;
+    margin-bottom: 0px;
+}
+
+#nome{
+    width: 260px;
+}
+
+#email{
+    width: 260px;
+}
+#adicionar{
+    background: #3d89e0;
+    height: 40px;
+    width: 100px;
+}
+mat-select {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    width: 35px;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+}
+
+.mat-select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+mat-error {
+    color: #f36b7f;
+    font-family: "Lato", sans-serif;
+    font-size: 10px;
+}
+
+.form-group select {
+    flex: 3;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #808080;
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+
+.bnt-group{
+    display: flex;
+    justify-content: end;
+    gap: 25px;
+
+    margin-top: 15px;
+}
+
+button{
+    height: 50px;
+    width: 130px;
+    margin: 25px 0;
+    background: #0076CD;
+    font-size: 16px;
+    color: #fff;
+
+    text-decoration: none;
+    border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+}
+.btn-cancelar{
+    background: #808080;
+}
+.btn-excluir{
+    background: #c90220;
+}
+.btn-salvar{
+    background: #007e39;
+}

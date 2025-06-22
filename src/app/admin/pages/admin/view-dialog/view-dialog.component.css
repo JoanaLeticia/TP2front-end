@@ -1,0 +1,84 @@
+.popup-content {
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Centraliza o popup */
+  position: fixed; /* Mantém o popup no lugar mesmo quando a página é rolada */
+  background-color: #fff;
+  padding: 32px;
+  width: 80%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  font-family: "Lato", sans-serif;
+  overflow-y: auto; /* Adiciona uma barra de rolagem vertical se o conteúdo exceder o tamanho do popup */
+}
+
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.userInfo {
+  padding: 25px;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 15px;
+
+  font-weight: normal; 
+  display: block; /* Altera a exibição para bloco */
+  margin-top: 5px; /* Adiciona margem superior para separar dos elementos acima */
+}
+
+.two span:first-child {
+  justify-self: start; /* Alinha o primeiro span à esquerda */
+}
+
+.two span:last-child {
+  justify-self: center; /* Alinha o segundo span ao centro */
+}
+
+.telefones {
+  display: flex;
+  flex-wrap: wrap; /* Quebra os telefones em várias linhas se necessário */
+  gap: 10px; /* Espaçamento entre os telefones */
+}
+
+.enderecos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaçamento entre os endereços */
+}
+
+.popup-bnt {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bnt-cancelar,
+.bnt-editar {
+  height: 40px;
+  width: 100px;
+  margin: 25px 0;
+  color: #555;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  border-style: none;
+  cursor: pointer;
+}
+
+.bnt-cancelar {
+  background: #CCCCCC;
+}
+
+.bnt-editar {
+  background: #FFD700;
+}
+
+.data-info {
+  font-weight: normal; /* Remove o negrito dos dados dinâmicos */
+  align-self: flex-end; /* Alinha o elemento na parte inferior do pai */
+}

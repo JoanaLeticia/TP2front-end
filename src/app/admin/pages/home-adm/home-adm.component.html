@@ -1,0 +1,31 @@
+<app-header></app-header>
+<app-navside></app-navside>
+<div class="container-admin-home">
+  <h1>Bem-vindo(a) ao Painel Administrativo</h1>
+  <p>Veja abaixo um resumo das atividades do sistema:</p>
+
+  <div class="dashboard-cards">
+    <div class="card-resumo">
+      <h3>Total de Produtos</h3>
+      <p>{{totalProdutos}}</p>
+    </div>
+    <div class="card-resumo">
+      <h3>Total de Pedidos</h3>
+      <p>{{totalPedidos}}</p>
+    </div>
+    <div class="card-resumo">
+      <h3>Usuários Registrados</h3>
+      <p>{{totalUsuarios}}</p>
+    </div>
+    <div class="card-resumo">
+      <h3>Estoque Baixo</h3>
+      <p>5 produtos</p>
+    </div>
+  </div>
+
+  <div class="acesso-rapido">
+    <button (click)="irProdutos()">Gerenciar Produtos</button>
+    <button (click)="irClientes()">Gerenciar Clientes</button>
+    <button (click)="irAdmins()">Gerenciar Admins</button>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+  <main class="container mx-auto px-0 py-8">
+    <!-- Título e mensagem de confirmação -->
+    <div class="text-center mb-8">
+      <h1 style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 50px;">Pedido Confirmado</h1>
+      <div class="flex justify-center mb-5">
+        <mat-icon class="text-green-500" style="font-size: 70px; width: 80px; height: 80px; color: #353535;">check_circle</mat-icon>
+      </div>
+      <h2 class="text-2xl font-semibold text-gray-700 mb-3">Obrigado por sua compra!</h2>
+      <p class="text-gray-600 mb-10" *ngIf="!isLoading">
+        Em breve enviaremos um e-mail à <strong class="text-gray-700">{{emailUsuario}}</strong> com todos os detalhes do seu pedido!
+      </p>
+      <button (click)="irParaMeusPedidos()" class="meuspedidos-button">
+        Meus Pedidos
+      </button>
+    </div>
+
+    <!-- Card com informações -->
+    <div *ngIf="!isLoading && pedido" class="mx-auto bg-white rounded-lg overflow-hidden" style="border: 1px solid #e4e4e4;">
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Coluna Informações do Pedido -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Informações do Pedido #{{pedido.idPedido}}</h3>
+            <ul class="space-y-0">
+              <li class="text-gray-600"><span class="font-bold">ID:</span> {{pedido.idPedido}}</li>
+              <li class="text-gray-600"><span class="font-bold">Total:</span> {{pedido.valorTotal | currency:'BRL'}}</li>
+              <li class="text-gray-600"><span class="font-bold">Forma de Pagamento:</span> 
+                {{pedido.pagamento.metodo.nome || 'Não especificado'}}
+              </li>
+              <li class="text-gray-600"><span class="font-bold">CEP:</span> {{pedido.enderecoEntrega.cep || 'Não informado'}}</li>
+            </ul>
+          </div>
+
+          <!-- Coluna Entrega -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Entrega</h3>
+            <div class="space-y-0">
+              <p class="text-gray-600"><span class="font-bold">Endereço:</span> 
+                {{pedido.enderecoEntrega.logradouro}}, 
+                {{pedido.enderecoEntrega.numero || ''}} 
+                {{pedido.enderecoEntrega.complemento || ''}}
+              </p>
+              <p class="text-gray-600"><span class="font-bold">Cidade:</span> 
+                {{pedido.enderecoEntrega.municipio.nome || 'Não informado'}} - 
+                {{pedido.enderecoEntrega.municipio.estado.nome || 'Não informado'}}
+              </p>
+              <p class="text-gray-600 mt-4">O prazo de entrega é de alguns dias úteis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="text-center py-8">
+      <p>Carregando informações do pedido...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="errorMessage" class="text-center py-8 text-red-500">
+      <p>{{errorMessage}}</p>
+      <p>Você será redirecionado em breve...</p>
+    </div>
+  </main>
+</body>
+
+<app-footer></app-footer>

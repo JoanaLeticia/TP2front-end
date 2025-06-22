@@ -1,0 +1,7 @@
+<div class="grid-produtos">
+  <app-card-produto
+    *ngFor="let card of cards()"
+    [produto]="card"
+    (click)="onDetalhesProduto(card.idProduto)" style="cursor: pointer;">
+  </app-card-produto>
+</div>

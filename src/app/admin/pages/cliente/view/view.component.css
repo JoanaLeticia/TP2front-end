@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+.popup-content {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #fff;
+  padding: 32px;
+  width: 80%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  font-family: "Lato", sans-serif;
+  overflow-y: auto;
+}
+
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.userInfo {
+  padding: 25px;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 15px;
+
+  font-weight: normal; 
+  display: block;
+  margin-top: 5px;
+}
+
+
+.three {
+  display: flex;
+  flex-direction: column;
+}
+
+.two {
+  display: grid;
+  grid-template-columns: auto 1fr; 
+  gap: 10px; 
+  margin-top: 10px;
+}
+
+.two span:first-child {
+  justify-self: start;
+}
+
+.two span:last-child {
+  justify-self: center;
+}
+
+.telefones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.enderecos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-bnt {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bnt-cancelar,
+.bnt-editar {
+  height: 40px;
+  width: 100px;
+  margin: 25px 0;
+  color: #555;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  border-style: none;
+  cursor: pointer;
+}
+
+.bnt-cancelar {
+  background: #CCCCCC;
+}
+
+.bnt-editar {
+  background: #FFD700;
+}
+
+.data-info {
+  font-weight: normal;
+}

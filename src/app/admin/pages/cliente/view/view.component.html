@@ -1,0 +1,34 @@
+<div class="popup-content">
+    <h2 id="popup-title">Informações do Cliente</h2>
+
+    <div class="userInfo">
+        <h3>Nome: <span class="data-info">{{data.nome}}</span></h3>
+        <h3>Email: <span class="data-info">{{data.login}}</span></h3>
+        <h3>CPF: <span class="data-info">{{data.cpf}}</span></h3>
+
+        <div class="twoo">
+            <h3>Telefones:</h3>
+            <span class="telefones">
+                <ng-container *ngFor="let telefone of data.listaTelefone">
+                    <span>{{telefone.codArea}} {{telefone.numero}}</span>
+                </ng-container>
+            </span>
+        </div>
+
+        <div class="twoo">
+            <h3>Endereços:</h3>
+            <span class="enderecos">
+                <ng-container *ngFor="let endereco of data.listaEndereco">
+                    <span><strong>Endereço:</strong> {{endereco.logradouro}}, {{endereco.numero}}, {{endereco.bairro}},
+                        {{endereco.cep}}, {{endereco.municipio?.nome}} - {{endereco.municipio?.estado?.sigla}}</span>
+                    <span><strong>Complemento:</strong> {{endereco.complemento}}</span> <br>
+                </ng-container>
+            </span>
+        </div>
+    </div>
+
+    <div class="popup-bnt">
+        <button class="bnt-cancelar" (click)="cancelar()">Cancelar</button>
+        <button class="bnt-editar" (click)="editar(data.id)">Editar</button>
+    </div>
+</div>

@@ -1,0 +1,382 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+  <main class="container mx-auto px-0 py-8">
+    <h2
+      style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 30px;">
+      Finalizar Compra</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <!-- Etapas do Checkout -->
+      <div class="lg:col-span-2">
+
+        <!-- Etapa 1: Endereço -->
+        <mat-card class="endereco-card">
+          <mat-card-header>
+            <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 15px;">Endereço de
+              Entrega</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngIf="enderecos.length > 0">
+              <mat-radio-group [(ngModel)]="enderecoSelecionado">
+                <div *ngFor="let endereco of enderecos" class="endereco-option mb-2"
+                  [class.endereco-option-collapsed]="enderecoSelecionado !== endereco"
+                  [class.endereco-option-expanded]="enderecoSelecionado === endereco">
+
+                  <div class="endereco-header" (click)="selecionarEndereco(endereco)">
+                    <mat-radio-button [value]="endereco" style="margin-right: 10px;">
+                      <div style="font-weight: 600; color: #3a3a3a; cursor: pointer;"
+                        (click)="selecionarEndereco(endereco)">{{endereco.municipio.nome}}</div>
+                    </mat-radio-button>
+                  </div>
+
+                  <div class="endereco-details" *ngIf="enderecoSelecionado === endereco">
+                    <div style="font-size: 14px; color: #494949;">
+                      <p class="font-medium">{{endereco.logradouro}}, {{endereco.numero}}</p>
+                      <p>{{endereco.bairro}}, {{endereco.municipio.nome}} - {{endereco.municipio.estado.sigla}}</p>
+                      <p>CEP: {{endereco.cep}}</p>
+                    </div>
+                    <div class="editar-endereco" (click)="editarEndereco(endereco)">
+                      <mat-icon style="font-size: 18px; margin-right: 4px;">edit</mat-icon>
+                      <span style="cursor:pointer">Editar</span>
+                    </div>
+                  </div>
+                </div>
+              </mat-radio-group>
+
+              <button class="button-add-endereco" mat-button color="primary" (click)="mostrarFormularioEndereco = true">
+                <mat-icon>add</mat-icon> Adicionar novo endereço
+              </button>
+            </div>
+
+            <div *ngIf="enderecos.length === 0" class="text-center py-4">
+              <p>Nenhum endereço cadastrado</p>
+              <button mat-raised-button color="primary" (click)="mostrarFormularioEndereco = true"
+                style="cursor: pointer;">
+                Cadastrar Endereço
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Novo endereço -->
+        <mat-card class="entrega-card" *ngIf="mostrarFormularioEndereco">
+          <mat-card-header>
+            <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">Novo
+              endereço</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div style="display: flex; gap: 15px;">
+              <div style="width: 80%;">
+                <span>Endereço</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.logradouro" required />
+                </div>
+              </div>
+
+              <div style="width: 20%;">
+                <span>Número</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.numero" required />
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 60%;">
+                <span>Complemento</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.complemento" />
+                </div>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Bairro</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.bairro" required />
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 30%;">
+                <span>CEP</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.cep" (input)="formatarCEP($event)" maxlength="9"
+                    placeholder="00000-000" required />
+                </div>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Estado</span>
+                <div class="estado-select-container">
+                  <div class="custom-select" (click)="toggleEstadoDropdown()" [class.active]="estadoDropdownOpen">
+                    <div class="selected-option">
+                      {{ novoEndereco.estado ? (novoEndereco.estado.sigla + ' - ' + novoEndereco.estado.nome) :
+                      'Selecione um estado' }}
+                      <span class="arrow-icon">{{ estadoDropdownOpen ? '▲' : '▼' }}</span>
+                    </div>
+
+                    <div class="dropdown-options" *ngIf="estadoDropdownOpen">
+                      <div class="search-box">
+                        <input type="text" placeholder="Buscar estado..." [(ngModel)]="estadoSearchTerm"
+                          (click)="$event.stopPropagation()">
+                      </div>
+                      <div class="option" *ngFor="let estado of filteredEstados" (click)="selectEstado(estado)"
+                        [class.selected]="novoEndereco.estado?.id === estado.id">
+                        <span class="sigla">{{ estado.sigla }}</span>
+                        <span class="nome">{{ estado.nome }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="width: 30%;">
+                <span>Cidade</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.nomeMunicipio" required
+                    (blur)="verificarMunicipioExistente()" />
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+              <button class="cancel-button" mat-button
+                (click)="mostrarFormularioEndereco = false; resetarFormularioEndereco()"
+                style="color: #666; border: 1px solid #ccc;">
+                Cancelar
+              </button>
+              <button class="button-add-novo-endereco" mat-button (click)="adicionarNovoEndereco()">
+                Adicionar Endereço
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- EDITAR ENDEREÇO -->
+        <mat-card class="entrega-card" *ngIf="mostrarFormularioEdicao">
+          <mat-card-header>
+            <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">Editar
+              endereço</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- Mesmo formulário do novo endereço, mas com os dados do endereço selecionado -->
+            <div style="display: flex; gap: 15px;">
+              <div style="width: 80%;">
+                <span>Endereço</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.logradouro" required />
+                </div>
+              </div>
+
+              <div style="width: 20%;">
+                <span>Número</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.numero" required />
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 60%;">
+                <span>Complemento</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.complemento" />
+                </div>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Bairro</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.bairro" required />
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+              <div style="width: 30%;">
+                <span>CEP</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.cep" (input)="formatarCEP($event)" maxlength="9"
+                    placeholder="00000-000" required />
+                </div>
+              </div>
+
+              <div style="width: 40%;">
+                <span>Estado</span>
+                <div class="estado-select-container">
+                  <div class="custom-select" (click)="toggleEstadoDropdown()" [class.active]="estadoDropdownOpen">
+                    <div class="selected-option">
+                      {{ novoEndereco.estado ? (novoEndereco.estado.sigla + ' - ' +
+                      novoEndereco.estado.nome) : 'Selecione um estado' }}
+                      <span class="arrow-icon">{{ estadoDropdownOpen ? '▲' : '▼' }}</span>
+                    </div>
+
+                    <div class="dropdown-options" *ngIf="estadoDropdownOpen">
+                      <div class="search-box">
+                        <input type="text" placeholder="Buscar estado..." [(ngModel)]="estadoSearchTerm"
+                          (click)="$event.stopPropagation()">
+                      </div>
+                      <div class="option" *ngFor="let estado of filteredEstados" (click)="selectEstado(estado)"
+                        [class.selected]="novoEndereco.estado?.id === estado.id">
+                        <span class="sigla">{{ estado.sigla }}</span>
+                        <span class="nome">{{ estado.nome }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="width: 30%;">
+                <span>Cidade</span>
+                <div class="input-endereco">
+                  <input type="text" [(ngModel)]="novoEndereco.nomeMunicipio" required
+                    (blur)="verificarMunicipioExistente()" />
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+              <button class="cancel-button" mat-button (click)="cancelarEdicao()"
+                style="color: #666; border: 1px solid #ccc;">
+                Cancelar
+              </button>
+              <button class="button-add-novo-endereco" mat-button (click)="salvarEdicao()">
+                Salvar Alterações
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Etapa 2: Pagamento -->
+        <mat-card class="pagamento-card">
+          <mat-card-header>
+            <mat-card-title style="font-size: 20px; font-weight: 600; margin-bottom: 15px;">Método de
+              Pagamento</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-radio-group [(ngModel)]="metodoPagamento">
+              <div *ngFor="let metodo of metodosPagamento" class="mb-2"
+                style="border: 1px solid #ccc; border-radius: 7px; overflow: hidden;">
+                <div class="header-pagamento" [class.header-pagamento-selected]="metodoPagamento?.id === metodo.id"
+                  style="padding-left: 10px;">
+                  <mat-radio-button [value]="metodo" class="w-full">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                      <div>
+                        <p style="font-weight: 600;">{{metodo.nome}}</p>
+                        <p *ngIf="metodo.descricao" class="text-sm text-gray-600">{{metodo.descricao}}</p>
+                      </div>
+                    </div>
+                  </mat-radio-button>
+                </div>
+
+                <!-- Campos específicos para cartão -->
+                <div *ngIf="metodo.id === 1 && metodoPagamento?.id === 1" style="padding: 15px;">
+                  <div class="cartao-form-group">
+                    <label>Número do Cartão</label>
+                    <div class="input-endereco" [class.input-invalido]="!dadosCartao.numero && formSubmetido">
+                      <input type="text" [(ngModel)]="dadosCartao.numero" (input)="formatarNumeroCartao($event)"
+                        placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+                    <span class="mensagem-erro" *ngIf="!dadosCartao.numero && formSubmetido">
+                      Número do cartão é obrigatório
+                    </span>
+                  </div>
+
+                  <!-- Validade -->
+                  <div class="cartao-form-group">
+                    <label>Validade (MM/AA)</label>
+                    <div class="input-endereco"
+                      [class.input-invalido]="(!dadosCartao.validade || !validarValidade()) && formSubmetido">
+                      <input type="text" [(ngModel)]="dadosCartao.validade" (input)="formatarValidade($event)"
+                        placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <span class="mensagem-erro" *ngIf="!dadosCartao.validade && formSubmetido">
+                      Validade é obrigatória
+                    </span>
+                    <span class="mensagem-erro" *ngIf="dadosCartao.validade && !validarValidade() && formSubmetido">
+                      Validade inválida (use MM/AA)
+                    </span>
+                  </div>
+
+                  <!-- CVV -->
+                  <div class="cartao-form-group">
+                    <label>CVV</label>
+                    <div class="input-endereco" [class.input-invalido]="!dadosCartao.cvv && formSubmetido">
+                      <input type="password" [(ngModel)]="dadosCartao.cvv" (input)="validarCVV($event)"
+                        placeholder="123" maxlength="3" required>
+                    </div>
+                    <span class="mensagem-erro" *ngIf="!dadosCartao.cvv && formSubmetido">
+                      CVV é obrigatório
+                    </span>
+                  </div>
+
+                  <!-- Nome no Cartão -->
+                  <div class="cartao-form-group">
+                    <label>Nome no Cartão</label>
+                    <div class="input-endereco" [class.input-invalido]="!dadosCartao.nome && formSubmetido">
+                      <input type="text" [(ngModel)]="dadosCartao.nome" required pattern="[a-zA-Z ]*">
+                    </div>
+                    <span class="mensagem-erro" *ngIf="!dadosCartao.nome && formSubmetido">
+                      Nome no cartão é obrigatório
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </mat-radio-group>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Resumo do Pedido -->
+      <div>
+        <mat-card class="resumo-pedido">
+          <mat-card-header>
+            <mat-card-title style="font-weight: 600; font-size: 20px; padding: 10px 8px 0px;">Resumo do
+              Pedido</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content style="margin-top: 5px;">
+            <div style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); margin: 0 10px; padding-bottom: 5px;">
+              <div class="flex"
+                style="justify-content: space-between; font-size: 14px; font-weight: 600; margin-top: 15px; margin-bottom: 5px;">
+                <span>Produto</span>
+                <span style="margin-left: 23px;">Qtd.</span>
+                <span>Preço</span>
+              </div>
+              <div *ngFor="let item of carrinhoItens" style="padding: 10px 0;">
+                <div class="flex justify-between" style="font-size: 15px;">
+                  <span style="width: 108px;">{{item.nome}}</span>
+                  <span>{{ item.quantidade }}</span>
+                  <span>{{item.valor * item.quantidade | currency:'BRL'}}</span>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 0 10px;">
+              <div class="flex justify-between" style="padding-top: 20px; color: #666; padding-bottom: 5px;">
+                <span>Subtotal:</span>
+                <span>{{calcularTotal() | currency:'BRL'}}</span>
+              </div>
+
+              <div class="flex justify-between py-2">
+                <span>Frete:</span>
+                <span>Grátis</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between py-2 font-bold"
+              style="font-size: 20px; margin-left: -16px; margin-right: -16px; margin-bottom: -21px; margin-top: 10px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: #ffffff; padding: 15px 25px; outline: 1px solid rgb(226, 226, 226);">
+              <span>Total:</span>
+              <span>{{calcularTotal() | currency:'BRL'}}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <button mat-raised-button color="primary" class="button-finalizar" (click)="finalizarPedido()"
+          [disabled]="!enderecoSelecionado || !metodoPagamento" style="cursor: pointer;">
+          Finalizar Pedido
+        </button>
+      </div>
+    </div>
+  </main>
+</body>
+
+<app-footer></app-footer>

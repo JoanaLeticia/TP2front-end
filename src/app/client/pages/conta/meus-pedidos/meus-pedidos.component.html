@@ -1,0 +1,86 @@
+<app-header></app-header>
+
+<body style="background-color: #f2f2f2;">
+    <main class="container mx-auto px-0 py-8">
+        <div style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; margin-bottom: 30px;">
+            Meus Pedidos
+        </div>
+
+        <div *ngIf="loading" style="text-align: center; padding: 50px;">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Carregando dados...</p>
+        </div>
+
+        <div *ngIf="error" style="text-align: center; padding: 20px; color: red;">
+            {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !error" class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+            <div class="lg:col-span-1">
+                <div class="nav-side-user">
+                    <div class="info-user">
+                        <div style="background-color: #ebebeb; width: 50px; height: 50px; align-content: center; text-align: center; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #c5c5c5;">
+                            {{ getIniciais() }}
+                        </div>
+                        <div style="line-height: 20px;">
+                            <p style="font-weight: 500;">{{ cliente?.nome }}</p>
+                            <p style="font-size: 13px; cursor: pointer;" (click)="logout()">Sair</p>
+                        </div>
+                    </div>
+                    <div class="nav-side-option">
+                        <ul>
+                            <li (click)="navegarPara('/gameverse/conta/minha-conta')">
+                                <mat-icon>account_circle</mat-icon>Minha Conta
+                            </li>
+                            <li (click)="navegarPara('/gameverse/conta/meus-pedidos')">
+                                <mat-icon>shopping_basket</mat-icon>Meus Pedidos
+                            </li>
+                            <li><mat-icon>favorite_border</mat-icon>Lista de Desejos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="card">
+                    <div *ngIf="pedidos.length === 0" style="text-align: center; padding: 20px;">
+                        <p>Você ainda não fez nenhum pedido.</p>
+                        <button mat-button class="button-add-novo-endereco" 
+                                style="margin-top: 20px;"
+                                (click)="navegarPara('/gameverse/home')">
+                            Ir para loja
+                        </button>
+                    </div>
+
+                    <div *ngIf="pedidos.length > 0">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 20px;">Seus Pedidos</h3>
+                        
+                        <div *ngFor="let pedido of pedidos" class="pedido-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div>
+                                    <span class="font-bold">Pedido #{{ pedido.idPedido }}</span>
+                                    <span style="margin-left: 15px; color: #666;">
+                                        {{ formatarData(pedido.horario) }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">Total: R$ {{ pedido.valorTotal?.toFixed(2) }}</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 0px;">
+                                <p><span class="font-bold">Status:</span> {{ pedido.statusPedido?.nome }}</p>
+                                <p><span class="font-bold">Itens:</span> {{ pedido.itens?.length }} produto(s)</p>
+                            </div>
+                            
+                            <button mat-button class="button-add-novo-endereco" 
+                                    (click)="verDetalhes(pedido.idPedido)" style="color: #fff;">
+                                Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<app-footer></app-footer>

@@ -1,0 +1,66 @@
+<div class="navside">
+    <div class="logo">
+        <button class="logo-bnt" (click)="logHome()">
+            <img src="../../../../assets/logo-gameverse-azul.png" alt="Logo do Sistema">
+        </button>
+    </div>
+    <nav class="nav-links">
+        <ul>
+            <li>
+                <button class="links-bnt" (click)="toggleSubmenu(0)">
+                    <mat-icon>group_outlined</mat-icon>
+                    <span>Usuários</span>
+                </button>
+                <div class="submenu" [class.active]="isSubmenuOpen[0]">
+                    <ul>
+                        <li><a href="adm/list">Administradores</a></li>
+                        <li><a href="municipio/list">Municípios</a></li>
+                        <li><a href="cliente/list">Clientes</a></li>
+                        <li><a href="estado/list">Estados</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <button class="links-bnt" (click)="toggleSubmenu(1)">
+                    <mat-icon>photo_album_outlined</mat-icon>
+                    <span>Produtos</span>
+                </button>
+                <div class="submenu" [class.active]="isSubmenuOpen[1]">
+                    <ul>
+                        <li><a href="produtos/list">Produtos</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <button class="links-bnt" (click)="toggleSubmenu(2)">
+                    <mat-icon>assignment_outlined</mat-icon>
+                    <span>Estoque</span>
+                </button>
+                <div class="submenu" [class.active]="isSubmenuOpen[2]">
+                    <ul>
+                        <li><a href="#">Estoque</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <button class="links-bnt" (click)="toggleSubmenu(3)">
+                    <mat-icon>shopping_cart_outlined</mat-icon>
+                    <span>Vendas</span>
+                </button>
+            </li>
+            <li>
+                <button class="links-bnt" (click)="toggleSubmenu(4)">
+                    <mat-icon>insert_chart_outlined</mat-icon>
+                    <span>Relatórios</span>
+                </button>
+                <div class="submenu" [class.active]="isSubmenuOpen[4]">
+                    <ul>
+                        <li><a href="#">Opção 1</a></li>
+                        <li><a href="#">Opção 2</a></li>
+                        <li><a href="#">Opção 3</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>
