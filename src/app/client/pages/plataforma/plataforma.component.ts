@@ -13,6 +13,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import { CustomPaginationComponent } from '../../../shared/components/template/custom-pagination/custom-pagination.component';
 
 export function getPortuguesePaginatorIntl() {
   const paginatorIntl = new MatPaginatorIntl();
@@ -40,7 +41,7 @@ export function getPortuguesePaginatorIntl() {
   standalone: true,
   templateUrl: './plataforma.component.html',
   styleUrl: './plataforma.component.css',
-  imports: [FooterComponent, HeaderComponent, GridProdutosComponent, CommonModule, MatPaginatorModule, MatFormFieldModule, MatOptionModule, MatSelectModule, FormsModule, MatIcon],
+  imports: [FooterComponent, HeaderComponent, GridProdutosComponent, CommonModule, MatPaginatorModule, MatFormFieldModule, MatOptionModule, MatSelectModule, FormsModule, MatIcon, CustomPaginationComponent],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -92,6 +93,16 @@ export class PlataformaComponent implements OnInit {
   getSelectedOptionText(): string {
     const selected = this.filterOptions.find(opt => opt.value === this.ordenacao);
     return selected ? selected.label : 'Selecione...';
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.size);
+  }
+
+  goToPage(pageNumber: number): void {
+    this.page = pageNumber - 1; // Nosso componente usa base 1, mas a API usa base 0
+    window.scrollTo(0, 0);
+    this.buscarProdutos();
   }
 
   // variaveis de controle para a paginacao
@@ -176,73 +187,52 @@ export class PlataformaComponent implements OnInit {
   buscarProdutos() {
     const [campo, direcao] = this.ordenacao.split(',');
 
-    const params: {
-      page: string;
-      size: string;
-      sort: string;
-      genero?: string;
-      desenvolvedora?: string;
-      precoMax?: string;
-    } = {
+    // Parâmetros para a busca paginada
+    const params: any = {
       page: this.page.toString(),
       size: this.size.toString(),
-      sort: `${campo} ${direcao}`,
+      sort: `${campo} ${direcao}`
     };
 
+    // Adiciona filtros se existirem
     if (this.filtrosSelecionados.genero) {
       params.genero = this.filtrosSelecionados.genero;
     }
-
     if (this.filtrosSelecionados.desenvolvedora) {
       params.desenvolvedora = this.filtrosSelecionados.desenvolvedora;
     }
-
     if (this.filtrosSelecionados.precoMax) {
       params.precoMax = this.filtrosSelecionados.precoMax.toString();
     }
 
-    console.log('Parâmetros enviados:', params);
+    console.log('Parâmetros para buscar produtos:', params);
 
-    const countParams: any = {};
-
-    if (this.filtrosSelecionados.genero) {
-      countParams.genero = this.filtrosSelecionados.genero;
-    }
-
-    if (this.filtrosSelecionados.desenvolvedora) {
-      countParams.desenvolvedora = this.filtrosSelecionados.desenvolvedora;
-    }
-
-    if (this.filtrosSelecionados.precoMax) {
-      countParams.precoMax = this.filtrosSelecionados.precoMax;
-    }
+    // Parâmetros para contar (mesmos filtros, sem paginação)
+    const countParams = { ...params };
+    delete countParams.page;
+    delete countParams.size;
+    delete countParams.sort;
 
     this.produtoService.getByPlataformaPaginado(this.plataforma, params).subscribe({
       next: (produtos) => {
         this.produtos = produtos;
         this.nenhumProdutoEncontrado = produtos.length === 0;
-        console.log('Dados recebidos:', produtos);
 
+        // Só conta se houver produtos ou se for a primeira página
         if (produtos.length > 0 || this.page === 0) {
           this.produtoService.countByPlataforma(this.plataforma, countParams).subscribe(
             data => {
               this.totalRecords = data;
               const totalPages = Math.ceil(this.totalRecords / this.size);
 
-              // Corrige o loop infinito - só reseta se realmente necessário
-              if (this.page > 0 && this.page >= totalPages) {
-                this.resetarPaginacao();
-                if (totalPages > 0) { // Só busca novamente se houver páginas
-                  this.buscarProdutos();
-                }
+              // Corrige a página se estiver fora do limite
+              if (this.page >= totalPages && totalPages > 0) {
+                this.page = totalPages - 1;
+                this.buscarProdutos(); // Recarrega com a página corrigida
               }
             },
-            error => {
-              console.error('Erro ao contar produtos:', error);
-            }
+            error => console.error('Erro ao contar produtos:', error)
           );
-        } else {
-          this.totalRecords = 0;
         }
       },
       error: (err) => {

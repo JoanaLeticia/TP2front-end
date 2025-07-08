@@ -1,0 +1,82 @@
+<div class="pagination-container">
+  <!-- Primeira página -->
+  <button (click)="goToFirst()" [disabled]="currentPage === 1" class="pagination-button" title="Primeira página">
+    &lt;&lt;
+  </button>
+  
+  <!-- Página anterior -->
+  <button (click)="goToPrev()" [disabled]="currentPage === 1" class="pagination-button" title="Página anterior">
+    &lt;
+  </button>
+
+  <!-- Números das páginas -->
+  <ng-container *ngIf="totalPages <= maxVisiblePages">
+    <!-- Mostrar todas as páginas se couberem -->
+    <button *ngFor="let p of range(1, totalPages)" 
+            (click)="goToPage(p)"
+            [class.active]="p === currentPage"
+            class="pagination-button page-number">
+      {{ p }}
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="totalPages > maxVisiblePages">
+    <!-- Páginas iniciais -->
+    <button *ngFor="let p of range(1, 2)" 
+            (click)="goToPage(p)"
+            [class.active]="p === currentPage"
+            class="pagination-button page-number">
+      {{ p }}
+    </button>
+
+    <!-- Elipsis ou páginas intermediárias -->
+    <ng-container *ngIf="currentPage <= 3">
+      <button *ngFor="let p of range(3, getVisiblePageEnd(5))" 
+              (click)="goToPage(p)"
+              [class.active]="p === currentPage"
+              class="pagination-button page-number">
+        {{ p }}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="currentPage > 3 && currentPage < totalPages - 2">
+      <span class="ellipsis" *ngIf="shouldShowStartEllipsis()">...</span>
+      
+      <button *ngFor="let p of getVisiblePageRange()" 
+              (click)="goToPage(p)"
+              [class.active]="p === currentPage"
+              class="pagination-button page-number">
+        {{ p }}
+      </button>
+      
+      <span class="ellipsis" *ngIf="shouldShowEndEllipsis()">...</span>
+    </ng-container>
+
+    <ng-container *ngIf="currentPage >= totalPages - 2">
+      <button *ngFor="let p of range(getVisiblePageStart(totalPages - 4), totalPages - 2)" 
+              (click)="goToPage(p)"
+              [class.active]="p === currentPage"
+              class="pagination-button page-number">
+        {{ p }}
+      </button>
+    </ng-container>
+
+    <!-- Páginas finais -->
+    <button *ngFor="let p of range(totalPages - 1, totalPages)" 
+            (click)="goToPage(p)"
+            [class.active]="p === currentPage"
+            class="pagination-button page-number">
+      {{ p }}
+    </button>
+  </ng-container>
+
+  <!-- Próxima página -->
+  <button (click)="goToNext()" [disabled]="currentPage === totalPages" class="pagination-button" title="Próxima página">
+    &gt;
+  </button>
+  
+  <!-- Última página -->
+  <button (click)="goToLast()" [disabled]="currentPage === totalPages" class="pagination-button" title="Última página">
+    &gt;&gt;
+  </button>
+</div>

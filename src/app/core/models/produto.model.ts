@@ -16,4 +16,8 @@ export class Produto {
     classificacao!: Classificacao;
     dataLancamento!: string;
     nomeImagem!: string;
+    altura?: number;
+    peso?: number;
+    largura?: number;
+    comprimento?: number;
 }

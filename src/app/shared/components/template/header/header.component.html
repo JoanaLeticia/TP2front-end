@@ -9,7 +9,11 @@
                     </a>
                 </div>
 
-                <!-- Barra de pesquisa -->
+                <button class="hamburger-btn" [class.show]="isNavHidden" [class.close]="isForceShowing"
+                    (click)="toggleNav()">
+                    <i class="fas" [class.fa-bars]="!isForceShowing" [class.fa-times]="isForceShowing"></i>
+                </button>
+
                 <div class="custom-search-bar">
                     <input type="text" placeholder="Pesquisar produtos..." [formControl]="searchControl"
                         (keyup.enter)="pesquisarProdutos()" />
@@ -19,73 +23,137 @@
                 </div>
 
                 <div style="display: flex;">
-                    <!-- Área do usuário -->
-                    <div class="user-area">
-                        <ng-container *ngIf="(usuarioLogado$ | async) as usuario; else notLoggedIn">
-                            <div class="user-dropdown" (mouseenter)="showDropdown = true"
-                                (mouseleave)="showDropdown = false">
-                                <button mat-icon-button class="user-icon">
-                                    <i class="fas fa-user-circle"></i>
-                                </button>
-                                <div class="user-info">
-                                    <span class="welcome">Bem-vindo(a), <br><strong
-                                            style="font-size: 14px; font-weight: 500;">{{ usuario.nome
-                                            }}</strong></span>
-                                </div>
-
-                                <!-- Menu Dropdown -->
-                                <div class="dropdown-menu" *ngIf="showDropdown">
-                                    <ul>
-                                        <li>
-                                            <a routerLink="/gameverse/conta/minha-conta" (click)="showDropdown = false">
-                                                <mat-icon>account_circle</mat-icon> Minha Conta
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a routerLink="/gameverse/conta/meus-pedidos"
-                                                (click)="showDropdown = false">
-                                                <mat-icon>shopping_basket</mat-icon> Meus Pedidos
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a (click)="logout(); showDropdown = false">
-                                                <mat-icon>exit_to_app</mat-icon> Sair
-                                            </a>
-                                        </li>
-                                    </ul>
+                    <div class="atendimento-area">
+                        <div class="atendimento-dropdown" (mouseenter)="showDropdown = true"
+                            (mouseleave)="showDropdown = false">
+                            <button mat-icon-button class="atendimento-icon">
+                                <i class="fa-solid fa-headset"></i>
+                            </button>
+                            <div class="atendimento-info">
+                                Central de
+                                <span>Atendimento<i class="fa-solid fa-angle-down"></i></span>
+                            </div>
+                            <!-- Menu Dropdown -->
+                            <div class="dropdown-menu" *ngIf="showDropdown" style="min-width: 230px;">
+                                <div class="infos-dropdown">
+                                    <div style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); padding-bottom: 8px;">
+                                        <h2><i class="fa-brands fa-whatsapp"></i>Whatsapp</h2>
+                                        <p>(63) 98400-0000</p>
+                                    </div>
+                                    <div
+                                        style="margin-top: 8px; padding-bottom: 8px; border-bottom: 1px solid hsl(0, 0%, 0%, 0.15);">
+                                        <h2><i class="fa-solid fa-envelope"></i>E-mail</h2>
+                                        <p>{{ 'contato@gameverse.com.br' }}</p>
+                                    </div>
+                                    <div class="footer-horarios" style="margin-top: 8px;">
+                                        <h2><i class="fa-solid fa-clock"></i>Horário de Atendimento</h2>
+                                        <p>Seg. à Sexta, das 08h às 17h</p>
+                                        <p>Sábado, das 08h às 12h</p>
+                                    </div>
                                 </div>
                             </div>
-                        </ng-container>
-                        <ng-template #notLoggedIn>
-                            <button mat-icon-button class="user-icon" (click)="onLoginClick()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área do usuário -->
+                <div class="user-area">
+                    <ng-container *ngIf="(usuarioLogado$ | async) as usuario; else notLoggedIn">
+                        <div class="user-dropdown" (mouseenter)="showDropdown = true"
+                            (mouseleave)="showDropdown = false">
+                            <button mat-icon-button class="user-icon">
                                 <i class="fas fa-user-circle"></i>
                             </button>
-                            <div class="user-info" style="margin-left: -10px;">
-                                <span class="welcome">Bem-vindo(a),</span>
-                                <div class="auth-links" style="color: white;">
-                                    <a (click)="onLoginClick()">Entre</a> ou <a
-                                        (click)="onCadastroClick()">Cadastre-se</a>
-                                </div>
+                            <div class="user-info">
+                                <span class="welcome">Bem-vindo(a), <br><strong
+                                        style="font-size: 14px; font-weight: 500;">{{ usuario.nome
+                                        }}</strong></span>
                             </div>
-                        </ng-template>
-                    </div>
 
-                    <!-- Ícones de ação -->
-                    <div class="action-icons">
-                        <button mat-icon-button>
-                            <i class="far fa-heart"></i>
+                            <!-- Menu Dropdown -->
+                            <div class="dropdown-menu" *ngIf="showDropdown">
+                                <ul>
+                                    <li>
+                                        <a routerLink="/gameverse/conta/minha-conta" (click)="showDropdown = false">
+                                            <mat-icon>account_circle</mat-icon> Minha Conta
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a routerLink="/gameverse/conta/meus-pedidos" (click)="showDropdown = false">
+                                            <mat-icon>shopping_basket</mat-icon> Meus Pedidos
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="logout(); showDropdown = false">
+                                            <mat-icon>exit_to_app</mat-icon> Sair
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #notLoggedIn>
+                        <button mat-icon-button class="user-icon" (click)="onLoginClick()">
+                            <i class="fas fa-user-circle"></i>
                         </button>
+                        <div class="user-info" style="margin-left: -10px;">
+                            <span class="welcome">Bem-vindo(a),</span>
+                            <div class="auth-links" style="color: white;">
+                                <a (click)="onLoginClick()">Entre</a> ou <a (click)="onCadastroClick()">Cadastre-se</a>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <!-- Ícones de ação -->
+                <div class="action-icons">
+                    <button mat-icon-button>
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="cart-dropdown" (mouseenter)="showCartDropdown = true"
+                        (mouseleave)="showCartDropdown = false">
                         <button mat-icon-button class="cart-icon" (click)="onCarrinhoClick()">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count">{{ quantCarrinho() }}</span>
                         </button>
+
+                        <!-- Dropdown do Carrinho -->
+                        <div class="dropdown-cart" *ngIf="showCartDropdown && carrinhoItens.length > 0">
+                            <div class="cart-item" *ngFor="let item of carrinhoItens">
+                                <a [routerLink]="['/gameverse/produto', item.id]">
+                                    <img [src]="item.imagemUrl" [alt]="item.nome" class="item-image">
+                                </a>
+                                <div class="item-info">
+                                    <a [routerLink]="['/gameverse/produto', item.id]" class="item-name">
+                                        {{ item.nome }} - {{item.plataforma}} Mídia {{item.tipoMidia}}
+                                    </a>
+                                    <span class="item-price">{{ item.valor | currency:'BRL' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="cart-summary">
+                                <div class="summary-row">
+                                    <span>Valor total:</span>
+                                    <span class="total-price">{{ totalCarrinho() | currency:'BRL' }}</span>
+                                </div>
+                            </div>
+
+                            <button class="go-to-cart-btn" (click)="onCarrinhoClick()">
+                                Ir para o carrinho
+                            </button>
+                        </div>
+
+                        <div class="empty-cart" *ngIf="showCartDropdown && carrinhoItens.length === 0">
+                            <mat-icon>remove_shopping_cart</mat-icon>
+                            <p>Seu carrinho está vazio</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
-    <nav class="category-nav">
+    <nav class="category-nav" [class.nav-hidden]="isNavHidden && !isForceShowing" [class.force-show]="isForceShowing">
         <div class="nav-container">
             <ul class="nav-list">
                 <li><a routerLink="/gameverse/produto/plataforma/ps4">PS4</a></li>

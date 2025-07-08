@@ -40,6 +40,8 @@ export class GridProdutosComponent implements OnInit {
     }
   }
 
+  @Input() layoutMode: 'default' | 'home' = 'default';
+
   private carregarCardsFromInput() {
     const cards: Card[] = (this.produtosInput || []).map(produto => ({
       idProduto: produto.id,

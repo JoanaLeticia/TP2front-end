@@ -82,12 +82,15 @@
         </div>
 
         <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+        <app-custom-pagination 
+            *ngIf="totalPages > 1" 
+            [currentPage]="page + 1" 
+            [totalPages]="totalPages"
+            (pageChange)="goToPage($event)"
+            style="margin-bottom: 20px;">
+        </app-custom-pagination>
       </div>
     </div>
-
-    <mat-paginator *ngIf="totalRecords > 0" [length]="totalRecords" [pageSize]="size" [pageIndex]="page"
-      [pageSizeOptions]="[4, 8, 12]" (page)="paginar($event)">
-    </mat-paginator>
   </main>
   <app-footer></app-footer>
 </body>

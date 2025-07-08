@@ -8,7 +8,6 @@
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
-    /* necessário para setas */
 }
 
 .myImg {
@@ -20,6 +19,30 @@
     max-width: 1200px;
     margin: 0 auto;
     padding-top: 40px;
+}
+
+.cards-condicoes {
+    display: flex;
+    margin-top: -20px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+    padding: 0 30px;
+
+    div {
+        display: flex;
+        align-items: center;
+        line-height: 22px;
+        gap: 20px;
+
+        i {
+            font-size: 24px;
+            color: #0d358b;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+    }
 }
 
 ::ng-deep .slick-prev-custom,
@@ -49,6 +72,37 @@
     right: 10px;
 }
 
+::ng-deep .slick-prev-custom,
+::ng-deep .slick-next-custom {
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.carrossel-produtos:hover ::ng-deep .slick-prev-custom,
+.carrossel-produtos:hover ::ng-deep .slick-next-custom {
+    opacity: 1;
+}
+
+.carrossel-container:hover ::ng-deep .slick-prev-custom,
+.carrossel-container:hover ::ng-deep .slick-next-custom {
+    opacity: 1;
+}
+
+.carrossel-produtos ::ng-deep .slick-prev-custom:hover,
+.carrossel-produtos ::ng-deep .slick-next-custom:hover,
+.carrossel-container ::ng-deep .slick-prev-custom:hover,
+.carrossel-container ::ng-deep .slick-next-custom:hover {
+    background-color: #0d358b !important;
+}
+
+.carrossel-produtos ::ng-deep .slick-prev-custom {
+    left: -20px;
+}
+
+.carrossel-produtos ::ng-deep .slick-next-custom {
+    right: -5px;
+}
+
 ::ng-deep .slick-prev-custom i,
 ::ng-deep .slick-next-custom i {
     color: #fff;
@@ -66,4 +120,18 @@
 
 ::ng-deep .slick-dots li.slick-active button:before {
     color: #0d358b;
+}
+
+.carrossel-mais-vendidos {
+    padding: 20px 0;
+}
+
+.carrossel-mais-vendidos .card-produto {
+    margin: 0 10px;
+}
+
+.carrossel-container .card-produto {
+    width: auto;
+    height: auto;
+    min-width: 200px;
 }

@@ -77,8 +77,16 @@ export class ProdutoService {
   }
 
   findById(id: number): Observable<Produto> {
-    return this.httpClient.get<Produto>(`${this.baseUrl}/${id}`);
-  }
+  return this.httpClient.get<Produto>(`${this.baseUrl}/${id}`).pipe(
+    map(produto => ({
+      ...produto,
+      peso: produto.peso || 0.1,
+      altura: produto.altura || 2,
+      largura: produto.largura || 15,
+      comprimento: produto.comprimento || 18
+    }))
+  );
+}
 
   insert(produto: Produto | ProdutoSimplificado): Observable<Produto> {
     return this.httpClient.post<Produto>(this.baseUrl, produto);

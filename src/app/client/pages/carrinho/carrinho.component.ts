@@ -16,6 +16,10 @@ import { Cliente } from '../../../core/models/cliente.model';
 import { Pedido } from '../../../core/models/pedido.model';
 import { map, switchMap, tap, throwError } from 'rxjs';
 import { EnderecoService } from '../../../core/services/utils/endereco.service';
+import { FreteOption } from '../../../core/models/frete-option.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FreteService } from '../../../core/services/order/frete.service';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-carrinho',
@@ -27,13 +31,22 @@ import { EnderecoService } from '../../../core/services/utils/endereco.service';
     RouterModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    ReactiveFormsModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   templateUrl: './carrinho.component.html',
-  styleUrls: ['./carrinho.component.css']
+  styleUrls: ['./carrinho.component.css'],
+  providers: [provideNgxMask()]
 })
 export class CarrinhoComponent implements OnInit {
   carrinhoItens: ItemPedido[] = [];
+  freteForm: FormGroup;
+  opcoesFrete: FreteOption[] = [];
+  freteSelecionado: FreteOption | null = null;
+  calculandoFrete = false;
+  erroFrete: string | null = null;
 
   constructor(
     private carrinhoService: CarrinhoService,
@@ -41,8 +54,14 @@ export class CarrinhoComponent implements OnInit {
     private enderecoService: EnderecoService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) { }
+    private router: Router,
+    private freteService: FreteService,
+    private fb: FormBuilder
+  ) {
+    this.freteForm = this.fb.group({
+      cepDestino: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]]
+    });
+  }
 
   ngOnInit(): void {
     this.carrinhoService.carrinho$.subscribe(itens => {
@@ -50,6 +69,46 @@ export class CarrinhoComponent implements OnInit {
 
       console.log('itens:', itens);
     });
+  }
+
+  calcularFrete() {
+    if (this.freteForm.invalid) {
+      this.snackBar.open('Por favor, insira um CEP válido', 'Fechar', { duration: 3000 });
+      return;
+    }
+
+    this.calculandoFrete = true;
+    this.erroFrete = null;
+    this.opcoesFrete = [];
+    this.freteSelecionado = null;
+
+    const cepDestino = this.freteForm.get('cepDestino')?.value.replace(/\D/g, '');
+
+    console.log('Itens do carrinho:', this.carrinhoItens); // Verifique os itens
+    console.log('CEP enviado:', cepDestino);
+
+    this.freteService.calcularFreteParaCarrinho(this.carrinhoItens, cepDestino).subscribe({
+      next: (resultado) => {
+        this.opcoesFrete = resultado;
+        this.calculandoFrete = false;
+
+        if (this.opcoesFrete.length === 0) {
+          this.erroFrete = 'Nenhuma opção de frete disponível para este CEP';
+        }
+      },
+      error: (erro) => {
+        console.error('Erro completo:', erro);
+        this.erroFrete = erro.error?.message || 'Erro ao calcular frete. Tente novamente.';
+        this.calculandoFrete = false;
+        if (this.erroFrete) {
+          this.snackBar.open(this.erroFrete, 'Fechar', { duration: 3000 });
+        }
+      }
+    });
+  }
+
+  selecionarFrete(opcao: FreteOption) {
+    this.freteSelecionado = opcao;
   }
 
   aumentarQuantidade(item: ItemPedido): void {
@@ -69,11 +128,28 @@ export class CarrinhoComponent implements OnInit {
     });
   }
 
-  calcularTotal(): number {
+  get totalProdutos(): number {
     return this.carrinhoService.getTotalValor();
   }
 
+  getValorFrete(): number {
+    if (!this.freteSelecionado) return 0;
+
+    const valor = this.freteSelecionado.preco.replace(/[^\d,.]/g, '')
+      .replace(',', '.');
+    return parseFloat(valor) || 0;
+  }
+
+  calcularTotal(): number {
+    const totalProdutos = this.carrinhoService.getTotalValor();
+    return totalProdutos + this.getValorFrete();
+  }
+
   finalizarCompra(): void {
+    if (!this.freteSelecionado) {
+      this.snackBar.open('Por favor, selecione uma opção de frete', 'Fechar', { duration: 3000 });
+      return;
+    }
     this.authService.getUsuarioLogado().pipe(
       tap(usuario => console.log('Usuário logado:', usuario)),
 

@@ -49,7 +49,7 @@ mat-paginator {
   position: relative;
   width: 200px;
   cursor: pointer;
-  border: 1px solid #e0e0e0;
+  outline: 1px solid #e0e0e0;
   border-radius: 8px;
   background: white;
 }
@@ -59,6 +59,7 @@ mat-paginator {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1px;
 }
 
 .arrow-icon {
@@ -70,6 +71,7 @@ mat-paginator {
   position: absolute;
   top: 100%;
   left: 0;
+  margin-bottom: 2px;
   width: 100%;
   background: white;
   border: 1px solid #e0e0e0;
@@ -117,7 +119,7 @@ app-grid-produtos {
   border-radius: 8px;
   align-self: flex-start; /* Mantém alinhado ao topo */
   top: 20px; /* Distância do topo quando faz scroll */
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   padding-right: 20px;
 }
 

@@ -4,7 +4,8 @@
   <main class="container mx-auto py-8" style="font-family: Libre Franklin; padding-bottom: 100px;">
     <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
       <div class="max-w-[1200px] mx-auto">
-        <div style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; ">
+        <div
+          style="display: flex; justify-content: center; font: 500 24px Libre Franklin, sans-serif; color: #000000; ">
           Carrinho
         </div>
         <div style="display: flex; justify-content: center; margin-top: 5px; color: #636363; margin-bottom: 20px;">
@@ -21,20 +22,23 @@
           </div>
 
           <!-- Itens do carrinho - Atualizado -->
-          <div *ngFor="let item of carrinhoItens" class="grid grid-cols-12 gap-4 py-7 items-center" style="border-bottom: 1px solid rgb(0, 0, 0, 0.15);">
+          <div *ngFor="let item of carrinhoItens" class="grid grid-cols-12 gap-4 py-7 items-center"
+            style="border-bottom: 1px solid rgb(0, 0, 0, 0.15);">
             <div class="col-span-5">
               <div class="flex items-center">
                 <img [src]="item.imagemUrl" alt="{{item.nome}}" class="w-17 h-20 object-cover rounded mr-4">
                 <div>
-                  <div class="text-sm text-gray-500" style="font-size: 12px;">{{item.desenvolvedora || 'Desenvolvedora não informada'}}</div>
-                  <div class="font-bold" style="font-size: 15px;">{{item.nome}} | {{item.plataforma}} | Mídia {{item.tipoMidia}}</div>
+                  <div class="text-sm text-gray-500" style="font-size: 12px;">{{item.desenvolvedora || 'Desenvolvedora
+                    não informada'}}</div>
+                  <div class="font-bold" style="font-size: 15px;">{{item.nome}} | {{item.plataforma}} | Mídia
+                    {{item.tipoMidia}}</div>
                   <div class="text-xs text-gray-500" style="font-size: 12px; ">Código: {{item.id}}</div>
                 </div>
               </div>
             </div>
 
             <div class="col-span-3">
-              <div class="flex items-center justify-center" >
+              <div class="flex items-center justify-center">
                 <button mat-icon-button (click)="diminuirQuantidade(item)" class="text-gray-500">
                   <mat-icon>remove</mat-icon>
                 </button>
@@ -59,15 +63,45 @@
           <!-- Seção de frete -->
           <div class="py-4" style="border-bottom: 1px solid rgb(0, 0, 0, 0.15);">
             <h3 class="font-bold mb-2">Calcular Frete:</h3>
-            <div class="flex">
-              <input type="text" placeholder="CEP" class="border rounded-l px-3 py-2 w-40">
-              <button class="text-white px-4 py-2 rounded-r" style="background-color: #0d358b; cursor: pointer;">Calcular</button>
+            <form [formGroup]="freteForm" (ngSubmit)="calcularFrete()" class="flex mb-3">
+              <input type="text" placeholder="CEP" class="border rounded-l px-3 py-2 w-40" formControlName="cepDestino"
+                mask="00000-000">
+              <button type="submit" class="text-white px-4 py-2 rounded-r"
+                style="background-color: #0d358b; cursor: pointer;" [disabled]="calculandoFrete">
+                {{ calculandoFrete ? 'Calculando...' : 'Calcular' }}
+              </button>
+            </form>
+
+            <!-- Opções de frete -->
+            <div *ngIf="opcoesFrete.length > 0" class="mb-4">
+              <h4 class="font-medium mb-2">Opções de entrega:</h4>
+              <div *ngFor="let opcao of opcoesFrete" class="p-3 mb-2 border rounded cursor-pointer"
+                [class.bg-blue-50]="freteSelecionado === opcao" [class.border-blue-500]="freteSelecionado === opcao"
+                (click)="selecionarFrete(opcao)">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="font-medium">{{opcao.nomeTransportadora}} - {{opcao.nomeServico}}</span>
+                    <div class="text-sm text-gray-600">Prazo: {{opcao.prazoEntrega}} dias úteis</div>
+                  </div>
+                  <span class="font-medium">{{opcao.preco | currency:'BRL'}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="erroFrete" class="text-red-500 text-sm mt-2">
+              {{erroFrete}}
             </div>
           </div>
 
           <!-- Seção de total -->
           <div class="pt-7 flex justify-end">
             <div class="text-right">
+              <div class="text-sm text-gray-500 mb-1">
+                Subtotal: {{ totalProdutos | currency:'BRL' }}
+              </div>
+              <div *ngIf="freteSelecionado" class="text-sm text-gray-500 mb-1">
+                Frete: {{ freteSelecionado.preco | currency:'BRL' }}
+              </div>
               <div class="font-bold text-xl">
                 Total: {{ calcularTotal() | currency:'BRL' }}
               </div>
@@ -80,7 +114,8 @@
 
         <!-- Botões de ação -->
         <div class="flex justify-end" style="gap: 20px">
-          <a mat-stroked-button routerLink="/gameverse/home" style="border: 1px solid #c5c5c5; padding: 25px 30px; border-radius: 7px; font-size: 16px; font-weight: 500; color: #494949">
+          <a mat-stroked-button routerLink="/gameverse/home"
+            style="border: 1px solid #c5c5c5; padding: 25px 30px; border-radius: 7px; font-size: 16px; font-weight: 500; color: #494949">
             Continuar comprando
           </a>
           <button mat-raised-button color="primary" (click)="finalizarCompra()"

@@ -1,25 +1,33 @@
 <app-header></app-header>
 
-<body
-  style="background-color: #f2f2f2; margin-top: -32px; margin-bottom: -32px; padding-top: 50px; padding-bottom: 50px;">
+<body style="margin-top: -32px; margin-bottom: -32px; padding-top: 50px; padding-bottom: 50px;">
   <main class="container">
     <ng-container *ngIf="(produto$ | async) as produto; else loading">
       <div class="product-detail-container">
         <div class="product-images">
-          <div class="main-image">
-            <img *ngIf="imageUrl" [src]="imageUrl" [alt]="produto.nome" class="product-image">
-            <div *ngIf="!imageUrl" class="image-placeholder">
-              <mat-icon>image_not_supported</mat-icon>
-              <span>Imagem não disponível</span>
+          <div class="main-image" style="margin-bottom: 15px;" (mousemove)="zoomImage($event)"
+            (mouseleave)="resetZoom()" (click)="abrirModal()">
+            <div class="image-container">
+              <img #productImage *ngIf="imageUrl" [src]="imageUrl" [alt]="produto.nome" class="product-image"
+                [style.transform]="zoomTransform">
+              <div *ngIf="!imageUrl" class="image-placeholder">
+                <mat-icon>image_not_supported</mat-icon>
+                <span>Imagem não disponível</span>
+              </div>
             </div>
           </div>
+          <span class="zoom-instruction">
+            <i class="fa-solid fa-magnifying-glass"></i>Passe o mouse sobre a foto para ampliar
+          </span>
         </div>
 
         <div class="product-info">
           <div class="product-header">
-            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Início > {{produto.plataforma.nome}} >
-              {{produto.genero.nome}} > {{produto.nome}}</p>
-            <h1 class="product-title">{{ produto.nome }}</h1>
+            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Início <i class="fa-solid fa-angle-right"></i>
+              {{produto.plataforma.nome}} <i class="fa-solid fa-angle-right"></i>
+              {{produto.genero.nome}} <i class="fa-solid fa-angle-right"></i> {{produto.nome}}</p>
+            <h1 class="product-title">{{ produto.nome }} - {{ produto.plataforma.nome }} Mídia
+              {{produto.tipoMidia.nome}}</h1>
             <div
               style="display: inline-flex; gap: 30px; margin-bottom: 15px; font-size: 14px; width: 100%; padding-bottom: 20px; border-bottom: 1px solid hsl(0, 0%, 0%, 0.15);">
               <div style="color: #666;"><strong style="font-weight: 500; color: #444;">Desenvolvedora: </strong> {{
@@ -29,28 +37,79 @@
                 }}</div>
             </div>
           </div>
-          <div style="font-size: 36px; font-weight: 700; color: #0d358b;">
+          <div style="font-size: 36px; font-weight: 700; color: #0d358b; margin-top: 5px;">
+            <div
+              style="font: 400 15px Libre Franklin, sans-serif; color: hsl(0, 0%, 0%, 0.6); text-decoration: line-through;">
+              {{produto.preco + (produto.preco * 0.10) | currency:'R$ '}}</div>
             {{produto.preco | currency:'R$ '}}
+            <div style="font: 400 15px Libre Franklin, sans-serif; color: hsl(0, 0%, 0%, 0.6); margin-bottom: 0px;">
+              <strong style="font-weight: 700;">10% OFF</strong> no PIX
+            </div>
           </div>
           <div style="line-height: 25px; margin-top: 5px; margin-bottom: 30px; font-size: 15px;">
-            Até 12x de <strong style="color: #0d358b;">{{produto.preco / 12 | currency:'R$ '}}</strong> sem juros
-            <br>ou <strong style="color: #0d358b;">{{produto.preco | currency:'R$ '}}</strong> à vista
+            Até 6x de <strong style="color: #0d358b;">{{produto.preco / 6 | currency:'R$ '}}</strong> sem juros
           </div>
 
-          <div style="justify-content: space-between; display: inline-flex; gap: 10px;">
-            <mat-icon>favorite_border</mat-icon><span>Lista de Desejos</span>
+          <div class="lista-pedidos">
+            <mat-icon class="lista-pedidos-icon">favorite_border</mat-icon><span style="font-size: 15px;">Lista de
+              Desejos</span>
           </div>
 
           <button mat-button color="primary" class="add-to-cart-btn" (click)="adicionarAoCarrinho(produto)"
             style="color: #fff;">Comprar</button>
 
-          <div class="py-4" style="margin-top: 10px;">
+          <p style="text-align: center; margin-top: 10px; font-size: 12px;">Estoque: <strong
+              style="color: #0d358b;">Disponível</strong></p>
+
+          <div style="height: 1px; width: 100%; background-color: hsl(0, 0%, 0%, 0.15); margin-top: 20px;"></div>
+
+          <div class="frete-container" style="margin-top: 20px;">
             <h3 class="mb-2" style="font-weight: 600;">Calcular o frete:</h3>
-            <div class="flex" style="width: 100%; gap: 10px;">
-              <input type="text" placeholder="Digite seu CEP" class="border px-3 py-3"
-                style="width: 60%; border-color: #929292; border-radius: 7px;">
-              <button class="text-white px-4 py-3 rounded"
-                style="background-color:#666; cursor: pointer; width: 40%; font-weight: 500; border-radius: 7px;">Calcular</button>
+            <form [formGroup]="freteForm" (ngSubmit)="calcularFrete()" class="flex" style="width: 100%; gap: 10px;">
+              <div style="width: 60%; position: relative;">
+                <input type="text" placeholder="Digite seu CEP" class="border px-3 py-3"
+                  style="width: 100%; border-color: #929292; border-radius: 7px;" formControlName="cep" mask="00000-000"
+                  (input)="onCepChange()" maxlength="9">
+
+                <!-- Ícone de loading ou validação -->
+                <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                  <mat-spinner *ngIf="cepCarregando" diameter="20"></mat-spinner>
+                  <mat-icon *ngIf="cepValido === true && !cepCarregando"
+                    style="color: green;margin-top: 5px;">check_circle</mat-icon>
+                  <mat-icon *ngIf="cepValido === false && !cepCarregando" style="color: red;margin-top: 5px;">error</mat-icon>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-calcular-frete"
+                [disabled]="calculandoFrete || freteForm.invalid || !cepValido">
+                {{ calculandoFrete ? 'Calculando...' : 'Calcular' }}
+              </button>
+            </form>
+
+            <div *ngIf="freteForm.get('cep')?.invalid && freteForm.get('cep')?.touched"
+              style="color: #d32f2f; margin-top: 5px; font-size: 13px;">
+              Por favor, insira um CEP válido (99999-999 ou 99999999)
+            </div>
+
+            <!-- Resultados do frete -->
+            <div *ngIf="opcoesFrete.length > 0" class="frete-resultados">
+              <div style="margin-top: 15px; border-radius: 5px; border: 1px solid #ddd; padding: 12px;">
+                <ul *ngFor="let opcao of opcoesFrete" class="opcao-frete">
+                  <li>
+                    <span style="max-width: 100px; text-align: start;">{{ opcao.preco | currency:'R$ ' }}</span>
+                    <span style="max-width: 120px; font-weight: 600; text-align: left;">{{ opcao.prazoEntrega }} dias
+                      úteis</span>
+                    <span style="width: 150px; text-align: start;">{{ opcao.nomeTransportadora }} - {{ opcao.nomeServico
+                      }}</span>
+                  </li>
+                </ul>
+              </div>
+              <span style="font-size: 12px; color: #666; margin-top: 10px;">* Os prazos de entrega começam a contar a
+                partir da confirmação de pagamento</span>
+            </div>
+
+            <div *ngIf="erroFrete" style="color: #d32f2f; margin-top: 10px; font-size: 14px;">
+              {{ erroFrete }}
             </div>
           </div>
         </div>
@@ -88,6 +147,15 @@
       </div>
     </ng-container>
   </main>
+
+  <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-button" (click)="fecharModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <img [src]="imageUrl" [alt]="produto.nome" class="modal-image">
+    </div>
+  </div>
 
   <ng-template #loading>
     <div class="loading-spinner">

@@ -12,14 +12,45 @@
         </div>
     </div>
     <main class="container">
-        <!-- Seção de Lançamentos -->
+        <div class="cards-condicoes">
+            <div>
+                <i class="fa-solid fa-lock"></i>
+                <p><strong>Compra Segura</strong><br>Site protegido com SSL</p>
+            </div>
+            <div>
+                <i class="fa-brands fa-pix"></i>
+                <p><strong>10% de desconto</strong><br>no pagamento com PIX</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-truck"></i>
+                <p><strong>Entrega digital por e-mail</strong><br>ou física a todo Brasil</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-credit-card"></i>
+                <p><strong>Parcelamento em até</strong><br>12x sem juros no cartão</p>
+            </div>
+        </div>
         <div class="secao-lancamentos">
             <div class="titulo-container">
                 <div class="linha"></div>
                 <h2 class="titulo-secao">LANÇAMENTOS</h2>
                 <div class="linha"></div>
             </div>
-            <app-grid-produtos [produtosInput]="produtos"></app-grid-produtos>
+            <app-grid-produtos layoutMode="home" [produtosInput]="produtos"></app-grid-produtos>
+        </div>
+        <div class="secao-maisvendidos">
+            <div class="titulo-container">
+                <div class="linha"></div>
+                <h2 class="titulo-secao">MAIS VENDIDOS</h2>
+                <div class="linha"></div>
+            </div>
+            <div class="carrossel-container carrossel-produtos" style="max-width: 1180px; text-align: center; margin-left: 20px;">
+                <ngx-slick-carousel [config]="carrosselMaisVendidosConfig">
+                    <div ngxSlickItem *ngFor="let produto of maisVendidos">
+                        <app-card-produto [produto]="produto"></app-card-produto>
+                    </div>
+                </ngx-slick-carousel>
+            </div>
         </div>
     </main>
 </body>

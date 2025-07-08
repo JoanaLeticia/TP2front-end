@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+.footer-atendimento {
+    flex: 0.8;
+    .footer-menu-title {
+        font-weight: 600;
+        font-size: 20px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    i {
+        padding-right: 7px;
+        font-size: 15px;
+    }
+
+    div {
+        padding-bottom: 7px;
+        margin-bottom: 7px;
+        border-bottom: 1px solid hsl(0, 0%, 100%, 0.20);
+    }
+
+    .footer-horarios {
+        font-size: 13px;
+        border-bottom: 0px;
+
+        h2 {
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        i {
+            font-size: 12px;
+        }
+    }
+
+    p {
+        color: hsl(0, 0%, 100%, 0.75);
+    }
+}
+
+.btn-enviar {
+    background-color: #1651d1;
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 5px;
+    border: 1px solid #1651d1;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-enviar:hover {
+    background-color: #1448b8;
+}
+
+input::placeholder {
+  color: #999;
+}
+
+input {
+  background-color: #fff;
+  border: 1px solid #cacaca;
+  color: #000;
+  width: 500px;
+  border-radius: 5px;
+  padding: 12px 20px;
+  transition: border-color 300ms ease;
+  margin-right: 10px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #cacaca;
+    box-shadow: none;
+}

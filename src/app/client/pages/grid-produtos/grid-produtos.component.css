@@ -9,3 +9,12 @@
     gap: 15px;
     padding: 0px 0px;
 }
+
+.grid-home-layout {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 10px;
+}

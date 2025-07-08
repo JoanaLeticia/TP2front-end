@@ -44,3 +44,34 @@ button.bg-blue-600:hover {
 .flex.justify-between > *:last-child {
   margin-right: 0;
 }
+
+.frete-option {
+  transition: all 0.2s ease;
+}
+
+.frete-option:hover {
+  background-color: #f5f5f5;
+}
+
+.frete-option.selected {
+  background-color: #f0f7ff;
+  border-color: #0d358b;
+}
+
+/* Estilo para o botão de calcular frete desabilitado */
+button:disabled {
+  background-color: #cccccc !important;
+  cursor: not-allowed !important;
+}
+
+/* Estilo para o input de CEP */
+input[type="text"] {
+  border: 1px solid #e2e8f0;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #0d358b;
+  box-shadow: 0 0 0 1px #0d358b;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CarrinhoService } from '../../../../core/services/order/carrinho.service';
@@ -10,6 +10,7 @@ import { AuthService } from '../../../../auth/auth.service';
 import { Usuario } from '../../../../core/models/usuario.model';
 import { Observable } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ItemPedido } from '../../../../core/models/item-pedido.model';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,8 @@ export class HeaderComponent implements OnInit {
   usuarioLogado$: Observable<Usuario | null>;
   searchControl = new FormControl('');
   showDropdown = false;
+  showCartDropdown = false;
+  carrinhoItens: ItemPedido[] = [];
 
   constructor(
     private carrinhoService: CarrinhoService,
@@ -33,6 +36,9 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService
   ) {
     this.usuarioLogado$ = this.authService.getUsuarioLogado();
+    this.carrinhoService.carrinho$.subscribe(itens => {
+      this.carrinhoItens = itens;
+    });
   }
 
   ngOnInit(): void { }
@@ -57,6 +63,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/gameverse/carrinho']);
   }
 
+  totalCarrinho(): number {
+    return this.carrinhoItens.reduce((total, item) => total + (item.valor * item.quantidade), 0);
+  }
+
   logout(): void {
     const usuario = this.authService.getUsuariologadoSnapshot();
     if (usuario?.perfil === 'CLIENTE') {
@@ -78,5 +88,40 @@ export class HeaderComponent implements OnInit {
     if (termo) {
       this.router.navigate(['/gameverse/pesquisa'], { queryParams: { q: termo } });
     }
+  }
+
+  isForceShowing = false;
+  isNavHidden = false;
+  lastScrollPosition = 0;
+  navHeight = 50;
+
+  toggleNav() {
+    this.isForceShowing = !this.isForceShowing;
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    if (this.isForceShowing) {
+      if (window.pageYOffset === 0) {
+        this.isForceShowing = false;
+        this.isNavHidden = false;
+      }
+      return;
+    }
+
+    const currentScrollPosition = window.pageYOffset;
+    const showThreshold = 150; // 150px do topo
+    const scrollDirection = currentScrollPosition > this.lastScrollPosition ? 'down' : 'up';
+
+    // Esconde ao rolar para baixo após o threshold
+    if (scrollDirection === 'down' && currentScrollPosition > showThreshold) {
+      this.isNavHidden = true;
+    }
+    // Mostra apenas quando estiver a 150px do topo ao rolar para cima
+    else if (scrollDirection === 'up' && currentScrollPosition <= showThreshold) {
+      this.isNavHidden = false;
+    }
+
+    this.lastScrollPosition = currentScrollPosition;
   }
 }

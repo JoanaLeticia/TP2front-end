@@ -1,4 +1,4 @@
-<div class="grid-produtos">
+<div class="grid-produtos" [ngClass]="{'grid-home-layout': layoutMode === 'home'}">
   <app-card-produto
     *ngFor="let card of cards()"
     [produto]="card"
