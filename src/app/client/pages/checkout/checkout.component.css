@@ -278,7 +278,6 @@ input[type="radio"]:checked::before {
 
 .entrega-card, .frete-card {
   margin-top: 20px;
-  overflow: hidden;
 }
 
 /* Adicione estas regras no final do arquivo */
@@ -368,11 +367,6 @@ input::placeholder {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-}
-
-.slide-container {
-  position: relative;
-  overflow: hidden;
 }
 
 /* ESTILOS DO DROPDOWN PERSONALIZADO */

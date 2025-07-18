@@ -8,6 +8,7 @@ export class Pagamento {
     parcelas?: number;
     pedidoId!: number;
     enderecoFaturamentoId?: number;
+    enderecoFaturamento?: Endereco; // Adicione esta linha
     usarEnderecoEntrega?: boolean;
 }
 

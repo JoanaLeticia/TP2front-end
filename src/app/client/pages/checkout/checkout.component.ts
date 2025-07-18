@@ -84,8 +84,23 @@ export class CheckoutComponent implements OnInit {
   cepCarregando = false;
   parcelasDisponiveis: any[] = [];
   enderecoFaturamentoNovo: boolean = false;
+  mostrarFormularioEnderecoFaturamento = false;
+  estadoDropdownOpenFaturamento = false;
+  estadoSearchTermFaturamento = '';
+  salvarEnderecoFaturamento: boolean = false;
 
   novoEndereco = {
+    logradouro: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    cep: '',
+    nomeMunicipio: '',
+    municipio: null as Municipio | null,
+    estado: null as Estado | null
+  };
+
+  novoEnderecoFaturamento = {
     logradouro: '',
     numero: '',
     complemento: '',
@@ -99,7 +114,8 @@ export class CheckoutComponent implements OnInit {
   pagamento: Pagamento = {
     pedidoId: 0,
     metodo: MetodoPagamento.CARTAO_CREDITO,
-    usarEnderecoEntrega: true
+    usarEnderecoEntrega: true,
+    enderecoFaturamento: undefined // Adicione esta linha
   }
 
   estados: Estado[] = []; // Lista de estados disponíveis
@@ -142,6 +158,7 @@ export class CheckoutComponent implements OnInit {
   onUsarEnderecoEntregaChange() {
     if (this.pagamento.usarEnderecoEntrega) {
       this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado?.id;
+      this.mostrarFormularioEnderecoFaturamento = false;
     }
   }
 
@@ -309,6 +326,7 @@ export class CheckoutComponent implements OnInit {
   ngOnDestroy() {
     document.removeEventListener('click', this.closeEstadoDropdownOnClickOutside);
     clearTimeout(this.inactivityTimer);
+    document.querySelector('.pagamento-card')?.classList.remove('dropdown-aberto');
   }
 
   carregarEnderecos(): void {
@@ -523,11 +541,6 @@ export class CheckoutComponent implements OnInit {
       });
     }
   }
-
-  mostrarFormularioNovoEnderecoFaturamento(): void {
-    this.mostrarFormularioEndereco = true;
-    this.enderecoFaturamentoNovo = true;
-}
 
   editarEndereco(endereco: Endereco): void {
     this.mostrarFormularioEdicao = true;
@@ -787,86 +800,170 @@ export class CheckoutComponent implements OnInit {
     return this.calcularTotal() / parcelas;
   }
 
-  finalizarPedido(): void {
+  async finalizarPedido(): Promise<void> {
     this.formSubmetido = true;
     this.pedidoFinalizado = false;
 
+    console.log('[FinalizarPedido] Iniciando processo...'); // Log de depuração
+
+    // Validações básicas
     if (!this.enderecoSelecionado || !this.metodoPagamento) {
-      this.snackBar.open('Selecione um endereço e método de pagamento', 'Fechar', {
-        duration: 5000,
-        panelClass: ['custom-snackbar']
-      });
+      const msg = !this.enderecoSelecionado ? 'Selecione um endereço de entrega' : 'Selecione um método de pagamento';
+      this.snackBar.open(msg, 'Fechar', { duration: 5000 });
+      console.log('[FinalizarPedido] Validação falhou:', msg); // Log de depuração
       return;
     }
 
+    // Validação específica para cartão de crédito
     if (this.metodoPagamento.id === 1) {
-      if (!this.dadosCartao.numero || !this.validarValidade() ||
-        !this.dadosCartao.cvv || !this.dadosCartao.nome) {
-        return;
-      }
-
-      if (this.dadosCartao.numero.replace(/\s/g, '').length < 16) {
+      if (!this.validarDadosCartao()) {
+        console.log('[FinalizarPedido] Dados do cartão inválidos'); // Log de depuração
         return;
       }
     }
 
-    if (this.metodoPagamento?.id === 1 && this.pagamento.usarEnderecoEntrega) {
-      this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado?.id;
-    }
+    // Processamento do endereço de faturamento
+    try {
+      // Se estiver usando endereço de entrega como faturamento
+      if (this.pagamento.usarEnderecoEntrega) {
+        this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado.id;
+        console.log('[FinalizarPedido] Usando endereço de entrega como faturamento'); // Log de depuração
+      }
+      // Se estiver usando um novo endereço de faturamento
+      else if (this.mostrarFormularioEnderecoFaturamento) {
+        console.log('[FinalizarPedido] Processando novo endereço de faturamento...'); // Log de depuração
 
-    if (this.metodoPagamento?.id === 1 && !this.pagamento.enderecoFaturamentoId) {
-      this.snackBar.open('Selecione um endereço de faturamento', 'Fechar', {
-        duration: 5000
+        if (!this.validarEnderecoFaturamento()) {
+          console.log('[FinalizarPedido] Endereço de faturamento inválido'); // Log de depuração
+          return;
+        }
+
+        if (this.salvarEnderecoFaturamento) {
+          await this.adicionarNovoEnderecoFaturamento();
+        } else {
+          this.pagamento.enderecoFaturamento = {
+            logradouro: this.novoEnderecoFaturamento.logradouro,
+            numero: this.novoEnderecoFaturamento.numero,
+            complemento: this.novoEnderecoFaturamento.complemento,
+            bairro: this.novoEnderecoFaturamento.bairro,
+            cep: this.novoEnderecoFaturamento.cep,
+            municipio: {
+              id: this.novoEnderecoFaturamento.municipio?.id || 0,
+              nome: this.novoEnderecoFaturamento.nomeMunicipio,
+              estado: this.novoEnderecoFaturamento.estado!
+            }
+          };
+        }
+      }
+      // Se nenhum endereço foi selecionado/preenchido
+      else if (!this.pagamento.enderecoFaturamentoId) {
+        this.snackBar.open('Selecione ou preencha um endereço de faturamento', 'Fechar', { duration: 5000 });
+        console.log('[FinalizarPedido] Nenhum endereço de faturamento selecionado'); // Log de depuração
+        return;
+      }
+
+      // Preparar dados do pedido
+      const pagamento = {
+        idMetodo: this.metodoPagamento.id,
+        numeroCartao: this.metodoPagamento.id === 1 ? this.dadosCartao.numero : undefined,
+        parcelas: this.metodoPagamento.id === 1 ? this.dadosCartao.parcelas : undefined,
+        pedidoId: 0,
+        enderecoFaturamentoId: this.pagamento.usarEnderecoEntrega ?
+          this.enderecoSelecionado.id :
+          this.pagamento.enderecoFaturamentoId,
+        enderecoFaturamento: !this.pagamento.usarEnderecoEntrega &&
+          !this.pagamento.enderecoFaturamentoId ?
+          this.pagamento.enderecoFaturamento :
+          undefined
+      };
+
+      console.log('[FinalizarPedido] Dados do pagamento:', pagamento); // Log de depuração
+
+      const pedido = {
+        itens: this.carrinhoItens.map(item => ({
+          idProduto: item.id,
+          quantidade: item.quantidade
+        })),
+        enderecoId: this.enderecoSelecionado.id,
+        valorFrete: this.getValorFrete(),
+        pagamento,
+        codigoCupom: this.cupomAplicado?.codigo || null
+      };
+
+      console.log('[FinalizarPedido] Enviando pedido:', pedido); // Log de depuração
+
+      // Enviar pedido
+      this.pedidoService.insert(pedido).subscribe({
+        next: (response) => {
+          const pedidoId = response.id || response.idPedido;
+          this.snackBar.open(`Pedido #${pedidoId} criado com sucesso!`, 'Fechar', {
+            duration: 5000,
+            panelClass: ['success-snackbar']
+          });
+
+          this.carrinhoService.limparCarrinho();
+          this.pedidoFinalizado = true;
+          this.router.navigate(['/gameverse/pedidoconfirmado']);
+        },
+        error: (error) => {
+          console.error('[FinalizarPedido] Erro ao criar pedido:', error);
+          this.snackBar.open('Erro ao finalizar pedido', 'Fechar', {
+            duration: 5000,
+            panelClass: ['custom-snackbar']
+          });
+        }
       });
-      return;
+
+    } catch (error) {
+      console.error('[FinalizarPedido] Erro no processo:', error);
+      this.snackBar.open('Erro ao processar pedido', 'Fechar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  }
+
+  private validarDadosCartao(): boolean {
+    if (!this.dadosCartao.numero || !this.validarValidade() ||
+      !this.dadosCartao.cvv || !this.dadosCartao.nome) {
+      this.snackBar.open('Preencha todos os dados do cartão', 'Fechar', { duration: 5000 });
+      return false;
     }
 
-    const pagamento = {
-      idMetodo: this.metodoPagamento.id,
-      numeroCartao: this.metodoPagamento.id === 1 ? this.dadosCartao.numero : undefined,
-      parcelas: this.metodoPagamento.id === 1 ? this.dadosCartao.parcelas : undefined,
-      pedidoId: 0
-    };
+    if (this.dadosCartao.numero.replace(/\s/g, '').length < 16) {
+      this.snackBar.open('Número do cartão inválido', 'Fechar', { duration: 5000 });
+      return false;
+    }
 
-    console.log("Pagamento cadastrado: ", pagamento);
+    return true;
+  }
 
-    const pedido = {
-      itens: this.carrinhoItens.map(item => ({
-        idProduto: item.id,
-        quantidade: item.quantidade
-      })),
-      enderecoId: this.enderecoSelecionado.id,
-      pagamento
-    };
+  private validarEnderecoFaturamento(): boolean {
+    if (!this.novoEnderecoFaturamento.estado) {
+      this.snackBar.open('Selecione um estado válido', 'Fechar', { duration: 5000 });
+      return false;
+    }
 
-    this.pedidoService.insert(pedido).subscribe({
-      next: (response) => {
-        const pedidoId = response.id || response.idPedido;
-        this.snackBar.open(`Pedido #${pedidoId} criado com sucesso!`, 'Fechar', {
-          duration: 5000,
-          panelClass: ['success-snackbar']
-        });
+    const camposObrigatorios = [
+      this.novoEnderecoFaturamento.logradouro,
+      this.novoEnderecoFaturamento.numero,
+      this.novoEnderecoFaturamento.bairro,
+      this.novoEnderecoFaturamento.cep,
+      this.novoEnderecoFaturamento.nomeMunicipio
+    ];
 
-        this.carrinhoService.limparCarrinho();
-        this.pedidoFinalizado = true;
+    if (camposObrigatorios.some(campo => !campo)) {
+      this.snackBar.open('Preencha todos os campos obrigatórios do endereço', 'Fechar', { duration: 5000 });
+      return false;
+    }
 
-        console.log('Pedido feito com sucesso: ', pedido);
-        this.router.navigate(['/gameverse/pedidoconfirmado']);
-      },
-      error: (error) => {
-        console.error('Erro ao criar pedido:', error);
-        this.snackBar.open('Erro ao finalizar pedido', 'Fechar', {
-          duration: 5000,
-          panelClass: ['custom-snackbar']
-        });
-      }
-    });
+    return true;
   }
 
   selecionarMetodoPagamento(metodo: any): void {
     this.metodoPagamento = metodo;
     this.pagamento.metodo = metodo;
-    
+
     if (metodo.id === 1) {
       this.carregarParcelas();
       if (this.enderecoSelecionado) {
@@ -961,5 +1058,195 @@ export class CheckoutComponent implements OnInit {
 
     this.dadosCartao.validade = value;
     event.target.value = value;
+  }
+
+  mostrarFormularioNovoEnderecoFaturamento(): void {
+    this.mostrarFormularioEnderecoFaturamento = true;
+    this.pagamento.enderecoFaturamentoId = undefined;
+    this.pagamento.enderecoFaturamento = undefined;
+    this.resetarFormularioEnderecoFaturamento();
+  }
+
+  cancelarNovoEnderecoFaturamento(): void {
+    this.mostrarFormularioEnderecoFaturamento = false;
+    this.resetarFormularioEnderecoFaturamento();
+  }
+
+  toggleEstadoDropdownFaturamento(): void {
+    this.estadoDropdownOpenFaturamento = !this.estadoDropdownOpenFaturamento;
+    if (this.estadoDropdownOpenFaturamento) {
+      this.estadoSearchTermFaturamento = '';
+      // Adiciona classe ao card
+      document.querySelector('.pagamento-card')?.classList.add('dropdown-aberto');
+    } else {
+      // Remove classe do card
+      document.querySelector('.pagamento-card')?.classList.remove('dropdown-aberto');
+    }
+  }
+
+  get filteredEstadosFaturamento(): Estado[] {
+    if (!this.estadoSearchTermFaturamento) return this.estados;
+
+    return this.estados.filter(estado =>
+      estado.nome.toLowerCase().includes(this.estadoSearchTermFaturamento.toLowerCase()) ||
+      estado.sigla.toLowerCase().includes(this.estadoSearchTermFaturamento.toLowerCase())
+    );
+  }
+
+  selectEstadoFaturamento(estado: Estado): void {
+    this.novoEnderecoFaturamento.estado = estado;
+    this.novoEnderecoFaturamento.municipio = null;
+    this.novoEnderecoFaturamento.nomeMunicipio = '';
+    this.estadoDropdownOpenFaturamento = false;
+    this.estadoSearchTermFaturamento = '';
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.estado-select-container') && this.estadoDropdownOpenFaturamento) {
+      this.estadoDropdownOpenFaturamento = false;
+    }
+  }
+
+  verificarMunicipioExistenteFaturamento(): void {
+    if (!this.novoEnderecoFaturamento.nomeMunicipio || !this.novoEnderecoFaturamento.estado) return;
+
+    this.municipioService.findByNomeSemPaginacao(this.novoEnderecoFaturamento.nomeMunicipio).subscribe({
+      next: (municipios: Municipio[]) => {
+        const municipioExistente = municipios.find(m =>
+          m.nome.toLowerCase() === this.novoEnderecoFaturamento.nomeMunicipio.toLowerCase() &&
+          m.estado.id === this.novoEnderecoFaturamento.estado?.id
+        );
+        this.novoEnderecoFaturamento.municipio = municipioExistente || null;
+      },
+      error: (err) => {
+        console.error('Erro ao verificar município:', err);
+        this.novoEnderecoFaturamento.municipio = null;
+      }
+    });
+  }
+
+  resetarFormularioEnderecoFaturamento(): void {
+    this.novoEnderecoFaturamento = {
+      logradouro: '',
+      numero: '',
+      complemento: '',
+      bairro: '',
+      cep: '',
+      nomeMunicipio: '',
+      municipio: null,
+      estado: null
+    };
+  }
+
+  async adicionarNovoEnderecoFaturamento(): Promise<void> {
+    const clienteId = this.authService.getClienteId();
+
+    if (!clienteId) {
+      this.snackBar.open('Usuário não autenticado', 'Fechar', {
+        duration: 5000,
+        panelClass: ['custom-snackbar']
+      });
+      return;
+    }
+
+    if (!this.novoEnderecoFaturamento.logradouro || !this.novoEnderecoFaturamento.numero ||
+      !this.novoEnderecoFaturamento.bairro || !this.novoEnderecoFaturamento.cep ||
+      !this.novoEnderecoFaturamento.estado || !this.novoEnderecoFaturamento.nomeMunicipio) {
+      this.snackBar.open('Preencha todos os campos obrigatórios', 'Fechar', {
+        duration: 5000,
+        panelClass: ['custom-snackbar']
+      });
+      return;
+    }
+
+    try {
+      let municipioId: number;
+
+      if (!this.novoEnderecoFaturamento.municipio) {
+        const novoMunicipio = {
+          id: 0,
+          nome: this.novoEnderecoFaturamento.nomeMunicipio,
+          idEstado: this.novoEnderecoFaturamento.estado.id
+        };
+
+        const municipioCriado = await this.municipioService.insert(novoMunicipio).toPromise();
+        if (!municipioCriado) throw new Error('Falha ao criar município');
+        municipioId = municipioCriado.id;
+      } else {
+        municipioId = this.novoEnderecoFaturamento.municipio.id;
+      }
+
+      // Criar objeto de endereço para o pedido
+      const enderecoPedido = {
+        logradouro: this.novoEnderecoFaturamento.logradouro,
+        numero: this.novoEnderecoFaturamento.numero,
+        complemento: this.novoEnderecoFaturamento.complemento,
+        bairro: this.novoEnderecoFaturamento.bairro,
+        cep: this.novoEnderecoFaturamento.cep,
+        municipio: {
+          id: municipioId,
+          nome: this.novoEnderecoFaturamento.nomeMunicipio,
+          estado: this.novoEnderecoFaturamento.estado
+        }
+      };
+
+      // Se o checkbox estiver marcado, salva o endereço no perfil do cliente
+      if (this.salvarEnderecoFaturamento) {
+        const enderecoDTO = {
+          logradouro: this.novoEnderecoFaturamento.logradouro,
+          numero: this.novoEnderecoFaturamento.numero,
+          complemento: this.novoEnderecoFaturamento.complemento,
+          bairro: this.novoEnderecoFaturamento.bairro,
+          cep: this.novoEnderecoFaturamento.cep,
+          idMunicipio: municipioId,
+          idCliente: clienteId
+        };
+
+        this.enderecoService.insert(enderecoDTO).subscribe({
+          next: (endereco) => {
+            this.enderecos.push(endereco);
+            this.pagamento.enderecoFaturamentoId = endereco.id;
+            this.mostrarFormularioEnderecoFaturamento = false;
+            this.resetarFormularioEnderecoFaturamento();
+            this.salvarEnderecoFaturamento = false;
+
+            this.snackBar.open('Endereço salvo e adicionado com sucesso!', 'Fechar', {
+              duration: 5000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: (err) => {
+            console.error('Erro ao criar endereço:', err);
+            this.snackBar.open('Erro ao salvar endereço', 'Fechar', {
+              duration: 5000,
+              panelClass: ['custom-snackbar']
+            });
+          }
+        });
+      } else {
+        this.pagamento.enderecoFaturamento = {
+          logradouro: this.novoEnderecoFaturamento.logradouro,
+          numero: this.novoEnderecoFaturamento.numero,
+          complemento: this.novoEnderecoFaturamento.complemento,
+          bairro: this.novoEnderecoFaturamento.bairro,
+          cep: this.novoEnderecoFaturamento.cep,
+          municipio: {
+            id: municipioId,
+            nome: this.novoEnderecoFaturamento.nomeMunicipio,
+            estado: this.novoEnderecoFaturamento.estado
+          }
+        };
+        this.mostrarFormularioEnderecoFaturamento = false;
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      this.snackBar.open('Erro ao processar município', 'Fechar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
   }
 }
