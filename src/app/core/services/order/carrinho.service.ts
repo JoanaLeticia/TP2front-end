@@ -9,7 +9,7 @@ import { AuthService } from '../../../auth/auth.service';
 export class CarrinhoService {
   private readonly CARRINHO_PREFIX = 'carrinho_';
   private carrinhoSubject = new BehaviorSubject<ItemPedido[]>([]);
-  
+
   carrinho$: Observable<ItemPedido[]> = this.carrinhoSubject.asObservable();
 
   constructor(private authService: AuthService) {
@@ -70,7 +70,12 @@ export class CarrinhoService {
     if (itemExistente) {
       itemExistente.quantidade += item.quantidade || 1;
     } else {
-      carrinho.push({ ...item, quantidade: item.quantidade || 1 });
+      const novoItem: ItemPedido = {
+        ...item,
+        quantidade: item.quantidade || 1,
+        produto: item.produto
+      };
+      carrinho.push(novoItem);
     }
 
     this.salvarCarrinho(userId, carrinho);
@@ -84,6 +89,10 @@ export class CarrinhoService {
     const item = carrinho.find(i => i.id === itemId);
 
     if (item) {
+      if (item.produto && quantidade > item.produto.estoque) {
+        console.warn('Tentativa de adicionar quantidade superior ao estoque');
+        return;
+      }
       item.quantidade = quantidade;
       this.salvarCarrinho(userId, carrinho);
     }
@@ -111,7 +120,7 @@ export class CarrinhoService {
       .toFixed(2));
   }
 
-  adicionarItemParaUsuario(userId: string | number, item: ItemPedido):  void {
+  adicionarItemParaUsuario(userId: string | number, item: ItemPedido): void {
     const carrinho = this.obterCarrinhoLocal(userId);
     const itemExistente = carrinho.find(i => i.id === item.id);
 
@@ -131,4 +140,9 @@ export class CarrinhoService {
       this.carrinhoSubject.next([]);
     }
   }
+
+  getItens(): ItemPedido[] {
+    return [...this.carrinhoSubject.value];
+  }
+
 }

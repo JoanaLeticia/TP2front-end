@@ -34,6 +34,7 @@ import { EditarEnderecoComponent } from './client/pages/conta/editar-endereco/ed
 import { DetalhesPedidoComponent } from './client/pages/conta/detalhes-pedido/detalhes-pedido.component';
 import { PedidoResolver } from './client/pages/conta/detalhes-pedido/pedido-resolver.resolver';
 import { AdminGuard } from './auth/admin.guard';
+import { CheckoutGuard } from './auth/checkout.guard';
 
 export const routes: Routes = [
 
@@ -86,7 +87,7 @@ export const routes: Routes = [
     { path: 'gameverse/produto/:id', component: DetalhesProdutoComponent, title: 'Detalhes da Produto' },
 
     { path: 'gameverse/carrinho', component: CarrinhoComponent, title: 'Carrinho' },
-    { path: 'gameverse/checkout', component: CheckoutComponent, title: 'Checkout', resolve: { carrinhoItens: CarrinhoResolver } },
+    { path: 'gameverse/checkout', component: CheckoutComponent, title: 'Checkout', resolve: { carrinhoItens: CarrinhoResolver }, canActivate: [CheckoutGuard] },
     { path: 'gameverse/pedidoconfirmado', component: PedidoConfirmadoComponent, title: 'Pedido Confirmado' },
 
     { path: 'gameverse/conta/minha-conta', component: MinhaContaComponent, title: 'Minha Conta' },

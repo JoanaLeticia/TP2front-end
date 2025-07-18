@@ -2,11 +2,35 @@
 
 .mat-card {
   margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
 }
 
-.mat-radio-button {
-  display: block;
-  margin-bottom: 0.5rem;
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #cacaca;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+input[type="radio"]:checked {
+  border-color: #0d358b;
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d358b;
 }
 
 .success-snackbar {
@@ -21,9 +45,33 @@
 
 .resumo-pedido {
   background-color: #fff;
+  padding: 7px;
   position: sticky;
   border: 1px solid #e4e4e4;
   border-radius: 7px;
+}
+
+.custom-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #0d358b;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.resumo-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 500;
+  padding-top: 10px;
+  background-color: #ffffff;
 }
 
 .button-finalizar {
@@ -45,7 +93,97 @@
   background-color: #fff;
   border: 1px solid #e4e4e4;
   border-radius: 7px;
-  padding: 10px;
+  padding: 7px;
+}
+
+.frete-card {
+  background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  padding: 7px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.opcoes-frete {
+  min-width: 370px;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #cacaca;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+input[type="radio"]:checked {
+  border-color: #0d358b;
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d358b;
+}
+
+.frete-option:hover {
+  input[type="radio"] {
+    border: 2px solid #0d358b;
+  }
+
+  background-color: rgba(13, 53, 139, 0.03);
+  transition: all 0.2s ease;
+}
+
+/* Espaçamento entre o radio button e o texto */
+.frete-option {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  border-radius: 4px;
+  will-change: transform, opacity;
+  margin-bottom: 5px;
+  transition: all 0.2s ease;
+  padding-right: 25px;
+  border: 1px solid #e4e4e4;
+}
+
+.frete-option:last-child {
+  margin-bottom: 1px;
+}
+
+.frete-option.selected {
+  background-color: rgba(13, 53, 139, 0.05);
+  border: 1px solid #0d358b;
+  z-index: 100;
+}
+
+.btn-cupom {
+  color: white;
+  padding: 0 15px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transition: all 0.3s ease;
+  background-color: #0d358b;
+  font-size: 15px;
+}
+
+.btn-cupom:hover {
+  background-color: #1548b6;
 }
 
 /* Adicione estas regras no final do arquivo */
@@ -62,47 +200,51 @@
   height: auto;
 }
 
+.endereco-option-expanded .endereco-header {
+  background-color: rgba(13, 53, 139, 0.05);
+  border: 1px solid #0d358b;
+}
+
 .endereco-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 50px;
-  padding: 0px 5px 0px;
+  padding: 0px 0px 0px;
   padding-right: 15px;
   cursor: pointer;
-  background-color: #f0f0f0;
-  border-radius: 7px;
-  transition: background-color 300ms ease;
-  border: 1px solid #d8d8d8;
-  font-size: 16px;
+  border-radius: 4px;
+  transition: all 300ms ease;
+  border: 1px solid #e4e4e4;
+  font-size: 14px;
+  background-color: white;
 }
 
 .endereco-header:hover {
-  background-color: #e4e4e4;
+  background-color: rgba(13, 53, 139, 0.03);
 }
 
 .endereco-details {
   display: flex;
   justify-content: space-between;
-  padding: 16px;
-  padding-left: 30px;
-  padding-top: 21px;
-  padding-right: 30px;
-  margin-top: -5px;
-  border: 1px solid #d8d8d8;
+  padding: 13px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border: 1px solid #e4e4e4;
   border-top: none;
-  border-radius: 0 0 7px 7px;
+  border-radius: 0 0 4px 4px;
 }
 
 .editar-endereco {
   display: flex;
-  font-size: 15px;
+  font-size: 14px;
   color: #666;
   transition: all 300ms ease;
 }
 
 .editar-endereco:hover {
   color: #0d358b;
+  margin-right: 3px;
 }
 
 .button-add-endereco {
@@ -111,6 +253,7 @@
   gap: 10px;
   justify-content: space-between;
   margin-top: 20px;
+  font-size: 15px;
   border-radius: 7px;
   transition: all 300ms ease;
   color: #666;
@@ -130,18 +273,23 @@
 }
 
 .entrega-card span {
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.entrega-card, .frete-card {
+  margin-top: 20px;
+  overflow: hidden;
 }
 
 /* Adicione estas regras no final do arquivo */
 .input-endereco {
-  margin-top: 5px;
+  margin-top: 2px;
   display: flex;
   align-items: center;
   background-color: #fff;
-  border: 1px solid #b4b4b4;
+  border: 1px solid #d1d1d1;
   /* Borda mais grossa e azul */
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 5px 10px;
   transition: border-color 300ms ease;
 }
@@ -222,6 +370,11 @@ input::placeholder {
   pointer-events: none;
 }
 
+.slide-container {
+  position: relative;
+  overflow: hidden;
+}
+
 /* ESTILOS DO DROPDOWN PERSONALIZADO */
 .estado-select-container {
   position: relative;
@@ -234,12 +387,13 @@ input::placeholder {
 }
 
 .selected-option {
-  margin-top: 5px;
-  padding: 9px 15px;
+  margin-top: 2px;
+  font-size: 14.5px;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #b4b4b4;
+  border: 1px solid #d1d1d1;
   border-radius: 5px;
   background-color: white;
 }
@@ -271,6 +425,7 @@ input::placeholder {
 .search-box {
   padding: 10px;
   border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
 .search-box input {
@@ -309,39 +464,34 @@ input::placeholder {
 
 :host {
   display: block;
+  position: relative;
 }
-
 
 .pagamento-card {
   margin-top: 20px;
   background-color: #fff;
   border: 1px solid #e4e4e4;
   border-radius: 7px;
-  padding: 10px;
+  padding: 7px;
 }
 
 .pagamento-card span {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .header-pagamento {
   transition: all 0.3s ease;
-  border-bottom: 1px solid #ccc;
-  margin-right: -7px;
-  margin-left: -7px;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  margin-bottom: -1px;
-  border-radius: 6px;
-  padding-left: 5px;
+  border: 1px solid #e4e4e4;
+  border-radius: 4px;
+  padding-right: 15px;
 }
 
 .header-pagamento:hover {
-  background-color: #e4e4e4;
+  background-color: rgba(13, 53, 139, 0.03);
 }
 
 .header-pagamento-selected {
-  background-color: #f0f5ff;
+  background-color: rgba(13, 53, 139, 0.03);
   border-color: #0d358b;
 }
 
@@ -352,7 +502,7 @@ input::placeholder {
 .cartao-form-group label {
   display: block;
   margin-bottom: 5px;
-  font-size: 14px;
+  font-size: 13px;
   color: #333;
 }
 
@@ -379,4 +529,128 @@ input::placeholder {
   font-size: 12px;
   margin-top: 4px;
   display: block;
+}
+
+input[type="text"] {
+  border: 1px solid #d1d1d1;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:hover {
+  border-color: #2155c4;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #cacaca;
+  box-shadow: none;
+}
+
+input[type="text"]::placeholder {
+  color: #999;
+}
+
+.footer-bottom-container {
+  background-color: #06225e;
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font: 300 14px Inter, sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.input-endereco select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 5px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.select-parcelas {
+  position: relative;
+}
+
+.select-icon {
+  position: absolute;
+  right: 5px;
+  top: 60%;
+  transform: translateY(-60%);
+  pointer-events: none;
+  color: #666;
+  font-size: 20px;
+}
+
+.faturamento-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+.faturamento-section h4 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 16px;
+}
+
+.endereco-faturamento {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.endereco-faturamento h5 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.endereco-faturamento-option {
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: white;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.endereco-faturamento-option:hover {
+  background-color: #f5f5f5;
+}
+
+.endereco-faturamento-option input[type="radio"] {
+  margin-right: 10px;
+}
+
+.btn-add-endereco-faturamento {
+  margin-top: 10px;
+  background-color: transparent;
+  color: #0d358b;
+  border: 1px solid #0d358b;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-add-endereco-faturamento:hover {
+  background-color: #0d358b;
+  color: white;
 }

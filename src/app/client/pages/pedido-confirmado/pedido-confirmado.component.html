@@ -28,7 +28,7 @@
               <li class="text-gray-600"><span class="font-bold">ID:</span> {{pedido.idPedido}}</li>
               <li class="text-gray-600"><span class="font-bold">Total:</span> {{pedido.valorTotal | currency:'BRL'}}</li>
               <li class="text-gray-600"><span class="font-bold">Forma de Pagamento:</span> 
-                {{pedido.pagamento.metodo.nome || 'Não especificado'}}
+                {{pedido.pagamento.metodo || 'Não especificado'}}
               </li>
               <li class="text-gray-600"><span class="font-bold">CEP:</span> {{pedido.enderecoEntrega.cep || 'Não informado'}}</li>
             </ul>

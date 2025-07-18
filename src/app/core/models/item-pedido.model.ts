@@ -10,4 +10,5 @@ export class ItemPedido {
     tipoMidia!: string;
     nomeImagem!: string;
     imagemUrl?: string;
+    produto?: Produto;
 }

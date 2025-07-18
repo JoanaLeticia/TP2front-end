@@ -1,0 +1,50 @@
+<header class="header">
+    <div class="top-header">
+        <div class="container">
+            <div class="top-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a routerLink="/gameverse/home">
+                        <img src="assets/logo-gameverse-branca.png" alt="Logo da Loja">
+                    </a>
+                </div>
+
+                <!-- Central de Atendimento -->
+                <div style="display: flex;">
+                    <div class="atendimento-area">
+                        <div class="atendimento-dropdown" (mouseenter)="showDropdown = true"
+                            (mouseleave)="showDropdown = false">
+                            <button mat-icon-button class="atendimento-icon">
+                                <i class="fa-solid fa-headset"></i>
+                            </button>
+                            <div class="atendimento-info">
+                                Central de
+                                <span>Atendimento<i class="fa-solid fa-angle-down"></i></span>
+                            </div>
+                            <!-- Menu Dropdown -->
+                            <div class="dropdown-menu" *ngIf="showDropdown" style="min-width: 230px;">
+                                <div class="infos-dropdown">
+                                    <div style="border-bottom: 1px solid hsl(0, 0%, 0%, 0.15); padding-bottom: 8px;">
+                                        <h2><i class="fa-brands fa-whatsapp"></i>Whatsapp</h2>
+                                        <p>(63) 98400-0000</p>
+                                    </div>
+                                    <div
+                                        style="margin-top: 8px; padding-bottom: 8px; border-bottom: 1px solid hsl(0, 0%, 0%, 0.15);">
+                                        <h2><i class="fa-solid fa-envelope"></i>E-mail</h2>
+                                        <p>{{ 'contato@gameverse.com.br' }}</p>
+                                    </div>
+                                    <div class="footer-horarios" style="margin-top: 8px;">
+                                        <h2><i class="fa-solid fa-clock"></i>Horário de Atendimento</h2>
+                                        <p>Seg. à Sexta, das 08h às 17h</p>
+                                        <p>Sábado, das 08h às 12h</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>

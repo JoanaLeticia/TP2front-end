@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Endereco } from '../../../core/models/endereco.model';
@@ -8,13 +8,13 @@ import { ItemPedido } from '../../../core/models/item-pedido.model';
 import { PedidoService } from '../../../core/services/order/pedido.service';
 import { FooterComponent } from '../../../shared/components/template/footer/footer.component';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatOptionModule } from '@angular/material/core';
 import { CommonModule, CurrencyPipe, NgFor } from '@angular/common';
-import { HeaderComponent } from '../../../shared/components/template/header/header.component';
+import { HeaderSimplificadoComponent } from '../../../shared/components/template/header-simplificado/header-simplificado.component';
 import { CarrinhoService } from '../../../core/services/order/carrinho.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,15 +22,44 @@ import { Estado } from '../../../core/models/estado.model';
 import { Municipio } from '../../../core/models/municipio.model';
 import { MunicipioService } from '../../../core/services/utils/municipio.service';
 import { Pagamento } from '../../../core/models/pagamento.model';
+import { Cupom } from '../../../core/models/cupom.model';
+import { CupomService } from '../../../core/services/order/cupom.service';
+import { FreteOption } from '../../../core/models/frete-option.model';
+import { FreteService } from '../../../core/services/order/frete.service';
+import { CepService } from '../../../core/services/utils/cep.service';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MetodoPagamento } from '../../../core/models/metodo-pagamento.model';
 
 @Component({
   standalone: true,
   imports: [
-    HeaderComponent, FooterComponent, MatCardHeader, MatCardTitle, MatCardContent, MatCard, FormsModule, MatRadioModule, MatIcon, MatFormFieldModule, MatOptionModule, CurrencyPipe, CommonModule, MatInputModule, MatSelectModule, MatIcon
+    HeaderSimplificadoComponent, FooterComponent, MatCardHeader, MatCardTitle, MatCardContent, MatCard, FormsModule, MatRadioModule, MatIcon, MatFormFieldModule, MatOptionModule, CurrencyPipe, CommonModule, MatInputModule, MatSelectModule, MatIcon, MatProgressSpinnerModule
   ],
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.css']
+  styleUrls: ['./checkout.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ opacity: 0, height: 0, overflow: 'hidden' }),
+        animate('300ms ease-out', style({ opacity: 1, height: '*' }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0, height: 0, overflow: 'hidden' }))
+      ])
+    ]),
+    trigger('staggerFadeIn', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(10px)' }),
+          stagger('100ms', [
+            animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class CheckoutComponent implements OnInit {
   carrinhoItens: ItemPedido[] = [];
@@ -41,6 +70,20 @@ export class CheckoutComponent implements OnInit {
   mostrarFormularioEdicao = false;
   enderecoEditando: any = null;
   formSubmetido = false;
+  private inactivityTimer: any;
+  pedidoFinalizado: boolean = false;
+  codigoCupom: string = '';
+  cupomAplicado: Cupom | null = null;
+  desconto: number = 0;
+  freteForm: FormGroup;
+  opcoesFrete: FreteOption[] = [];
+  freteSelecionado: FreteOption | null = null;
+  calculandoFrete = false;
+  erroFrete: string | null = null;
+  cepValido: boolean | null = null;
+  cepCarregando = false;
+  parcelasDisponiveis: any[] = [];
+  enderecoFaturamentoNovo: boolean = false;
 
   novoEndereco = {
     logradouro: '',
@@ -52,6 +95,12 @@ export class CheckoutComponent implements OnInit {
     municipio: null as Municipio | null,
     estado: null as Estado | null
   };
+
+  pagamento: Pagamento = {
+    pedidoId: 0,
+    metodo: MetodoPagamento.CARTAO_CREDITO,
+    usarEnderecoEntrega: true
+  }
 
   estados: Estado[] = []; // Lista de estados disponíveis
   municipiosFiltrados: Municipio[] = [];
@@ -90,6 +139,12 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  onUsarEnderecoEntregaChange() {
+    if (this.pagamento.usarEnderecoEntrega) {
+      this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado?.id;
+    }
+  }
+
   selectEstado(estado: Estado): void {
     this.novoEndereco.estado = estado;
     this.novoEndereco.municipio = null;
@@ -106,8 +161,16 @@ export class CheckoutComponent implements OnInit {
     private pedidoService: PedidoService,
     private snackBar: MatSnackBar,
     private carrinhoService: CarrinhoService,
-    private municipioService: MunicipioService
-  ) { }
+    private municipioService: MunicipioService,
+    private cupomService: CupomService,
+    private freteService: FreteService,
+    private cepService: CepService,
+    private fb: FormBuilder
+  ) {
+    this.freteForm = this.fb.group({
+      cepDestino: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]]
+    });
+  }
 
   ngOnInit(): void {
     console.log('CheckoutComponent iniciado');
@@ -121,8 +184,119 @@ export class CheckoutComponent implements OnInit {
 
     this.carregarEnderecos();
     this.carregarEstados();
+    this.carregarParcelas();
 
     document.addEventListener('click', this.closeEstadoDropdownOnClickOutside.bind(this));
+
+    this.inactivityTimer = setTimeout(() => {
+      this.router.navigate(['/carrinho']);
+      this.snackBar.open('Sessão expirada por inatividade', 'Fechar', { duration: 5000 });
+    }, 900000);
+  }
+
+  onCepChange() {
+    const cepControl = this.freteForm.get('cepDestino');
+    if (cepControl?.valid) {
+      this.cepCarregando = true;
+      this.cepValido = null;
+      const cep = cepControl.value.replace(/\D/g, '');
+
+      this.cepService.validarCep(cep).subscribe({
+        next: (resultado) => {
+          this.cepValido = resultado.valido;
+          if (resultado.valido) {
+            cepControl.setValue(this.cepService.formatarCep(cep), { emitEvent: false });
+          } else {
+            this.erroFrete = resultado.erro ?? null;
+          }
+          this.cepCarregando = false;
+        },
+        error: () => {
+          this.cepValido = false;
+          this.cepCarregando = false;
+        }
+      });
+    } else {
+      this.cepValido = false;
+    }
+  }
+
+  get totalProdutos(): number {
+    return this.carrinhoService.getTotalValor();
+  }
+
+  toggleFormularioEndereco(): void {
+    this.mostrarFormularioEndereco = !this.mostrarFormularioEndereco;
+
+    if (this.mostrarFormularioEndereco) {
+      this.enderecoSelecionado = null;
+      this.mostrarFormularioEdicao = false;
+      this.opcoesFrete = [];
+      this.freteSelecionado = null;
+      this.resetarFormularioEndereco();
+    }
+  }
+
+
+  toggleFormularioEdicao(endereco: Endereco): void {
+    this.mostrarFormularioEdicao = !this.mostrarFormularioEdicao;
+    if (this.mostrarFormularioEdicao) {
+      this.mostrarFormularioEndereco = false;
+      this.editarEndereco(endereco);
+    } else {
+      this.cancelarEdicao();
+    }
+  }
+
+  calcularFrete(): void {
+    if (!this.enderecoSelecionado) {
+      this.snackBar.open('Selecione um endereço para calcular o frete', 'Fechar', {
+        duration: 3000
+      });
+      return;
+    }
+
+    this.calculandoFrete = true;
+    this.erroFrete = null;
+    this.opcoesFrete = [];
+    this.freteSelecionado = null;
+
+    const cepDestino = this.enderecoSelecionado.cep.replace(/\D/g, '');
+
+    this.freteService.calcularFreteParaCarrinho(this.carrinhoItens, cepDestino).subscribe({
+      next: (resultado) => {
+        this.opcoesFrete = resultado.filter(opcao => opcao.preco != null);
+        this.calculandoFrete = false;
+
+        if (this.opcoesFrete.length > 0) {
+          this.freteSelecionado = this.opcoesFrete[0];
+          this.calcularTotal(true); // Atualiza as parcelas
+        } else {
+          this.erroFrete = 'Nenhuma opção de frete disponível para este CEP';
+        }
+      },
+      error: (erro) => {
+        console.error('Erro ao calcular frete:', erro);
+        this.erroFrete = erro.error?.message || 'Erro ao calcular frete. Tente novamente.';
+        this.calculandoFrete = false;
+        this.snackBar.open(this.erroFrete || 'Erro desconhecido', 'Fechar', { duration: 3000 });
+      }
+    });
+  }
+
+  selecionarFrete(opcao: FreteOption): void {
+    this.freteSelecionado = opcao;
+    this.calcularTotal(true);
+  }
+
+  @HostListener('document:mousemove')
+  @HostListener('document:keypress')
+  resetTimer() {
+    clearTimeout(this.inactivityTimer);
+    this.inactivityTimer = setTimeout(() => {
+      this.router.navigate(['/carrinho']);
+      this.snackBar.open('Sessão expirada por inatividade', 'Fechar', { duration: 5000 });
+    }, 900000);
   }
 
   closeEstadoDropdownOnClickOutside(event: MouseEvent) {
@@ -134,6 +308,7 @@ export class CheckoutComponent implements OnInit {
 
   ngOnDestroy() {
     document.removeEventListener('click', this.closeEstadoDropdownOnClickOutside);
+    clearTimeout(this.inactivityTimer);
   }
 
   carregarEnderecos(): void {
@@ -143,7 +318,6 @@ export class CheckoutComponent implements OnInit {
       next: (cliente: any) => {
         console.log('Cliente recebido do serviço:', cliente);
 
-        // Verifica os nomes alternativos da propriedade
         const enderecos = cliente.listaEndereco || [];
         console.log('Endereços encontrados:', enderecos);
 
@@ -151,6 +325,7 @@ export class CheckoutComponent implements OnInit {
 
         if (this.enderecos.length > 0) {
           this.enderecoSelecionado = this.enderecos[0];
+          this.calcularFrete(); // Calcula frete automaticamente quando carrega o primeiro endereço
         }
       },
       error: (error) => {
@@ -168,6 +343,32 @@ export class CheckoutComponent implements OnInit {
       this.estados = estados;
     });
   }
+
+  carregarParcelas(): void {
+    if (this.metodoPagamento?.id !== 1) return;
+
+    const total = this.calcularTotal();
+    const parcelaAtual = this.dadosCartao.parcelas;
+
+    this.parcelasDisponiveis = [];
+    const maxParcelas = 12;
+
+    for (let i = 1; i <= maxParcelas; i++) {
+      const valorParcela = total / i;
+      this.parcelasDisponiveis.push({
+        valor: i,
+        valorParcela: valorParcela,
+        valorTotal: total
+      });
+    }
+
+    if (parcelaAtual && parcelaAtual <= maxParcelas) {
+      this.dadosCartao.parcelas = parcelaAtual;
+    } else if (this.parcelasDisponiveis.length > 0) {
+      this.dadosCartao.parcelas = 1;
+    }
+  }
+
 
   onEstadoChange(): void {
     const estado = this.mostrarFormularioEdicao ? this.enderecoEditando.estado : this.novoEndereco.estado;
@@ -295,7 +496,12 @@ export class CheckoutComponent implements OnInit {
           this.enderecos.push(endereco);
           this.enderecoSelecionado = endereco;
           this.mostrarFormularioEndereco = false;
+          this.mostrarFormularioEdicao = false;
           this.resetarFormularioEndereco();
+
+          this.enderecoSelecionado = endereco;
+          this.calcularFrete();
+
           this.snackBar.open('Endereço adicionado com sucesso!', 'Fechar', {
             duration: 5000,
             panelClass: ['success-snackbar']
@@ -318,8 +524,14 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  mostrarFormularioNovoEnderecoFaturamento(): void {
+    this.mostrarFormularioEndereco = true;
+    this.enderecoFaturamentoNovo = true;
+}
+
   editarEndereco(endereco: Endereco): void {
     this.mostrarFormularioEdicao = true;
+    this.mostrarFormularioEndereco = false;
     this.enderecoEditando = { ...endereco };
     this.novoEndereco = {
       logradouro: endereco.logradouro,
@@ -331,7 +543,6 @@ export class CheckoutComponent implements OnInit {
       municipio: endereco.municipio,
       estado: endereco.municipio.estado
     };
-
     this.onEstadoChange();
   }
 
@@ -438,8 +649,13 @@ export class CheckoutComponent implements OnInit {
           });
 
           this.mostrarFormularioEdicao = false;
+          this.mostrarFormularioEndereco = false;
           this.enderecoEditando = null;
           this.resetarFormularioEndereco();
+
+          if (this.enderecoSelecionado?.id === enderecoAtualizado.id) {
+            this.calcularFrete();
+          }
         },
         error: (err) => {
           console.error('[14] Erro ao atualizar endereço:', err);
@@ -458,6 +674,48 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  aplicarCupom() {
+    if (!this.codigoCupom) return;
+
+    this.cupomService.validarCupom(this.codigoCupom).subscribe({
+      next: (resposta) => {
+        if (resposta.valido && resposta.cupom) {
+          this.cupomAplicado = resposta.cupom;
+          this.desconto = resposta.valorDesconto || 0;
+
+          console.log('Cupom aplicado:', {
+            cupom: this.cupomAplicado,
+            desconto: this.desconto,
+            tipo: this.cupomAplicado.tipo.nome
+          });
+
+          this.snackBar.open(resposta.mensagem || 'Cupom aplicado!', 'Fechar', {
+            duration: 3000
+          });
+
+          // Atualiza as parcelas após aplicar o cupom
+          this.calcularTotal(true);
+        } else {
+          this.snackBar.open(resposta.mensagem || 'Cupom inválido', 'Fechar', {
+            duration: 3000
+          });
+        }
+      },
+      error: (erro) => {
+        console.error('Erro na validação:', erro);
+        this.snackBar.open('Erro ao validar cupom', 'Fechar', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  removerCupom() {
+    this.cupomAplicado = null;
+    this.codigoCupom = '';
+    this.desconto = 0;
+    this.calcularTotal(true);
+  }
 
   private validarEndereco(): boolean {
     if (!this.novoEndereco.estado || !this.novoEndereco.nomeMunicipio) {
@@ -503,10 +761,26 @@ export class CheckoutComponent implements OnInit {
     event.target.value = value;
   }
 
-  calcularTotal(): number {
-    return this.carrinhoItens.reduce(
-      (total, item) => total + (item.valor * item.quantidade), 0
-    );
+  calcularTotal(atualizarParcelas: boolean = false): number {
+    const totalProdutos = this.carrinhoService.getTotalValor();
+    const frete = this.getValorFrete();
+    const total = totalProdutos + frete - this.desconto;
+
+    if (atualizarParcelas && this.metodoPagamento?.id === 1) {
+      this.carregarParcelas();
+    }
+
+    return total;
+  }
+
+  getValorFrete(): number {
+    if (!this.freteSelecionado || !this.freteSelecionado.preco) return 0;
+
+    const valor = this.freteSelecionado.preco
+      .replace(/[^\d,.]/g, '')
+      .replace(',', '.');
+
+    return parseFloat(valor) || 0;
   }
 
   calcularParcela(parcelas: number): number {
@@ -515,6 +789,7 @@ export class CheckoutComponent implements OnInit {
 
   finalizarPedido(): void {
     this.formSubmetido = true;
+    this.pedidoFinalizado = false;
 
     if (!this.enderecoSelecionado || !this.metodoPagamento) {
       this.snackBar.open('Selecione um endereço e método de pagamento', 'Fechar', {
@@ -533,6 +808,17 @@ export class CheckoutComponent implements OnInit {
       if (this.dadosCartao.numero.replace(/\s/g, '').length < 16) {
         return;
       }
+    }
+
+    if (this.metodoPagamento?.id === 1 && this.pagamento.usarEnderecoEntrega) {
+      this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado?.id;
+    }
+
+    if (this.metodoPagamento?.id === 1 && !this.pagamento.enderecoFaturamentoId) {
+      this.snackBar.open('Selecione um endereço de faturamento', 'Fechar', {
+        duration: 5000
+      });
+      return;
     }
 
     const pagamento = {
@@ -562,9 +848,9 @@ export class CheckoutComponent implements OnInit {
         });
 
         this.carrinhoService.limparCarrinho();
+        this.pedidoFinalizado = true;
 
         console.log('Pedido feito com sucesso: ', pedido);
-
         this.router.navigate(['/gameverse/pedidoconfirmado']);
       },
       error: (error) => {
@@ -577,8 +863,43 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
+  selecionarMetodoPagamento(metodo: any): void {
+    this.metodoPagamento = metodo;
+    this.pagamento.metodo = metodo;
+    
+    if (metodo.id === 1) {
+      this.carregarParcelas();
+      if (this.enderecoSelecionado) {
+        this.pagamento.enderecoFaturamentoId = this.enderecoSelecionado.id;
+      }
+    }
+  }
+
   selecionarEndereco(endereco: Endereco): void {
+    if (this.mostrarFormularioEndereco) {
+      this.mostrarFormularioEndereco = false;
+    }
+
+    if (this.mostrarFormularioEdicao) {
+      this.mostrarFormularioEdicao = false;
+    }
+
     this.enderecoSelecionado = this.enderecoSelecionado === endereco ? null : endereco;
+
+    if (this.enderecoSelecionado) {
+      this.calcularFrete();
+      this.calcularTotal(true);
+    } else {
+      this.opcoesFrete = [];
+      this.freteSelecionado = null;
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent) {
+    if (!this.pedidoFinalizado) {
+      event.returnValue = 'Você tem certeza que deseja sair? Seu pedido não foi finalizado.';
+    }
   }
 
   // FORMATAÇÃO DOS INPUTS
@@ -592,6 +913,10 @@ export class CheckoutComponent implements OnInit {
     const formatted = value.replace(/(\d{4})(?=\d)/g, '$1 ');
     this.dadosCartao.numero = formatted;
     event.target.value = formatted;
+  }
+
+  formatarNumeroCartaoVisual(numero: string): string {
+    return '•••• •••• •••• ' + numero.slice(-4);
   }
 
   validarValidade(): boolean {

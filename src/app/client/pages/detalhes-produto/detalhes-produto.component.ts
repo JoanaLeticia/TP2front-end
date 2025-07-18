@@ -146,7 +146,7 @@ export class DetalhesProdutoComponent implements OnInit {
 
     this.freteService.calcularFrete(this.produto.id, cep).subscribe({
       next: (resultado) => {
-        this.opcoesFrete = resultado;
+        this.opcoesFrete = resultado.filter(opcao => opcao.preco != null);
         this.calculandoFrete = false;
         if (this.opcoesFrete.length === 0) {
           this.erroFrete = 'Nenhuma opção de frete disponível para este CEP';
@@ -210,7 +210,8 @@ export class DetalhesProdutoComponent implements OnInit {
       nomeImagem: produto.nomeImagem,
       imagemUrl: produto.nomeImagem
         ? this.produtoService.getUrlImagem(produto.nomeImagem)
-        : '../../../../assets/imagens/sem-imagem.jpg'
+        : '../../../../assets/imagens/sem-imagem.jpg',
+      produto: produto
     };
 
     this.carrinhoService.adicionarItem(item);
